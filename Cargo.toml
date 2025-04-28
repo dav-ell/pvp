@@ -1,0 +1,23 @@
+[package]
+name = "pvp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aes = "0.8.4"
+cbc = "0.1.2"
+opencv = "0.94.4"
+openh264 = "0.8.1"
+rand = "0.8"
+serde_json = "1.0"
+tokio = { version = "1.44.2", features = ["full"] }
+crossbeam = "0.8.4"
+byteorder = "1.5"
+hex = "0.4"
+
+#[profile.release]
+#opt-level = 3
+#lto = true
+#strip = true
+#codegen-units = 1
+#panic = "abort"
