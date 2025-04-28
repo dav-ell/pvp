@@ -14,6 +14,7 @@ tokio = { version = "1.44.2", features = ["full"] }
 crossbeam = "0.8.4"
 byteorder = "1.5"
 hex = "0.4"
+stun-rs = "0.1.11"
 
 #[profile.release]
 #opt-level = 3
