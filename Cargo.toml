@@ -16,9 +16,9 @@ byteorder = "1.5"
 hex = "0.4"
 stun-rs = "0.1.11"
 
-#[profile.release]
-#opt-level = 3
-#lto = true
-#strip = true
-#codegen-units = 1
-#panic = "abort"
+[profile.release]
+opt-level = 3
+lto = true
+strip = true
+codegen-units = 1
+panic = "abort"
