@@ -39,16 +39,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(public_addr) => {
             println!("\n*******************************************************");
             println!("*** Your public address is likely: {} ***", public_addr);
-            println!("*** Share this address with your peer.         ***");
-            println!("*******************************************************\n");
+            println!("*** Share this address with your peer.               ***");
+            println!("********************************************************\n");
             Some(public_addr)
         }
         Err(e) => {
             eprintln!("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             eprintln!("!!! STUN query failed: {} !!!", e);
-            eprintln!("!!! Could not determine public IP address.       !!!");
-            eprintln!("!!! NAT traversal might fail if direct connection !!!");
-            eprintln!("!!! requires it (e.g., symmetric NATs).        !!!");
+            eprintln!("!!! Could not determine public IP address.          !!!");
+            eprintln!("!!! NAT traversal might fail if direct connection   !!!");
+            eprintln!("!!! requires it (e.g., symmetric NATs).             !!!");
             eprintln!("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             eprintln!("Proceeding, but connection may fail.\n");
             None

@@ -81,14 +81,6 @@ fn main() {
     // Add the library path for the final linker stage
     println!("cargo:rustc-link-search=native={}", opencv_lib_path);
 
-    // Link OpenH264 statically during the final link stage
-    println!("cargo:rustc-link-lib=static=openh264");
-
-    // Link only the required OpenCV libraries statically
-    for lib in opencv_libs.split(',') {
-        println!("cargo:rustc-link-lib=static={}", lib);
-    }
-
     // Link additional required static libraries
     let additional_libs = ["zlib", "png", "jpeg", "tiff", "webp", "openjp2", "tbb"];
     for lib in additional_libs.iter() {
@@ -125,8 +117,6 @@ fn main() {
     println!("Setting for opencv crate -> OPENCV_INCLUDE_PATHS={}", &opencv_include_path);
     println!("Setting for opencv crate -> OPENCV_LINK_PATHS={}", &opencv_lib_path);
     println!("Setting for rustc linker -> Search Path: native={}", opencv_lib_path);
-    println!("Setting for rustc linker -> Link Statically: openh264");
-    println!("Setting for rustc linker -> Link Statically: {}", opencv_libs);
     println!("Setting for rustc linker -> Link Statically: {}", additional_libs.join(","));
     println!("Setting for rustc linker -> Link Statically: stdc++,gcc");
     println!("=================================================");
