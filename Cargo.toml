@@ -6,15 +6,24 @@ edition = "2021"
 [dependencies]
 aes = "0.8.4"
 cbc = "0.1.2"
-opencv = "0.94.4"
+opencv = { version = "=0.94.4", features = ["clang-runtime"] }
 openh264 = { version = "0.8.1", features = ["source"] }
 rand = "0.8"
 serde_json = "1.0"
 tokio = { version = "1.44.2", features = ["full"] }
-crossbeam = "0.8.4"
+# crossbeam = "0.8.4" # No longer directly needed, tokio/std channels are sufficient
 byteorder = "1.5"
 hex = "0.4"
 stun-rs = "0.1.11"
+
+# Audio dependencies
+cpal = "0.15.3"
+opus = "0.3.0"
+ringbuf = "0.4.8"
+rubato = "0.16.2"
+
+[build-dependencies]
+pkg-config = "0.3"
 
 [profile.release]
 opt-level = 3
