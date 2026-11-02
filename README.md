@@ -2,6 +2,8 @@
 
 PVP gives small recurring groups a familiar room and one reusable invitation. Create a room, share the link, and come back together. Join to listen, use your microphone, or turn on your camera when you choose. Optional accounts add saved people and direct calling.
 
+The standalone Apache-2.0 [`@dav-ell/pvp-call`](packages/pvp-call/README.md) package provides encrypted peer calling, media controls, and connection evidence for other applications. Its README covers installation, integration, and tests.
+
 The October 31 source upgrade keeps the PVP name and unifies the browser and Mac experience around Rooms. It adds full-window pair video, expandable self previews, mobile layout/keyboard improvements, automatic microphone recovery, measured outgoing quality, muted-sound reminders, and live connection evidence. See [implementation, checks, and remaining device-validation limits](docs/ROOMS-UPGRADE.md). Browser/signaling 0.3.25 is live with the [animated network homepage](docs/NETWORK-FRONT-PAGE.md); native source changes await a new Mac package. Earlier release records below describe their original versions.
 
 **Open PVP.app on your Mac** and choose **Continue as guest**, or create a meeting link in the browser. The app connects to the Rust signaling service at [lopixel.space](https://lopixel.space). With an optional account, share your username for direct calls: Mac friends ring in their menu bar, and browser friends ring while their page is open. Closing the Mac window keeps you available from the menu bar. Original Flutter 1.0.0 installs remain compatible with the updated server.

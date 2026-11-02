@@ -1,0 +1,40 @@
+--- a/web/group-calls.js
++++ b/web/group-calls.js
+@@ -1,2 +1,3 @@
++import { createPeerConnection } from '../packages/pvp-call/src/mesh.js';
+ import { BandwidthMeter, bandwidthLabel, bandwidthControls, validCaps, videoCap } from './bandwidth.js';
+ import { MeetingChat } from '/meeting-chat.js';
+@@ -129,5 +130,5 @@
+     if (this.links.has(id)) return this.links.get(id);
+     const token = this.token, roomId = this.room.room_id;
+-    const pc = new RTCPeerConnection({iceServers: [{urls: STUN}], bundlePolicy: 'max-bundle'});
++    const pc = createPeerConnection();
+     const link = { meter: new BandwidthMeter(), caps: this.caps(id), requested: {camera:null,screen:null}, id, pc, generation, chain: Promise.resolve(), candidates: [], remote: new MediaStream(), state: {}, evidence: null, code: '', frames: 0, forwardedBytes: 0, sentBytes: 0, receivedBytes: 0, openedAt: performance.now() };
+     this.links.set(id, link);
+--- a/web/app.js
++++ b/web/app.js
+@@ -1,2 +1,3 @@
++import { createPeerConnection } from '../packages/pvp-call/src/mesh.js';
+ import { BandwidthMeter, bandwidthLabel, bandwidthControls, validCaps, videoCap } from './bandwidth.js';
+ import { MeetingLinks } from '/meetings.js';
+@@ -429,5 +430,5 @@
+   await prepareMedia(); if (state.call !== call) return null;
+   // Intentionally STUN only. There is no TURN fallback and no media server.
+-  const pc = new RTCPeerConnection({ iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }], bundlePolicy: 'max-bundle' }); state.pc = pc; state.candidates = [];
++  const pc = createPeerConnection(); state.pc = pc; state.candidates = [];
+   networkEvent('Peer connection created; STUN configured, no TURN');
+   clearInterval(state.stats); state.stats = setInterval(() => updateStats().catch(() => { if (state.pc === pc && state.call === call) { call.evidence = null; $('call-network').textContent = 'Route unavailable'; renderInspector(); } }), 1000);
+--- a/signaling/src/main.rs
++++ b/signaling/src/main.rs
+@@ -1070,4 +1070,11 @@
+ fn router(app: App) -> Router {
+     Router::new()
++        .route("/packages/pvp-call/src/index.js", get(|| async { ([("content-type", "text/javascript; charset=utf-8")], include_str!("../../packages/pvp-call/src/index.js")) }))
++        .route("/packages/pvp-call/src/mesh.js", get(|| async { ([("content-type", "text/javascript; charset=utf-8")], include_str!("../../packages/pvp-call/src/mesh.js")) }))
++        .route("/packages/pvp-call/src/media.js", get(|| async { ([("content-type", "text/javascript; charset=utf-8")], include_str!("../../packages/pvp-call/src/media.js")) }))
++        .route("/packages/pvp-call/src/room.js", get(|| async { ([("content-type", "text/javascript; charset=utf-8")], include_str!("../../packages/pvp-call/src/room.js")) }))
++        .route("/packages/pvp-call/src/security.js", get(|| async { ([("content-type", "text/javascript; charset=utf-8")], include_str!("../../packages/pvp-call/src/security.js")) }))
++        .route("/packages/pvp-call/src/quality.js", get(|| async { ([("content-type", "text/javascript; charset=utf-8")], include_str!("../../packages/pvp-call/src/quality.js")) }))
++        .route("/packages/pvp-call/src/inspector.js", get(|| async { ([("content-type", "text/javascript; charset=utf-8")], include_str!("../../packages/pvp-call/src/inspector.js")) }))
+         .route(
+             "/",

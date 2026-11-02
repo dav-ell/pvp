@@ -1,0 +1,36 @@
+name: PVP calling library
+on:
+  push:
+    paths:
+      [
+        "packages/pvp-call/**",
+        "web/security.js",
+        "web/group-quality.js",
+        "web/inspector.js",
+        ".github/workflows/pvp-call.yml",
+      ]
+  pull_request:
+    paths:
+      [
+        "packages/pvp-call/**",
+        "web/security.js",
+        "web/group-quality.js",
+        "web/inspector.js",
+        ".github/workflows/pvp-call.yml",
+      ]
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/pvp-call
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: packages/pvp-call/package-lock.json
+      - run: npm ci
+      - run: npx playwright-core install --with-deps chromium
+      - run: npm test
