@@ -10,10 +10,11 @@ use aes::cipher::{BlockEncryptMut, KeyIvInit};
 use aes::cipher::block_padding::Pkcs7;
 use cbc::Encryptor as CbcEncryptorGeneric;
 use opencv::{
-    core::{Mat, AlgorithmHint},
+    core::Mat,
     imgproc,
     prelude::*,
 };
+use crate::network::cvt_color;
 use openh264::{
     encoder::{Encoder as H264Encoder, EncoderConfig as H264EncoderConfig}, // Alias to avoid name clash
     OpenH264API,
@@ -107,13 +108,13 @@ pub async fn sender_task(
                         video_seq_num = video_seq_num.wrapping_add(1);
 
                         let mut yuv_mat = Mat::default();
-                        if imgproc::cvt_color(
+                        if cvt_color(
                             &frame,
                             &mut yuv_mat,
                             imgproc::COLOR_BGR2YUV_I420, // Assuming input from OpenCV capture is BGR
-                            0,
-                            AlgorithmHint::ALGO_HINT_DEFAULT,
-                        ).is_err() {
+                        )
+                        .is_err()
+                        {
                             eprintln!("VID Sender: Failed to convert frame {} to YUV_I420", current_video_seq);
                             continue;
                         }
@@ -247,6 +248,13 @@ async fn fragment_and_send(
         .chunks(MAX_PAYLOAD_SIZE)
         .collect();
 
+    let maximum = match packet_type {
+        PacketType::Video => 1024,
+        PacketType::Audio => 16,
+    };
+    if fragments.len() > maximum {
+        return;
+    }
     let total_frags = fragments.len() as u16;
 
     if total_frags == 0 {
@@ -314,6 +322,7 @@ async fn fragment_and_send(
         let mut packet = Vec::with_capacity(header_bytes.len() + ciphertext_slice.len());
         packet.extend_from_slice(&header_bytes);
         packet.extend_from_slice(ciphertext_slice); // Append encrypted data
+        let packet = pvp::packet_security::seal(&packet, key);
 
 
         // Check total packet size against common MTU limits (optional but good practice)

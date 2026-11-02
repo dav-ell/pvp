@@ -1,0 +1,38 @@
+{
+  "name": "@dav-ell/pvp-call",
+  "version": "0.1.0",
+  "description": "Transport-independent encrypted peer-to-peer voice and video for browser applications",
+  "type": "module",
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    },
+    "./security": "./src/security.js",
+    "./quality": "./src/quality.js",
+    "./inspector": "./src/inspector.js"
+  },
+  "files": [
+    "src",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.64.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dav-ell/pvp.git",
+    "directory": "packages/pvp-call"
+  },
+  "types": "./src/index.d.ts"
+}

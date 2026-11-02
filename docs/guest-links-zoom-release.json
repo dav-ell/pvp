@@ -1,0 +1,152 @@
+{
+  "date": "2026-10-23",
+  "version": "0.3.22",
+  "nativeVersion": "1.0.20+21",
+  "expectedPreviousVersion": "0.3.21",
+  "expectedPreviousSha256": "a3de83a6389b8a139fc7e32f4d6861956f94a10b7904ab90eedca3d07a3fc7db",
+  "expectedCaddySha256": "f931ac239a30cffddd461a80669e15d29e4f467ceb16323f6e4c105f0ebe9f3a",
+  "candidateSha256": "d604f0e6215a2cc270616091bd9574c0cf09fe79fa3e95ef097db577757de049",
+  "archiveSha256": "6804124166a158e2203f1bef877e0360efd240795526b1ef52e6a49bfa5d92ad",
+  "assets": {
+    "/": "e1d7b9b9bae7fdc081dc4783f4f92bd8e7ce36b84caf78dffed403a50be3e829",
+    "/security.js": "a0e04cd9aab538c1585148be17e49e9f07d2a9db13bfe19593a59e4ba85ab6b6",
+    "/meetings.js": "dd502c9c25ac933fd6f9ed8dd4af432a6bc1badc1853b0798987f8bbf90ba0fe",
+    "/styles.css": "1a2e8126e69e69642fb2b34038e6ffae18b256e4883a7992cf48ced2e8877f8f",
+    "/inspector.js": "0949acdd0dbb4bce491a054cbb8366462e3ca47f111fda2fdb498e648acf6ad7",
+    "/icon.svg": "0927360ec0c08b7b133662e50709e04f1ccc492179126aa8143d72dcadd6d121",
+    "/group-quality.js": "d777f1abc238bb59e03cd26b6369cabcd3518539b142c5cb9978276d3d1c7b8c",
+    "/group-video.js": "c8ea3f9dde9f9efbc7b19ea6065b23787e381ef74b02fa9ee7a29dd8450dabdf",
+    "/group-calls.js": "146b69bc3af74c93701de47cc79ca8d42d890345acc3d4d45d56bfe4d3eb163c",
+    "/manifest.webmanifest": "2c399d80f83231f72e9d7dfc41a33e810996d3e70bcf77ba41e7562cc219c8f2",
+    "/meeting-chat.js": "ff15414f04b30bb7467e479f71951e7feff158ead581625ace1157745b231abe",
+    "/bandwidth.js": "7e6cc98ef21143e0e852938165922c5bfe594c2956593bafe831a3a1c83f2402",
+    "/app.js": "74243640fed9c1d241d3bbbe199024ede5c51f821eb2fe2fc77572088022e9b9",
+    "/packages/pvp-call/src/security.js": "534aa8f9250b75dc3d8b79141867601af70e5b0810d74f1a40ad047d130208e5",
+    "/packages/pvp-call/src/mesh.js": "763eeee194994454761220b1e7207bd68d23b4e700edd1dc30b9909a6efe7307",
+    "/packages/pvp-call/src/inspector.js": "d8d5426e5fe7d675dcd81147840e24146c70241c4a86ab8be59e282c8befb6ee",
+    "/packages/pvp-call/src/media.js": "a64ba3f1ffbf364f07d7a251a5b330799559d73b6e075a807d5a4f26a5ec40aa",
+    "/packages/pvp-call/src/index.js": "86f43be491fa42331f6135ecaa552006801c9e170fb0ff0e55141463c031ff79",
+    "/packages/pvp-call/src/quality.js": "7a689d823924d93d6b60d7e98b240a1dde4af953abb2edc1b422e319a8c3110c",
+    "/packages/pvp-call/src/room.js": "b58f9f62275cca892f87d329b095fcba9923537b7013f627a96bcfb10d8c9efe",
+    "/motion.js": "f8da31e5f76e6e9e43c03c6b3047854d88eea245133b1e74b794c1843d6430a5",
+    "/motion.css": "5a7b5233ff84d907ea7739b6a4010f1da3a71decc37165552ead330b64a859b2",
+    "/playback.js": "d0c5a6e2e57977a1c2dfa06c3f5aeed569fc393ea50700b57c22c66a792211ea",
+    "/meeting-join.js": "3b56050e47d58cecf60532970e4b14278b15cd2228650c2cbd9082a79e7dcef0",
+    "/meeting-route.js": "5ed7b68b25437796c279442ceae4816fa146a5ab11b8d7be414267b2dc427538",
+    "/meeting-mobile.css": "32235100c94492206ad1ef94614b9de264bacca96ac24f46158b69380efb22a1",
+    "/ui.js": "8de0c48a23570e3b26b2a76fc82d051836510dcb05e5d8e35c834f01998905a5",
+    "/polish.css": "877849b15ec76d14375e473e5a867f1183b8168de276c784a7d8a3a29a4ed782",
+    "/icons.svg": "83ae170f435f83de851bf1c802f8184dc9689834da56f7d5b53ab44361270161"
+  },
+  "validation": {
+    "browserTests": 50,
+    "flutterTests": 72,
+    "signalingTests": 32,
+    "wordingBrowserTest": "passed",
+    "wordingNativeTests": 4,
+    "flutterAnalyze": "passed",
+    "clippy": "passed",
+    "macArchitectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "macRecursiveSignatureVerification": "passed"
+  },
+  "status": "deployed and verified over public HTTPS",
+  "deployment": {
+    "health": {
+      "media": "direct-p2p",
+      "status": "ok",
+      "version": "0.3.22"
+    },
+    "rollback": "/var/backups/pvp/guest-zoom-2026-10-23-1792761208",
+    "binarySha256": "d604f0e6215a2cc270616091bd9574c0cf09fe79fa3e95ef097db577757de049",
+    "macArchiveSha256": "6804124166a158e2203f1bef877e0360efd240795526b1ef52e6a49bfa5d92ad",
+    "verifiedAssets": 29,
+    "databaseIntegrity": "ok",
+    "durableRecordsMatchBackup": {
+      "users": true,
+      "friends": true,
+      "meetings": true,
+      "meeting_members": true,
+      "meeting_controls": true,
+      "meeting_access": true,
+      "meeting_blocks": true,
+      "discovery_preferences": true
+    },
+    "signalingConnectionsAtRestart": 0,
+    "services": [
+      "active",
+      "active",
+      "active",
+      "active"
+    ]
+  },
+  "publicArtifacts": {
+    "health": {
+      "media": "direct-p2p",
+      "status": "ok",
+      "version": "0.3.22"
+    },
+    "verifiedAssets": 29,
+    "archiveSha256": "6804124166a158e2203f1bef877e0360efd240795526b1ef52e6a49bfa5d92ad",
+    "archiveBytes": 33312782,
+    "previousDownloadAvailable": true,
+    "verifiedAt": "2026-10-23T13:14:03.411Z"
+  },
+  "productionVerification": {
+    "status": "passed",
+    "checkedAtUtc": "2026-10-23T13:14:06.659Z",
+    "checks": [
+      "guest link creation and sharing",
+      "guest host controls retained after reload",
+      "more private wording and share message",
+      "stable Zoom identity across invitation forms",
+      "mobile guest admission",
+      "two-way encrypted WebRTC audio",
+      "no automatic Zoom admin",
+      "released Zoom participant seats"
+    ]
+  },
+  "finalAudit": {
+    "checkedAtUtc": "2026-10-23T13:15:09.424040+00:00",
+    "removedExactVerificationUsers": 1,
+    "removedExactVerificationMeetings": 2,
+    "existingDurableRecordsPreserved": {
+      "users": true,
+      "friends": true,
+      "meetings": true,
+      "meeting_members": true,
+      "meeting_controls": true,
+      "meeting_access": true,
+      "meeting_blocks": true,
+      "discovery_preferences": true
+    },
+    "counts": {
+      "users": 9,
+      "friends": 6,
+      "meetings": 5,
+      "meeting_members": 10,
+      "meeting_controls": 1,
+      "meeting_access": 5,
+      "meeting_blocks": 0,
+      "discovery_preferences": 1,
+      "meeting_visits": 0
+    },
+    "intentionalNewUser": "pvp-zoom-service (non-login internal owner)",
+    "databaseIntegrity": "ok",
+    "foreignKeys": "ok",
+    "services": {
+      "pvp-signaling": "active",
+      "caddy": "active",
+      "pvp-relay": "active",
+      "frps": "active"
+    }
+  },
+  "portableBackup": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261023T131210Z-2932.sqlite",
+  "nativeArchive": {
+    "url": "https://lopixel.space/downloads/PVP-macOS-1.0.20.zip",
+    "version": "1.0.20+21",
+    "localInstallation": "not changed"
+  }
+}

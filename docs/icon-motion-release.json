@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-17",
+  "version": "0.3.21",
+  "nativeVersion": "1.0.19+20",
+  "expectedPreviousVersion": "0.3.20",
+  "expectedPreviousSha256": "633e4ea32c64b9505416f30544a71f3c8a9583fa51182bc207a25514fae96593",
+  "expectedCaddySha256": "647e7916250a40ff42f93774d29d16182787f2df71649d40f0572f08c4497094",
+  "candidateSha256": "a3de83a6389b8a139fc7e32f4d6861956f94a10b7904ab90eedca3d07a3fc7db",
+  "archiveSha256": "d3fc69122c1493bf77e64bb19ee025ea859805a6a0004194783d9e5aa7a149ce",
+  "assets": {
+    "/": "18ce363816deea468b54e08df6abb5bef43c22322da90b265e46075d1729684f",
+    "/security.js": "a0e04cd9aab538c1585148be17e49e9f07d2a9db13bfe19593a59e4ba85ab6b6",
+    "/meetings.js": "230a78fbce182a16866b0460afabf70b7d06182dd7493f0428b4db09afb9e32e",
+    "/styles.css": "3da45a0ab5883e57dbc2ef0d74f61aedabc80d6b68bbe6c849035d95fb48bc86",
+    "/inspector.js": "0949acdd0dbb4bce491a054cbb8366462e3ca47f111fda2fdb498e648acf6ad7",
+    "/icon.svg": "0927360ec0c08b7b133662e50709e04f1ccc492179126aa8143d72dcadd6d121",
+    "/group-quality.js": "d777f1abc238bb59e03cd26b6369cabcd3518539b142c5cb9978276d3d1c7b8c",
+    "/group-video.js": "c8ea3f9dde9f9efbc7b19ea6065b23787e381ef74b02fa9ee7a29dd8450dabdf",
+    "/group-calls.js": "2ccad9ef0e385df64eba00a1dc12195c896bbca8c98d6e3eda048860d52d3394",
+    "/manifest.webmanifest": "2c399d80f83231f72e9d7dfc41a33e810996d3e70bcf77ba41e7562cc219c8f2",
+    "/meeting-chat.js": "ff15414f04b30bb7467e479f71951e7feff158ead581625ace1157745b231abe",
+    "/bandwidth.js": "7e6cc98ef21143e0e852938165922c5bfe594c2956593bafe831a3a1c83f2402",
+    "/app.js": "746bfadc230c6f5412d2aac00a42dcf12f04b93babf9589956ca2e93ae35f70f",
+    "/packages/pvp-call/src/security.js": "534aa8f9250b75dc3d8b79141867601af70e5b0810d74f1a40ad047d130208e5",
+    "/packages/pvp-call/src/mesh.js": "763eeee194994454761220b1e7207bd68d23b4e700edd1dc30b9909a6efe7307",
+    "/packages/pvp-call/src/inspector.js": "d8d5426e5fe7d675dcd81147840e24146c70241c4a86ab8be59e282c8befb6ee",
+    "/packages/pvp-call/src/media.js": "a64ba3f1ffbf364f07d7a251a5b330799559d73b6e075a807d5a4f26a5ec40aa",
+    "/packages/pvp-call/src/index.js": "86f43be491fa42331f6135ecaa552006801c9e170fb0ff0e55141463c031ff79",
+    "/packages/pvp-call/src/quality.js": "7a689d823924d93d6b60d7e98b240a1dde4af953abb2edc1b422e319a8c3110c",
+    "/packages/pvp-call/src/room.js": "b58f9f62275cca892f87d329b095fcba9923537b7013f627a96bcfb10d8c9efe",
+    "/motion.js": "f8da31e5f76e6e9e43c03c6b3047854d88eea245133b1e74b794c1843d6430a5",
+    "/motion.css": "5a7b5233ff84d907ea7739b6a4010f1da3a71decc37165552ead330b64a859b2",
+    "/playback.js": "d0c5a6e2e57977a1c2dfa06c3f5aeed569fc393ea50700b57c22c66a792211ea",
+    "/meeting-join.js": "20c51a125022cd9b1e422919fc7f374939697c0a1667b3577639cb8e57aba956",
+    "/meeting-route.js": "5ed7b68b25437796c279442ceae4816fa146a5ab11b8d7be414267b2dc427538",
+    "/meeting-mobile.css": "32235100c94492206ad1ef94614b9de264bacca96ac24f46158b69380efb22a1",
+    "/ui.js": "8de0c48a23570e3b26b2a76fc82d051836510dcb05e5d8e35c834f01998905a5",
+    "/polish.css": "877849b15ec76d14375e473e5a867f1183b8168de276c784a7d8a3a29a4ed782",
+    "/icons.svg": "83ae170f435f83de851bf1c802f8184dc9689834da56f7d5b53ab44361270161"
+  },
+  "validation": {
+    "browserTests": 49,
+    "flutterTests": 68,
+    "signalingTests": 28,
+    "flutterAnalyze": "passed",
+    "clippy": "passed",
+    "focusedChromiumAndWebKit": "passed",
+    "nativeListenerInterop": "passed",
+    "nativeSixPartyInterop": "passed",
+    "strict480pReceiverPerformanceCheck": "failed under local adaptation; retained as opt-in check",
+    "macArchitectures": [
+      "arm64",
+      "x86_64"
+    ],
+    "macRecursiveSignatureVerification": "passed",
+    "physicalMobileAndVoiceOverPilot": "not performed"
+  },
+  "portableBackup": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261018T030845Z-20419.sqlite",
+  "deployment": {
+    "health": {
+      "media": "direct-p2p",
+      "status": "ok",
+      "version": "0.3.21"
+    },
+    "rollback": "/var/backups/pvp/icon-motion-2026-10-17-1792293566",
+    "binarySha256": "a3de83a6389b8a139fc7e32f4d6861956f94a10b7904ab90eedca3d07a3fc7db",
+    "macArchiveSha256": "d3fc69122c1493bf77e64bb19ee025ea859805a6a0004194783d9e5aa7a149ce",
+    "verifiedAssets": 29,
+    "databaseIntegrity": "ok",
+    "durableRecordsMatchBackup": {
+      "users": true,
+      "friends": true,
+      "meetings": true,
+      "meeting_members": true,
+      "meeting_controls": true,
+      "meeting_access": true,
+      "meeting_blocks": true,
+      "discovery_preferences": true
+    },
+    "signalingConnectionsAtRestart": 0,
+    "services": [
+      "active",
+      "active",
+      "active",
+      "active"
+    ]
+  },
+  "publicArtifacts": {
+    "checkedAtUtc": "2026-10-18T03:19:43.719433+00:00",
+    "health": {
+      "media": "direct-p2p",
+      "status": "ok",
+      "version": "0.3.21"
+    },
+    "verifiedAssetCount": 29,
+    "macDownload": {
+      "url": "https://lopixel.space/downloads/PVP-macOS-1.0.19.zip",
+      "bytes": 33315228,
+      "sha256": "d3fc69122c1493bf77e64bb19ee025ea859805a6a0004194783d9e5aa7a149ce",
+      "contentDisposition": "attachment"
+    }
+  },
+  "productionBrowser": {
+    "chromium": "passed",
+    "webkit": "passed on isolated retry",
+    "initialWebKitRun": "timed out reloading after explicit leave; retry passed",
+    "scope": "live HTTPS listening, permission recovery, microphone upgrade, reconnect, duplicate tab, refresh, both browser SDP roles",
+    "testAccountCleanup": "exact temporary owners and their meetings removed"
+  },
+  "finalAudit": {
+    "checkedAtUtc": "2026-10-18T03:23:22.326351+00:00",
+    "durableRecordsMatchPreRelease": {
+      "users": true,
+      "friends": true,
+      "meetings": true,
+      "meeting_members": true,
+      "meeting_controls": true,
+      "meeting_access": true,
+      "meeting_blocks": true,
+      "discovery_preferences": true
+    },
+    "counts": {
+      "users": 8,
+      "friends": 6,
+      "meetings": 5,
+      "meeting_members": 10,
+      "meeting_controls": 1,
+      "meeting_access": 5,
+      "meeting_blocks": 0,
+      "discovery_preferences": 0
+    },
+    "databaseIntegrity": "ok",
+    "foreignKeys": "ok",
+    "services": {
+      "pvp-signaling": "active",
+      "caddy": "active",
+      "pvp-relay": "active",
+      "frps": "active"
+    },
+    "caddySha256": "f931ac239a30cffddd461a80669e15d29e4f467ceb16323f6e4c105f0ebe9f3a",
+    "serviceRestartCounters": {
+      "pvp-signaling": 0,
+      "caddy": 0,
+      "pvp-relay": 3,
+      "frps": 0
+    }
+  }
+}

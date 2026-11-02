@@ -1,0 +1,205 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>PVP · Interface polish concept</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f4f4fa;background:#101116;font-synthesis:none;--text:#f4f4fa;--muted:#b3b5c6;--purple:#a5a0ff;--accent:#6b60db;--surface:#252630;--line:#41434e;--ease:cubic-bezier(.16,1,.3,1)}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer;color:inherit}button:disabled{cursor:default;opacity:.6}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #b8b3ff;outline-offset:4px}a{color:#d2ceff}svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}[hidden]{display:none!important}.board{max-width:1440px;margin:0 auto;padding:40px 36px}.eyebrow{color:#b1abff;letter-spacing:2px;font-size:11px;font-weight:650;margin:0 0 12px}.intro{display:flex;justify-content:space-between;gap:32px;align-items:end;margin-bottom:24px}.intro h1{font-size:36px;font-weight:600;letter-spacing:-1.3px;margin:0;line-height:1.15}.intro p{color:var(--muted);font-size:14px;line-height:1.65;max-width:390px;margin:0}.notice{padding:12px 16px;border:1px solid #3c3d4e;border-radius:12px;color:#c5c3dd;font-size:13px;line-height:1.5;background:#1c1b2a;margin:0 0 26px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:24px;align-items:start}.section-label{display:flex;align-items:center;gap:8px;font-size:12px;color:#bdc0d2;margin:0 0 12px;font-weight:500}.section-label span{margin-left:auto;font-size:11px;color:#9399b1}.frame{border:1px solid #3b3d49;background:#191a22;box-shadow:0 20px 60px #0003;position:relative;overflow:hidden;isolation:isolate}.desktop{height:540px;border-radius:20px}.phone{height:704px;border-radius:30px}.windowbar{height:30px;padding:12px 16px;display:flex;gap:6px;background:#20212a}.windowbar i{width:7px;height:7px;border-radius:50%;background:#626372}.windowbar i:first-child{background:#b87882}.windowbar i:nth-child(2){background:#b4a073}.windowbar i:last-child{background:#7d9e91}.screen{height:calc(100% - 30px);display:flex;flex-direction:column;position:relative;background:radial-gradient(ellipse at 50% 55%,#25263855,transparent 70%)}.phone .screen{height:100%;padding-top:10px}.call-top{display:flex;align-items:center;gap:12px;padding:22px 24px 12px}.call-title{min-width:0;flex:1}.call-title h2{font-size:18px;letter-spacing:-.4px;font-weight:600;margin:0;overflow-wrap:anywhere}.call-title p{font-size:12px;color:var(--muted);margin:5px 0 0}.brand-mini{font-size:14px;font-weight:650;color:#c4bfff;letter-spacing:-.5px}.small-icon{width:40px;height:40px;display:grid;place-items:center;border:0;background:transparent;border-radius:12px;color:#c9cbda;flex:none;position:relative}.small-icon svg{width:20px;height:20px}.small-icon:hover{background:#ffffff0c}.count{display:flex;align-items:center;gap:6px;border:1px solid #454752;border-radius:24px;background:#282933;font-size:12px;min-height:38px;padding:7px 11px}.count svg{width:17px;height:17px}.stage{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12px 24px;gap:12px;position:relative;text-align:center}.avatar{width:136px;height:136px;border-radius:50%;background:linear-gradient(145deg,#69638e,#45415e);display:grid;place-items:center;font-size:46px;font-weight:500;letter-spacing:-2px;position:relative;box-shadow:0 0 0 1px #d9d4ff22,inset 0 1px 0 #ffffff22;transition:box-shadow 180ms ease,transform 280ms var(--ease)}.avatar::before{content:"";position:absolute;inset:-9px;border:2px solid transparent;border-radius:50%;transition:border-color 180ms ease}.avatar.speaking::before{border-color:#b6afff;animation:voice 1300ms ease-in-out 3}.avatar.speaking{box-shadow:0 0 0 16px #a49bff08}.stage h3{font-size:23px;font-weight:500;letter-spacing:-.4px;margin:6px 0 0}.stage .status{font-size:13px;line-height:1.45;color:#b9bcce;margin:0;min-height:20px}.status.live{color:#ade0c8}.inline-badge{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:12px;color:#c7c4e6;padding:7px 10px;background:#343243;border-radius:20px}.inline-badge svg{width:14px;height:14px}.pill{display:inline-flex;justify-content:center;align-items:center;gap:8px;border:1px solid #5d596d;border-radius:24px;min-height:42px;background:#2d2c3c;padding:10px 17px;font-size:13px}.pill svg{width:17px;height:17px}.pill.primary{background:var(--accent);border-color:var(--accent);color:white}.pill.danger{background:#b24150;border-color:#b24150;color:white}.pill:hover{filter:brightness(1.12)}.you{font-size:12px;color:#b2b5c6;margin:8px 24px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}.you>span{display:flex;align-items:center;gap:7px}.you svg{width:15px;height:15px}.dock-area{padding:12px 20px 24px;display:flex;justify-content:center;flex-shrink:0}.dock{display:flex;justify-content:center;align-items:start;gap:9px;border:1px solid #ffffff12;background:#2b2d37;padding:10px 12px;border-radius:24px;box-shadow:0 8px 28px #0003}.action-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:48px;position:relative}.action{width:48px;height:48px;display:grid;place-items:center;background:#3c3e4b;border:1px solid transparent;border-radius:50%;position:relative;transition:transform 110ms var(--ease),background 180ms ease,border-color 180ms ease}.action:hover{background:#4a4c5c}.action:active{transform:scale(.94)}.action.active{background:#dedbea;color:#272331}.action.off{background:#3d3845;color:#fff}.action.add-mic::after{content:'+';font-size:13px;font-weight:700;line-height:16px;background:#d8d3ff;color:#2b2544;position:absolute;right:0;top:0;width:16px;height:16px;border-radius:50%;outline:2px solid #2b2d37}.action.danger{background:#bb4554;color:white;width:68px;border-radius:20px}.action .badge{position:absolute;right:1px;top:1px;width:7px;height:7px;background:#c5baff;border-radius:50%;box-shadow:0 0 0 3px #2b2d37}.caption{display:none;font-size:10px;color:#c5c7d5;line-height:1.25;max-width:68px;text-align:center}.caption.always,.labels .caption{display:block}.tooltip{position:absolute;bottom:calc(100% + 11px);left:50%;transform:translateX(-50%);background:#e5e3f2;color:#252331;font-size:11px;padding:7px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 110ms ease;z-index:8}.action:hover+.tooltip,.action:focus-visible+.tooltip{opacity:1}.phone .call-top{padding:20px 18px 12px;gap:9px}.phone .call-title h2{font-size:19px}.phone .stage{gap:12px;padding:18px 18px 8px}.phone .avatar{width:150px;height:150px;font-size:51px;background:linear-gradient(145deg,#6f657e,#49445d)}.phone .stage h3{font-size:25px}.phone .dock-area{padding:16px 16px 26px}.phone .dock{width:100%;border-radius:25px;padding:12px 11px;gap:14px}.phone .action{width:54px;height:54px}.phone .action.danger{width:64px}.phone .you{margin:8px 24px 0}.phone .inline-badge{font-size:12px}.home-indicator{height:4px;width:96px;border-radius:4px;background:#b3b4c5;margin:0 auto 12px;flex:none;opacity:.7}.phone .stage.camera{background:linear-gradient(145deg,#47426255,#303b4a77);margin:16px 16px 8px;border-radius:24px}.camera-placeholder{width:100%;height:100%;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}.camera-placeholder small{font-size:11px;color:#b5bad0}.backdrop{position:absolute;inset:0;background:#090a10a8;z-index:10;backdrop-filter:blur(5px)}.sheet{position:absolute;z-index:11;left:12px;right:12px;bottom:12px;border:1px solid #555764;background:#2b2d37;border-radius:24px;padding:18px 16px 16px;box-shadow:0 18px 60px #0006;animation:sheet-in 280ms var(--ease);max-height:calc(100% - 34px);overflow:auto;overscroll-behavior:contain;text-align:left}.desktop .sheet{left:auto;right:22px;bottom:98px;width:300px}.grabber{width:32px;height:4px;background:#656778;border-radius:5px;margin:-7px auto 12px}.sheet-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.sheet h3{margin:0;font-size:19px;font-weight:600;letter-spacing:-.4px}.sheet p{font-size:13px;line-height:1.5;color:#c3c5d5}.sheet .small-icon{background:#3a3c48;width:32px;height:32px;min-width:44px;min-height:44px;border-radius:50%}.sheet-row{display:flex;width:100%;align-items:center;gap:12px;min-height:54px;padding:10px 5px;background:transparent;border:0;text-align:left;font-size:15px;border-radius:10px}.sheet-row:hover{background:#ffffff09}.sheet-row>svg:first-child{color:#c6c1ff;width:22px;height:22px}.sheet-row>span{flex:1}.sheet-row>small{font-size:12px;color:#bbbed0}.sheet-row>svg:last-child:not(:first-child){width:16px;height:16px;color:#999db3}.rule{height:1px;background:#484a57;margin:8px 0}.switch{height:26px;width:44px;background:#666876;border-radius:20px;position:relative;flex:none}.switch:after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#f2f1fb;top:3px;left:3px;transition:transform 180ms var(--ease)}[aria-checked=true] .switch{background:#776be2}[aria-checked=true] .switch:after{transform:translateX(18px)}.person-row{display:flex;align-items:center;gap:11px;padding:14px 2px;border-bottom:1px solid #474956}.person-avatar{height:38px;width:38px;border-radius:50%;display:grid;place-items:center;background:#514d72;font-size:13px}.person-row>div{flex:1}.person-row strong{font-size:14px;font-weight:500}.person-row small{display:block;font-size:12px;color:#b7bbce;margin-top:4px}.person-row>svg{width:18px;color:#bcb8e0}.sheet .pill{margin-top:14px;width:100%}.sheet details{font-size:13px;color:#c4c6d7;line-height:1.6;margin-top:12px}.sheet summary{cursor:pointer;padding:8px 0;min-height:44px}.sheet details p{font-size:12px;margin:4px 0}.chat-bubble{background:#3b394e;border-radius:14px 14px 14px 4px;padding:11px 13px;margin:16px 0;font-size:13px;line-height:1.5}.chat-bubble small{display:block;color:#b6afff;font-size:11px;margin-bottom:5px}.composer{display:flex;gap:8px}.composer input{min-width:0;flex:1;border:1px solid #5c5c70;background:#20212d;color:#f1f1fa;border-radius:12px;padding:12px;font-size:16px;min-height:48px}.composer button{width:48px;min-height:48px;border:0;border-radius:12px;background:var(--accent)}.composer svg{width:21px;height:21px}.error-symbol{width:56px;height:56px;display:grid;place-items:center;border-radius:18px;background:#4f3b4b;color:#f6c9c5;margin:12px 0 18px}.error-symbol svg{width:28px;height:28px}.sheet .recovery-title{font-size:22px}.simulation{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;padding:12px 0;color:#a9afc4;font-size:12px}.simulation label{display:flex;align-items:center;gap:8px}.simulation select{background:#252732;color:#d9dbea;border:1px solid #484b60;border-radius:8px;min-height:40px;padding:7px 10px;font-size:13px;max-width:100%}.simulation button{background:#252732;color:#d9dbea;border:1px solid #484b60;border-radius:8px;min-height:40px;padding:7px 10px;font-size:12px}.notes{color:#aeb4c9;font-size:12px;line-height:1.6;margin:10px 0 0}.principles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}.principle{padding:18px;border:1px solid #3a3e4d;background:#1c1e27;border-radius:14px}.principle svg{color:#aaa3f6;width:23px;height:23px}.principle h3{font-size:14px;font-weight:550;margin:12px 0 8px}.principle p{margin:0;color:#adb5c9;font-size:12px;line-height:1.6}.footer{color:#aab1c5;font-size:12px;line-height:1.6;margin-top:24px}.live-bars{display:inline-flex;gap:3px;align-items:center;height:18px;margin-right:4px;vertical-align:middle}.live-bars i{display:block;width:3px;border-radius:3px;height:5px;background:#b7b0ff;animation:bar 650ms ease-in-out 4}.live-bars i:nth-child(2){animation-delay:160ms}.live-bars i:nth-child(3){animation-delay:300ms}.banner{margin:0 22px;padding:10px 12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;line-height:1.4;border:1px solid #806575;background:#3a2f3a;border-radius:10px;animation:sheet-in 180ms var(--ease)}.banner svg{width:18px}.banner button{background:transparent;border:0;font-weight:600;color:#eee5ff;min-height:30px}.check-pop{animation:check 280ms var(--ease)}@keyframes voice{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.05);opacity:1}}@keyframes bar{0%,100%{height:5px}50%{height:15px}}@keyframes sheet-in{from{opacity:.4;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}@keyframes check{from{opacity:.4;transform:scale(.8)}to{opacity:1;transform:scale(1)}}.reduced *, .reduced *::before,.reduced *::after{animation:none!important;transition:none!important}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media(max-width:1050px){.board{padding:28px 22px}.layout{grid-template-columns:minmax(0,1fr) 320px;gap:18px}.intro h1{font-size:30px}.desktop .dock{gap:5px;padding:10px}.desktop .action{width:42px;height:42px}.desktop .action-wrap{min-width:42px}.desktop .action.danger{width:58px}.desktop .call-top{padding:18px}.principles{grid-template-columns:1fr}.principle{padding:16px}.intro p{max-width:340px}.desktop .sheet{right:12px;width:min(300px,calc(100% - 24px))}}
+@media(max-width:760px){.board{padding:24px 16px}.intro{display:block}.intro h1{font-size:29px}.intro p{margin-top:12px;max-width:none}.layout{display:flex;flex-direction:column}.left,.right{width:100%}.right{order:-1}.phone{max-width:390px;margin:auto;height:700px}.desktop{height:500px}.desktop .action-wrap[data-desktop-only]{display:none}.desktop .dock{gap:12px}.desktop .action{width:48px;height:48px}.desktop .action.danger{width:64px}.simulation{justify-content:center}.simulation select{font-size:16px}.principles{grid-template-columns:1fr}.section-label span{max-width:50%;text-align:right}.notice{font-size:12px}.desktop .call-top{padding:18px 14px}.desktop .brand-mini{display:none}}
+@media(max-width:360px){.phone .dock{gap:6px;padding:12px 8px}.phone .action{width:48px;height:52px}.phone .action.danger{width:56px}.desktop .dock{gap:6px;padding:8px}.desktop .action{width:44px;height:48px}.desktop .action.danger{width:56px}}
+</style></head><body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs><symbol id="icon-arrow-up-right" viewBox="0 0 24 24">
+  <path d="M7 7h10v10" />
+  <path d="M7 17 17 7" />
+</symbol>
+<symbol id="icon-check" viewBox="0 0 24 24">
+  <path d="M20 6 9 17l-5-5" />
+</symbol>
+<symbol id="icon-chevron-left" viewBox="0 0 24 24">
+  <path d="m15 18-6-6 6-6" />
+</symbol>
+<symbol id="icon-chevron-right" viewBox="0 0 24 24">
+  <path d="m9 18 6-6-6-6" />
+</symbol>
+<symbol id="icon-circle-question-mark" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="10" />
+  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+  <path d="M12 17h.01" />
+</symbol>
+<symbol id="icon-clock-3" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="10" />
+  <path d="M12 6v6h4" />
+</symbol>
+<symbol id="icon-copy" viewBox="0 0 24 24">
+  <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+</symbol>
+<symbol id="icon-ellipsis" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="1" />
+  <circle cx="19" cy="12" r="1" />
+  <circle cx="5" cy="12" r="1" />
+</symbol>
+<symbol id="icon-headphones" viewBox="0 0 24 24">
+  <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" />
+</symbol>
+<symbol id="icon-link" viewBox="0 0 24 24">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+</symbol>
+<symbol id="icon-lock-keyhole" viewBox="0 0 24 24">
+  <circle cx="12" cy="16" r="1" />
+  <rect x="3" y="10" width="18" height="12" rx="2" />
+  <path d="M7 10V7a5 5 0 0 1 10 0v3" />
+</symbol>
+<symbol id="icon-log-out" viewBox="0 0 24 24">
+  <path d="m16 17 5-5-5-5" />
+  <path d="M21 12H9" />
+  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+</symbol>
+<symbol id="icon-message-circle" viewBox="0 0 24 24">
+  <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
+</symbol>
+<symbol id="icon-mic-off" viewBox="0 0 24 24">
+  <path d="M12 19v3" />
+  <path d="M15 9.34V5a3 3 0 0 0-5.68-1.33" />
+  <path d="M16.95 16.95A7 7 0 0 1 5 12v-2" />
+  <path d="M18.89 13.23A7 7 0 0 0 19 12v-2" />
+  <path d="m2 2 20 20" />
+  <path d="M9 9v3a3 3 0 0 0 5.12 2.12" />
+</symbol>
+<symbol id="icon-mic" viewBox="0 0 24 24">
+  <path d="M12 19v3" />
+  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+  <rect x="9" y="2" width="6" height="13" rx="3" />
+</symbol>
+<symbol id="icon-phone-off" viewBox="0 0 24 24">
+  <path d="M10.1 13.9a14 14 0 0 0 3.732 2.668 1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2 18 18 0 0 1-12.728-5.272" />
+  <path d="M22 2 2 22" />
+  <path d="M4.76 13.582A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 .244.473" />
+</symbol>
+<symbol id="icon-plus" viewBox="0 0 24 24">
+  <path d="M5 12h14" />
+  <path d="M12 5v14" />
+</symbol>
+<symbol id="icon-screen-share-off" viewBox="0 0 24 24">
+  <path d="M13 3H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3" />
+  <path d="M8 21h8" />
+  <path d="M12 17v4" />
+  <path d="m22 3-5 5" />
+  <path d="m17 3 5 5" />
+</symbol>
+<symbol id="icon-screen-share" viewBox="0 0 24 24">
+  <path d="M13 3H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3" />
+  <path d="M8 21h8" />
+  <path d="M12 17v4" />
+  <path d="m17 8 5-5" />
+  <path d="M17 3h5v5" />
+</symbol>
+<symbol id="icon-settings-2" viewBox="0 0 24 24">
+  <path d="M14 17H5" />
+  <path d="M19 7h-9" />
+  <circle cx="17" cy="17" r="3" />
+  <circle cx="7" cy="7" r="3" />
+</symbol>
+<symbol id="icon-switch-camera" viewBox="0 0 24 24">
+  <path d="M11 19H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" />
+  <path d="M13 5h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5" />
+  <circle cx="12" cy="12" r="3" />
+  <path d="m18 22-3-3 3-3" />
+  <path d="m6 2 3 3-3 3" />
+</symbol>
+<symbol id="icon-users-round" viewBox="0 0 24 24">
+  <path d="M18 21a8 8 0 0 0-16 0" />
+  <circle cx="10" cy="8" r="5" />
+  <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
+</symbol>
+<symbol id="icon-video-off" viewBox="0 0 24 24">
+  <path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196" />
+  <path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2" />
+  <path d="m2 2 20 20" />
+</symbol>
+<symbol id="icon-video" viewBox="0 0 24 24">
+  <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
+  <rect x="2" y="6" width="14" height="12" rx="2" />
+</symbol>
+<symbol id="icon-volume-2" viewBox="0 0 24 24">
+  <path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
+  <path d="M16 9a5 5 0 0 1 0 6" />
+  <path d="M19.364 18.364a9 9 0 0 0 0-12.728" />
+</symbol>
+<symbol id="icon-volume-x" viewBox="0 0 24 24">
+  <path d="M11 4.702a.7.7 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.7.7 0 0 0 11 19.298z" />
+  <path d="m16.5 14.5 5-5" />
+  <path d="m16.5 9.5 5 5" />
+</symbol>
+<symbol id="icon-wifi-off" viewBox="0 0 24 24">
+  <path d="M12 20h.01" />
+  <path d="M8.5 16.429a5 5 0 0 1 7 0" />
+  <path d="M5 12.859a10 10 0 0 1 5.17-2.69" />
+  <path d="M19 12.859a10 10 0 0 0-2.007-1.523" />
+  <path d="M2 8.82a15 15 0 0 1 4.177-2.643" />
+  <path d="M22 8.82a15 15 0 0 0-11.288-3.764" />
+  <path d="m2 2 20 20" />
+</symbol>
+<symbol id="icon-x" viewBox="0 0 24 24">
+  <path d="M18 6 6 18" />
+  <path d="m6 6 12 12" />
+</symbol><symbol id="icon-wifi" viewBox="0 0 24 24">
+  <path d="M12 20h.01" />
+  <path d="M2 8.82a15 15 0 0 1 20 0" />
+  <path d="M5 12.859a10 10 0 0 1 14 0" />
+  <path d="M8.5 16.429a5 5 0 0 1 7 0" />
+</symbol></defs></svg>
+<main class="board"><p class="eyebrow">PVP / INTERFACE DIRECTION</p><div class="intro"><h1>People at the center.<br>Clarity in every control.</h1><p>A quieter call surface, one icon family, and motion that explains changes. Familiar actions are visual; important decisions keep a few clear words.</p></div><p class="notice"><strong>Interactive design concept.</strong> All people, permissions, audio activity and camera states are simulated. No devices or meetings are accessed. Try the controls and scenario menus.</p>
+<div class="layout"><section class="left"><h2 class="section-label">Desktop & Mac direction <span>Solo call · compact controls</span></h2><div id="desktop-frame" class="frame desktop"><div class="windowbar" aria-hidden="true"><i></i><i></i><i></i></div><div class="screen" id="desktop-screen"></div></div><div class="simulation"><label>Try a state<select id="desktop-scenario"><option value="solo">Waiting for others</option><option value="duo">Someone joins</option><option value="speaking">Speaking activity</option><option value="reconnect">Connection interrupted</option><option value="playback">Playback needs a tap</option></select></label><button id="demo-labels" aria-pressed="false">Show control labels</button><button id="demo-motion" aria-pressed="false">Reduce motion</button></div><div class="principles"><article class="principle"><svg><use href="#icon-users-round"/></svg><h3>People first</h3><p>The person and conversation own the screen. Capacity, bandwidth and setup details recede.</p></article><article class="principle"><svg><use href="#icon-mic"/></svg><h3>Recognize the action</h3><p>Consistent symbols, stable positions and short labels where they help a decision.</p></article><article class="principle"><svg><use href="#icon-check"/></svg><h3>See what changed</h3><p>A speaking ring, a slashed mic, a copied check. Idle screens settle and stay quiet.</p></article></div></section>
+<section class="right"><h2 class="section-label">Phone direction <span>Tap More to see the new sheet</span></h2><div id="mobile-frame" class="frame phone"><div class="screen" id="mobile-screen"></div></div><div class="simulation"><label>Try a state<select id="mobile-scenario"><option value="listening">Listening</option><option value="speaking">Speaking activity</option><option value="more">More sheet</option><option value="denied">Microphone unavailable</option><option value="playback">Playback needs a tap</option><option value="reconnect">Connection interrupted</option></select></label></div><p class="notes">Microphone, camera, More and Leave stay reachable. Devices, quality and echo cancellation live one level deeper.</p></section></div>
+<p class="footer">Icons: Lucide, pinned source and license in <a href="polish-assets/SOURCE.json">polish-assets</a>. <a href="../ICON-MOTION-UX-PLAN.md">Full plan</a>. This concept illustrates appearance and feedback; real state wiring and device validation are implementation work.</p></main>
+<script>
+const icon=name=>`<svg aria-hidden="true"><use href="#icon-${name}"/></svg>`;
+const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const models={desktop:{kind:'desktop',duo:false,listening:false,muted:false,camera:false,panel:null,status:'normal',copied:false,speaking:false,left:false,echo:true,messages:[]},mobile:{kind:'mobile',duo:true,listening:true,muted:true,camera:false,panel:null,status:'normal',copied:false,speaking:false,left:false,echo:true,messages:[]}};
+let labels=false,reduced=false;
+const action=(m,id,glyph,label,{active=false,off=false,caption=false,extra='',badge=false}={})=>`<div class="action-wrap" ${extra}><button class="action ${active?'active':''} ${off?'off':''} ${id==='leave'?'danger':''} ${id==='mic'&&m.listening?'add-mic':''}" type="button" data-action="${id}" aria-label="${escape(id==='mic'&&!m.listening?'Microphone':id==='camera'?'Camera':label)}" ${(id==='mic'&&!m.listening)||id==='camera'?`aria-pressed="${active}"`:''}>${icon(glyph)}${badge?'<span class="badge" aria-hidden="true"></span>':''}</button><span class="tooltip" aria-hidden="true">${escape(label)}</span><span class="caption ${caption?'always':''}">${escape(label)}</span></div>`;
+const row=(action,glyph,text,trailing='')=>`<button class="sheet-row" data-action="${action}">${icon(glyph)}<span>${text}</span>${trailing||icon('chevron-right')}</button>`;
+function sheet(m){
+ const type=m.panel,title={more:'More',people:'People',audio:'Audio & video',chat:'Chat',permission:'Mic access unavailable',connection:'Connection'}[type];
+ let body='';
+ if(type==='more')body=`${row('chat','message-circle','Chat','<small>1 new</small>')}${row('people','users-round','People',`<small>${m.duo?2:1}</small>`)}${m.camera?row('flip','switch-camera','Flip camera'):''}${m.kind==='desktop'?row('share','screen-share','Share screen'):''}<div class="rule"></div>${row('audio','settings-2','Audio & video')}${row('connection',m.status==='reconnect'?'wifi-off':'wifi','Connection')}<div class="rule"></div><button class="sheet-row" data-action="labels" role="switch" aria-checked="${labels}">${icon('circle-question-mark')}<span>Show control labels</span><i class="switch" aria-hidden="true"></i></button>`;
+ if(type==='audio')body=`${row('device','mic','Microphone','<small>Default</small>')}${row('device','volume-2','Speaker','<small>Default</small>')}${row('device','video','Camera','<small>Default</small>')}<div class="rule"></div><button class="sheet-row" data-action="echo" role="switch" aria-checked="${m.echo}">${icon('headphones')}<span>Echo cancellation</span><i class="switch" aria-hidden="true"></i></button><details><summary>About this setting</summary><p>Reduces speaker sound picked up by your microphone. The concept does not change any devices.</p></details>`;
+ if(type==='people')body=`${m.duo?'<div class="person-row"><span class="person-avatar">E</span><div><strong>Emily</strong><small>In the call</small></div>'+icon('mic')+'</div>':''}<div class="person-row"><span class="person-avatar">D</span><div><strong>David · You</strong><small>${m.listening?'Listening':m.muted?'Microphone off':'Microphone on'}</small></div>${icon(m.listening?'headphones':m.muted?'mic-off':'mic')}</div><button class="pill" data-action="copy">${icon(m.copied?'check':'link')}${m.copied?'Copied':'Invite'}</button>`;
+ if(type==='chat')body=`<div class="chat-bubble"><small>Emily</small>Can you hear me?</div>${m.messages.map(t=>`<div class="chat-bubble"><small>You</small>${escape(t)}</div>`).join('')}<form class="composer" data-chat><input name="message" aria-label="Message" placeholder="Message" maxlength="160" required><button aria-label="Send message">${icon('arrow-up-right')}</button></form>`;
+ if(type==='permission')body=`<div class="error-symbol">${icon('mic-off')}</div><p>You can keep listening. Allow microphone access in your browser to speak.</p><button class="pill primary" data-action="listen">${icon('headphones')}Keep listening</button><button class="pill" data-action="retry">${icon('mic')}Try mic</button><details><summary>Microphone help</summary><p>Check this site’s microphone permission in your browser and the browser’s microphone access in phone Settings. Return and try again.</p></details>`;
+ if(type==='connection')body=`<p>${m.status==='reconnect'?'The connection was interrupted. Your microphone stays off while this concept reconnects.':'Call connected. Technical details live here, away from the conversation.'}</p>${row('recover','wifi-off',m.status==='reconnect'?'Reconnect':'Connection details')}<details><summary>About this concept</summary><p>Connection and permission states here are simulated. The production plan wires feedback to actual media and network events.</p></details>`;
+ return `<div class="backdrop" data-action="close" aria-hidden="true"></div><section class="sheet" role="dialog" aria-label="${title}" tabindex="-1">${m.kind==='mobile'?'<div class="grabber" aria-hidden="true"></div>':''}<div class="sheet-top"><h3>${title}</h3><button class="small-icon" data-action="close" aria-label="Back to call">${icon('x')}</button></div>${body}</section>`;
+}
+function render(key,{focus=null}={}){
+ const m=models[key],root=document.getElementById(key+'-screen');root.classList.toggle('labels',labels);
+ const title='Evening catch-up', person=m.duo?'Emily':'David';
+ let banner=m.status==='playback'?`<div class="banner">${icon('volume-x')}<button data-action="hear">Hear meeting</button></div>`:m.status==='reconnect'?`<div class="banner">${icon('wifi-off')}<span>Reconnecting…</span><button data-action="recover">Retry</button></div>`:'';
+ if(m.sharing)banner+=`<div class="banner">${icon('screen-share')}<span>Sharing screen</span><button data-action="share">Stop sharing</button></div>`;
+ const stage=m.left?`<div class="stage"><div class="avatar">D</div><h3>You left</h3><p class="status">Your microphone and camera are off.</p><button class="pill primary" data-action="rejoin">${icon('headphones')}Rejoin</button></div>`:`${banner}<div class="stage ${m.camera?'camera':''}">${m.camera?'<div class="camera-placeholder">':''}<div class="avatar ${m.speaking&&m.status==='normal'?'speaking':''}">${m.duo?'E':'D'}</div><h3>${person}</h3><p class="status ${m.speaking&&m.status==='normal'?'live':''}">${m.speaking&&m.status==='normal'?'<span class="live-bars" aria-hidden="true"><i></i><i></i><i></i></span>':''}${m.status==='reconnect'?'Connection interrupted':!m.duo?'Waiting for others':m.speaking?'Speaking':'In the call'}</p>${!m.duo?`<button class="pill" data-action="copy">${icon(m.copied?'check':'link')}${m.copied?'Copied':'Invite'}</button>`:''}${m.camera?'<small>Camera preview · simulated</small></div>':''}</div>${m.duo?`<div class="you"><span>David · You</span><span>${icon(m.listening?'headphones':m.muted?'mic-off':'mic')}${m.listening?'Listening':m.muted?'Mic off':'Mic on'}</span></div>`:''}<div class="dock-area"><div class="dock" aria-label="Call controls">${action(m,'mic',m.listening?'mic':m.muted?'mic-off':'mic',m.listening?'Use mic':m.muted?'Unmute':'Mute',{active:!m.listening&&!m.muted,off:m.listening||m.muted,caption:m.listening})}${action(m,'camera',m.camera?'video':'video-off',m.camera?'Camera off':'Camera on',{active:m.camera,off:!m.camera})}${m.kind==='desktop'?action(m,'share',m.sharing?'screen-share-off':'screen-share',m.sharing?'Stop sharing':'Share screen',{active:m.sharing,extra:'data-desktop-only'})+action(m,'chat','message-circle','Chat',{extra:'data-desktop-only',badge:true})+action(m,'people','users-round','People',{extra:'data-desktop-only'}):''}${action(m,'more','ellipsis','More',{badge:m.kind==='mobile'})}${action(m,'leave','phone-off','Leave',{caption:true})}</div></div>`;
+ root.innerHTML=`<div class="surface" ${m.panel?'inert':''} style="display:contents"><header class="call-top">${m.kind==='desktop'?'<span class="brand-mini">pvp</span>':''}<div class="call-title"><h2>${title}</h2></div><button class="count" data-action="people" aria-label="People, ${m.duo?2:1} in call">${icon('users-round')}${m.duo?2:1}</button><button class="small-icon ${m.copied?'check-pop':''}" data-action="copy" aria-label="${m.copied?'Link copied':'Copy invitation link'}">${icon(m.copied?'check':'link')}</button></header>${stage}${m.kind==='mobile'?'<div class="home-indicator" aria-hidden="true"></div>':''}</div>${m.panel?sheet(m):''}`;
+ if(focus&&root.querySelector(`[data-action="${focus}"]`))root.querySelector(`[data-action="${focus}"]`).focus({preventScroll:true});else if(m.panel)root.querySelector('.sheet').focus({preventScroll:true});
+}
+function act(key,action){const m=models[key];let focus=null;
+ if(['more','people','audio','chat','connection'].includes(action)){if(!m.panel)m.invoker=action;m.panel=action;}
+ else if(action==='close'){m.panel=null;focus=m.invoker||'more';}
+ else if(action==='mic'){if(m.listening){m.listening=false;m.muted=false;}else m.muted=!m.muted;focus='mic';}
+ else if(action==='camera'){m.camera=!m.camera;focus='camera';}
+ else if(action==='copy'){m.copied=true;setTimeout(()=>{m.copied=false;render(key);},1500);}
+ else if(action==='labels'){labels=!labels;document.getElementById('demo-labels').setAttribute('aria-pressed',String(labels));Object.keys(models).forEach(k=>render(k));return;}
+ else if(action==='echo'){m.echo=!m.echo;focus='echo';}
+ else if(action==='listen'){m.panel=null;m.listening=true;m.muted=true;focus='mic';}
+ else if(action==='retry'){m.panel=null;m.listening=false;m.muted=false;focus='mic';}
+ else if(action==='leave'){m.left=true;m.camera=false;m.muted=true;m.sharing=false;m.speaking=false;m.panel=null;}
+ else if(action==='rejoin'){m.left=false;m.listening=true;m.muted=true;}
+ else if(action==='hear'||action==='recover'){m.status='normal';m.panel=null;focus=action==='hear'?'mic':'more';}
+ else if(action==='share'){m.sharing=!m.sharing;m.panel=null;}
+ else if(action==='flip'||action==='device'){m.panel='audio';}
+ render(key,{focus});
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const root=b.closest('.screen');if(root)act(root.id.split('-')[0],b.dataset.action);});
+document.addEventListener('submit',e=>{if(!e.target.matches('[data-chat]'))return;e.preventDefault();const root=e.target.closest('.screen'),key=root.id.split('-')[0],input=e.target.elements.message;if(input.value.trim())models[key].messages.push(input.value.trim());render(key);});
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const root=document.activeElement.closest('.screen');if(root&&models[root.id.split('-')[0]].panel){e.preventDefault();act(root.id.split('-')[0],'close');}});
+for(const key of ['desktop','mobile'])document.getElementById(key+'-scenario').onchange=e=>{const m=models[key],v=e.target.value;Object.assign(m,{left:false,panel:null,status:'normal',speaking:false,camera:false,copied:false});if(key==='desktop')m.duo=v!=='solo';if(v==='speaking'){m.speaking=true;m.listening=false;m.muted=false;setTimeout(()=>{m.speaking=false;render(key);},3900);}if(v==='listening'){m.listening=true;m.muted=true;}if(v==='more')m.panel='more';if(v==='denied'){m.panel='permission';m.listening=true;m.muted=true;}if(v==='playback')m.status='playback';if(v==='reconnect')m.status='reconnect';render(key);};
+document.getElementById('demo-labels').onclick=()=>{labels=!labels;document.getElementById('demo-labels').setAttribute('aria-pressed',String(labels));Object.keys(models).forEach(k=>render(k));};
+document.getElementById('demo-motion').onclick=()=>{reduced=!reduced;document.body.classList.toggle('reduced',reduced);document.getElementById('demo-motion').setAttribute('aria-pressed',String(reduced));};
+Object.keys(models).forEach(k=>render(k));
+</script></body></html>

@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-05",
+  "nativeVersion": "1.0.11+12",
+  "productionVersion": "0.3.10",
+  "installedApp": "/Users/davell/Applications/PVP.app",
+  "publicDownload": "https://lopixel.space/downloads/PVP-macOS-1.0.11.zip",
+  "signing": "Universal Intel/Apple silicon, Apple Development signed; not notarized",
+  "validation": {
+    "flutterAnalysis": "clean",
+    "flutterTests": 36,
+    "browserTests": "25 passed initially; meeting integration assertion updated for new status wording and both meeting tests passed on rerun",
+    "serverPreflight": "isolated unprivileged health, assets, persistent session, recurring meeting and admin metadata",
+    "productionHealth": "0.3.10 healthy; pvp-signaling, caddy, pvp-relay and frps active",
+    "installedExecutable": "matches packaged executable; app reopened and TLS connections established"
+  },
+  "serverBackup": "/var/backups/pvp/meeting-ux-2026-10-05-1791244090",
+  "caddyBackup": "/var/backups/pvp/meeting-ux-download-1791244081",
+  "nativeBackup": "/Users/davell/Documents/github/pvp/.build/meeting-ux/installed-app-backup-20261005-194712/PVP.app",
+  "sha256": {
+    "dist/PVP-macOS-1.0.11.zip": "1f029dfe3f965006db2f75091867686e17fe21ca5376aea325d295c16755e080",
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "ef075ca525743195a1737db0dc0b5506f4d90201f4ae32d2d98e98664d935e68",
+    "desktop/lib/ui/group_call.dart": "c0436574aa5f584649eecf5ee36332606946c999cb68651d7472ec260ea76e3d",
+    "desktop/lib/ui/meeting_chat.dart": "d9b7b84e560c0bf53075d18668df39590637325427a6b0210db7370073fde6b2",
+    "web/index.html": "b4c52b06e7ef37bbf853a36a60a7db8676ddff97d22511428f55b489a6877cfd",
+    "web/styles.css": "5d4e6d5f1c4bd89069cd1f5ce38e8eb828bfd11f5fd882da280cf2dce36a4dc3",
+    "web/group-calls.js": "38a631de2ca60b1c5000873b6235383aab9de6260ec98fb94cf4cc47ea687cda"
+  }
+}

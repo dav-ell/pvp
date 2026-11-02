@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-13",
+  "status": "deployed",
+  "scope": "browser layout; native Mac package unchanged",
+  "productionVersion": "0.3.14",
+  "binarySha256": "0bb9f581748339d2ee20a2591794813cfcc5a39f091d1d25c7eeb87d1d760a91",
+  "assets": {
+    "/security.js": "a0e04cd9aab538c1585148be17e49e9f07d2a9db13bfe19593a59e4ba85ab6b6",
+    "/meetings.js": "01a60c3a8122a6da8bf6039acc44ce7b1822257acced0fc4849366b66eec4860",
+    "/": "85df7719fa1866f9f5c5a8e948b1d8f57f41ec3434c57cbc878deb13648cea3e",
+    "/styles.css": "b903025bba4a84ad65ede576f531858c4be8c612548b18b0cfdf5cab665e6221",
+    "/inspector.js": "0949acdd0dbb4bce491a054cbb8366462e3ca47f111fda2fdb498e648acf6ad7",
+    "/icon.svg": "e35acc218e30dd446b18627512dd78e7091533ade6ec663f25b7b02564d88aff",
+    "/group-quality.js": "d777f1abc238bb59e03cd26b6369cabcd3518539b142c5cb9978276d3d1c7b8c",
+    "/group-video.js": "7240aea641bf4ebd338182eb4c98281a4dbaeaccc1a40098181cd2bc67227ce0",
+    "/group-calls.js": "b3cea2d04495531bb113132111d8fd7c4eba3950e5d81f1935c2f7aeadf8c582",
+    "/manifest.webmanifest": "fa75cfeee4555ba90fe408d4c7c9498e4a52bbcd9b594539b13a8bea6cd24b31",
+    "/meeting-chat.js": "ff15414f04b30bb7467e479f71951e7feff158ead581625ace1157745b231abe",
+    "/bandwidth.js": "49dc7c7760ed280b077f74bc1c242436a747d0a48620266b3914be820c811efc",
+    "/app.js": "624435de624644b9ac7e06a84eac97034ed654a98f452d7dfce7e856688088a4",
+    "/packages/pvp-call/src/security.js": "534aa8f9250b75dc3d8b79141867601af70e5b0810d74f1a40ad047d130208e5",
+    "/packages/pvp-call/src/mesh.js": "763eeee194994454761220b1e7207bd68d23b4e700edd1dc30b9909a6efe7307",
+    "/packages/pvp-call/src/inspector.js": "d8d5426e5fe7d675dcd81147840e24146c70241c4a86ab8be59e282c8befb6ee",
+    "/packages/pvp-call/src/media.js": "a64ba3f1ffbf364f07d7a251a5b330799559d73b6e075a807d5a4f26a5ec40aa",
+    "/packages/pvp-call/src/index.js": "86f43be491fa42331f6135ecaa552006801c9e170fb0ff0e55141463c031ff79",
+    "/packages/pvp-call/src/quality.js": "7a689d823924d93d6b60d7e98b240a1dde4af953abb2edc1b422e319a8c3110c",
+    "/packages/pvp-call/src/room.js": "b58f9f62275cca892f87d329b095fcba9923537b7013f627a96bcfb10d8c9efe"
+  },
+  "validation": {
+    "browserTests": 36,
+    "voiceRoomAndMeetingRegressionTests": 3,
+    "candidatePreflight": "passed",
+    "publicHttpsAssets": "all match",
+    "database": "integrity verified; durable records preserved",
+    "services": "pvp-signaling, caddy, pvp-relay and frps active"
+  },
+  "rollback": "/var/backups/pvp/discord-layout-2026-10-13-1791892346"
+}

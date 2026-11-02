@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>PVP · Mobile meeting UX proposal</title>
+<style>
+:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f5f5fa;background:#101116;font-synthesis:none;--muted:#a4a8b9;--line:#303344;--surface:#202330;--purple:#6b70ff;--green:#88dfb2}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button,summary{cursor:pointer}button,a,input,select{touch-action:manipulation}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #b9bcff;outline-offset:4px}button:disabled{opacity:.5;cursor:wait}button{color:inherit}button svg{pointer-events:none}p,h1,h2,h3{margin:0}svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}[hidden]{display:none!important}
+.board{max-width:1300px;margin:auto;padding:36px 40px 26px}.eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#a4a8ff;font-weight:700}.intro{display:flex;justify-content:space-between;gap:32px;align-items:flex-start;margin:12px 0 26px}.intro h1{font-size:34px;line-height:1.15;letter-spacing:-1px}.intro p{max-width:510px;color:var(--muted);line-height:1.6;font-size:15px}.notice{border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:13px;color:#b9bdcf;margin-bottom:26px;background:#181a24}.notice strong{color:#e5e7f2}.phones{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}.column-label{display:flex;gap:10px;align-items:center;font-size:14px;font-weight:650;margin:0 0 12px}.step{display:grid;place-items:center;border:1px solid #464a70;background:#252841;color:#c2c5ff;border-radius:50%;width:25px;height:25px;font-size:12px}.phone{height:716px;border:1px solid #3a3e52;border-radius:26px;background:#191b25;overflow:auto;overscroll-behavior-y:contain;display:flex;flex-direction:column;box-shadow:0 18px 46px #0003;position:relative}.screen{min-height:100%;display:flex;flex-direction:column;padding:24px 22px max(20px,env(safe-area-inset-bottom));gap:20px}.brand{display:flex;align-items:center;gap:9px;font-size:22px;font-weight:750;letter-spacing:-1px}.mark{display:grid;place-items:center;width:32px;height:32px;background:var(--purple);border-radius:10px}.mark svg{width:22px}.screen-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.pill{color:#b5b9cc;font-size:12px;border:1px solid #393d50;padding:5px 9px;border-radius:20px;white-space:nowrap}.meeting h2{font-size:27px;line-height:1.2;letter-spacing:-.7px;overflow-wrap:anywhere}.meeting p{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.5}.people{display:flex;align-items:center;gap:10px;font-size:14px;color:#c9ccdc}.mini-avatar{width:31px;height:31px;display:grid;place-items:center;border-radius:50%;background:#464c71;font-weight:650;font-size:13px}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px}.name{display:grid;gap:9px;font-size:14px;font-weight:600}.name input{width:100%;font-size:16px;min-height:52px;border:1px solid #45495d;border-radius:10px;color:#f6f6fa;background:#11131b;padding:13px 14px}.name input::placeholder{color:#858ba3}.device{display:flex;gap:10px;align-items:center;color:#c7cada;font-size:14px;padding:12px;border:1px solid var(--line);border-radius:10px}.device svg{color:#b2b7d0}.actions{display:grid;gap:10px}.btn{width:100%;display:flex;justify-content:center;align-items:center;gap:9px;min-height:52px;border:1px solid #474b61;border-radius:11px;padding:13px 14px;background:#262938;font-size:16px;font-weight:650;text-align:center;line-height:1.3}.btn.primary{background:var(--purple);border-color:var(--purple);color:white}.btn:hover{filter:brightness(1.1)}.btn.tertiary{background:transparent;border-color:transparent;font-size:14px;font-weight:500;color:#b9bdd0;min-height:44px}.btn.danger{color:#ffb8b6;background:#3b242e;border-color:#75434d}.hint{color:var(--muted);font-size:13px;line-height:1.5}.fine{color:#b0b5c9;font-size:12px;line-height:1.55}.spacer{flex:1}.privacy{font-size:13px;line-height:1.55;color:var(--muted)}.privacy summary{padding:8px 0;min-height:36px;color:#c4c8da}.privacy p{margin-top:4px}.state-icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:#3b3034;color:#ffd3b0}.state-icon svg{width:26px;height:26px}.recovery h3{font-size:25px;line-height:1.2;letter-spacing:-.5px;margin-bottom:12px}.recovery p{color:#bec2d2;font-size:15px;line-height:1.6}.help{border-left:2px solid #6d7294;padding:2px 0 2px 13px;font-size:14px;line-height:1.6;color:#b9bed0}.help p+p{margin-top:10px}.status{display:flex;align-items:center;gap:8px;color:var(--green);font-size:14px;font-weight:600}.status.warn{color:#ffd3a0}.call-title{display:grid;gap:6px}.call-title h2{font-size:20px;letter-spacing:-.3px;overflow-wrap:anywhere}.call-title p{font-size:13px;color:var(--muted)}.participant{flex:1;min-height:180px;border:1px solid #363c52;background:radial-gradient(circle at 50% 36%,#333d5b,#222635 68%);border-radius:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center;padding:24px 12px}.big-avatar{width:100px;height:100px;display:grid;place-items:center;background:#555b8d;border-radius:50%;font-size:36px;font-weight:600;border:3px solid #8ad9b0;box-shadow:0 0 0 7px #8ad9b012}.participant strong{font-size:20px}.participant small{font-size:13px;color:var(--green)}.you{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;color:#c4c9da}.you span+span{font-size:12px;color:var(--muted)}.call-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.control{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1px solid #41465e;border-radius:12px;background:#2b3042;min-height:72px;min-width:0;padding:10px 3px;font-size:12px;line-height:1.3}.control.leave{color:#ffc4c6;background:#4d2b36;border-color:#73404e}.control.active{color:#d5d8ff;background:#424775}.call-note{border:1px solid #343c56;padding:12px;border-radius:9px;color:#bfc9e0;font-size:13px;line-height:1.5}.more{display:grid;gap:7px;border:1px solid #454b65;border-radius:12px;padding:10px;background:#272d40}.more button{min-height:44px;border:0;background:#33394f;border-radius:8px;text-align:left;padding:9px 12px;font-size:14px}.scenario{display:grid;gap:8px;margin:14px 2px 0;color:var(--muted);font-size:12px}.scenario select{min-height:44px;width:100%;font-size:14px;padding:8px 10px;background:#1b1e29;color:#d5d8e6;border:1px solid #3a3e52;border-radius:8px}.column-note{font-size:13px;color:var(--muted);line-height:1.5;margin:12px 2px 0}.footer{margin-top:28px;font-size:13px;line-height:1.5;color:var(--muted)}.tabs{display:none}.spinner{width:28px;height:28px;border:2px solid #4c526b;border-top-color:#acafff;border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:1000px){.board{padding:24px 20px}.phones{gap:14px}.screen{padding-left:16px;padding-right:16px}.intro{display:block}.intro p{margin-top:12px}.intro h1{font-size:30px}}
+@media(max-width:700px){.board{padding:18px 16px}.intro{margin-bottom:18px}.intro h1{font-size:26px}.intro p{font-size:14px}.notice{font-size:12px;margin-bottom:16px}.tabs{display:flex;gap:8px;margin-bottom:18px}.tabs button{flex:1;min-height:44px;font-size:14px;border:1px solid #43495e;background:#242839;color:#c0c6db;border-radius:9px}.tabs button[aria-selected=true]{border-color:#9b9fff;background:#3e4472;color:white}.phones{display:block}.column{display:none}.column.selected{display:block}.phone{height:auto;min-height:650px;border-radius:18px;overflow:visible}.screen{min-height:650px;padding:22px 20px;gap:20px}.column-label{font-size:13px}.scenario select{font-size:16px}.footer{margin-top:20px}.participant{min-height:240px}.intro p{max-width:none}}
+@media(prefers-reduced-motion:reduce){.spinner{animation:none}*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs>
+<symbol id="mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-3 0h6"/></symbol>
+<symbol id="mic-off" viewBox="0 0 24 24"><path d="m3 3 18 18M9 5a3 3 0 0 1 6 0v6M5 10v2a7 7 0 0 0 12 5M19 10v2M12 19v3m-3 0h6"/></symbol>
+<symbol id="video" viewBox="0 0 24 24"><rect x="3" y="5" width="12" height="14" rx="3"/><path d="m15 10 6-4v12l-6-4"/></symbol>
+<symbol id="headphones" viewBox="0 0 24 24"><path d="M4 14v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="12" width="4" height="8" rx="2"/><rect x="17" y="12" width="4" height="8" rx="2"/></symbol>
+<symbol id="more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+<symbol id="leave" viewBox="0 0 24 24"><path d="M9 3H4v18h5m2-9h10m-4-4 4 4-4 4"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+</defs></svg>
+<main class="board">
+<p class="eyebrow">PVP · Mobile meeting proposal</p>
+<div class="intro"><h1>Open the link.<br>Get into the conversation.</h1><p>A meeting invitation opens a meeting screen. Listening works without microphone permission. Every failure offers a clear next step.</p></div>
+<p class="notice"><strong>Interactive concept.</strong> Buttons and scenario menus simulate the flows. This file makes no calls, opens no devices and changes no permissions.</p>
+<nav class="tabs" aria-label="Proposal screens"><button aria-selected="true" data-tab="0">Join</button><button aria-selected="false" data-tab="1">Recovery</button><button aria-selected="false" data-tab="2">In call</button></nav>
+<div class="phones">
+ <section class="column selected" data-column="0"><h2 class="column-label"><span class="step">1</span> A focused invitation</h2><div class="phone" id="phone-0"></div><label class="scenario">Try an outcome<select data-scenario="0"><option value="invite">Start at invitation</option><option value="allowed">Microphone allowed</option><option value="denied">Microphone blocked</option><option value="pending">Prompt unanswered</option><option value="busy">Microphone unavailable</option><option value="full">Meeting full</option><option value="expired">Link unavailable</option><option value="private">Private meeting</option></select></label><p class="column-note">One name field. Two clear ways in. Camera off. No account dashboard or sidebar.</p></section>
+ <section class="column" data-column="1"><h2 class="column-label"><span class="step">2</span> Recovery without a dead end</h2><div class="phone" id="phone-1"></div><label class="scenario">Try a recovery state<select data-scenario="1"><option value="denied">Microphone blocked</option><option value="pending">Prompt unanswered</option><option value="busy">Microphone unavailable</option><option value="rejoin">Page refreshed</option><option value="offline">Connection interrupted</option></select></label><p class="column-note">Persistent status and help. Listening remains available when capture fails.</p></section>
+ <section class="column" data-column="2"><h2 class="column-label"><span class="step">3</span> The call fills the phone</h2><div class="phone" id="phone-2"></div><label class="scenario">Try a call state<select data-scenario="2"><option value="listening">Joined to listen</option><option value="speaking">Microphone enabled</option><option value="sound">Playback needs a tap</option><option value="rejoin">Page refreshed</option><option value="offline">Connection interrupted</option></select></label><p class="column-note">Actual call status, reachable controls, optional microphone, and a safe rejoin path.</p></section>
+</div>
+<p class="footer">Design targets: 16px+ form text, 52px primary controls, normal browser zoom, safe-area spacing, one clear recovery action per failure. Real Safari/Brave permission dialogs and keyboard behavior still require physical iPhone testing.</p>
+</main>
+<script>
+const icon = name => `<svg aria-hidden="true"><use href="#${name}"/></svg>`;
+const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const models = [
+ {state:'invite',outcome:'allowed',name:'',help:false,camera:false,more:false},
+ {state:'denied',outcome:'denied',name:'Emily',help:false,camera:false,more:false},
+ {state:'listening',outcome:'allowed',name:'Emily',help:false,camera:false,more:false}
+];
+const brand = `<div class="brand"><span class="mark">${icon('video')}</span>pvp</div>`;
+const screenTop = label => `<div class="screen-top">${brand}<span class="pill">${label}</span></div>`;
+const meeting = `<div class="meeting"><h2>Evening catch-up</h2><p>Hosted by David</p></div>`;
+const button = (action,text,cls='',glyph='') => `<button type="button" class="btn ${cls}" data-action="${action}">${glyph?icon(glyph):''}${text}</button>`;
+function invite(m,i) {return `${screenTop('Invitation')}${meeting}<p class="people"><span class="mini-avatar">D</span><span><span class="dot"></span>David is here</span></p>
+ <form data-join="${i}" class="actions"><label class="name" for="name-${i}">Your name<input id="name-${i}" name="displayName" value="${escape(m.name)}" placeholder="Name for this meeting" required maxlength="60" autocomplete="name"></label>
+ <div class="device">${icon('video')}Camera off · Turn it on later</div>
+ <button class="btn primary" type="submit">${icon('mic')}Join with microphone</button>
+ ${button('listen','Join to listen','','headphones')}<p class="hint">Listen without giving microphone access.</p></form>
+ <details class="privacy"><summary>About privacy and meeting controls</summary><p>Calls are encrypted and connect directly. Participants can see your network address. The host and admins can mute or remove participants.</p></details>
+ <p class="fine">Direct calls share your network address with participants.</p><div class="spacer"></div>${button('account','Sign in instead','tertiary')}<p class="fine" data-note></p>`;}
+function recovery(m) {
+ const waiting=m.state==='pending', rejoin=m.state==='rejoin', offline=m.state==='offline';
+ const title=waiting?'Waiting for microphone access':rejoin?'Welcome back':offline?'Your connection was interrupted':m.state==='busy'?'Microphone unavailable':'Your microphone is blocked';
+ const detail=waiting?'Check for a permission prompt from your browser. You can join to listen while you decide.':rejoin?`Your name and meeting are saved. Rejoin with your microphone off.`:offline?'The meeting is still here. You can reconnect with your microphone off.':m.state==='busy'?'Your browser could not open the microphone. You can still join and hear everyone.':'You can join to listen. To speak, allow microphone access in your browser and return here.';
+ return `${screenTop(rejoin?'Rejoin meeting':'Before you join')}${meeting}<div class="state-icon">${waiting?'<span class="spinner"></span>':icon(rejoin?'headphones':'mic-off')}</div><div class="recovery" role="status"><h3>${title}</h3><p>${detail}</p></div>
+ ${rejoin?`<div class="device">${icon('mic-off')}Joining as ${escape(m.name||'Emily')} · Mic off</div>`:''}
+ ${m.help?'<div class="help"><p>Open this site’s microphone settings in your browser. Allow access, return here, then try again.</p><p>If access is blocked for the browser itself, check its microphone permission in iPhone Settings. Browser menus differ.</p><p>A website cannot change these permissions for you. Listening needs no microphone permission.</p></div>':''}
+ <div class="spacer"></div><div class="actions">${button('listen',rejoin?'Rejoin to listen':offline?'Reconnect to listen':'Join to listen','primary','headphones')}
+ ${(!waiting&&!rejoin&&!offline)?button('help',m.help?'Hide microphone help':'How to enable microphone'):''}
+ ${button(rejoin||offline?'join':'retry',rejoin||offline?'Join with microphone':waiting?'Check again':'Try microphone again','tertiary','mic')}</div>
+ <p class="fine">Your camera is off. You choose when to enable your microphone.</p>`;
+}
+function call(m) {
+ const listening=m.state==='listening'||m.state==='sound', blocked=m.state==='sound';
+ return `${screenTop('Meeting')}<div class="call-title"><h2>Evening catch-up</h2><p>2 people · Direct, encrypted call</p></div><p class="status ${blocked?'warn':''}" role="status">${icon(blocked?'headphones':'check')}${blocked?'Joined · Tap below to hear':listening?'Joined · Listening':'Joined · Microphone on'}</p>
+ ${blocked?button('hear','Tap to hear meeting','primary','headphones'):''}
+ <div class="participant"><span class="big-avatar">D</span><strong>David</strong><small>${blocked?'Audio waiting for your tap':'Speaking'}</small></div>
+ <div class="you"><span>${escape(m.name||'Emily')} · You</span><span>${listening?'Listening · Mic off':'Microphone on'}</span></div>
+ ${listening&&!blocked?'<p class="call-note">You can hear the call. Tap <strong>Use mic</strong> whenever you want to speak.</p>':''}
+ ${m.more?'<div class="more">'+['People and chat','Audio help','Simulate page refresh'].map((s,i)=>`<button data-action="${['people','audio-help','refresh'][i]}">${s}</button>`).join('')+'</div>':''}
+ <div class="call-controls"><button class="control ${listening?'':'active'}" data-action="${listening?'use-mic':'mute'}">${icon(listening?'mic-off':'mic')}${listening?'Use mic':'Mute'}</button><button class="control ${m.camera?'active':''}" data-action="camera">${icon('video')}${m.camera?'Camera off':'Camera on'}</button><button class="control" data-action="more">${icon('more')}More</button><button class="control leave" data-action="leave">${icon('leave')}Leave</button></div><p class="fine" data-note></p>`;
+}
+function unavailable(m) {
+ const privateMeeting=m.state==='private', full=m.state==='full';
+ return `${screenTop('Meeting link')}${meeting}<div class="state-icon">${icon('headphones')}</div><div class="recovery"><h3>${full?'This meeting is full':privateMeeting?'This meeting needs an invitation':'This link is unavailable'}</h3><p>${full?'All 16 places are in use. Retry when someone leaves or ask the host for help.':privateMeeting?'Sign in with your invited account or ask the host for an open meeting link.':'The host may have deleted this link. Ask them for a new one.'}</p></div><div class="spacer"></div>${button(full?'recheck':privateMeeting?'account':'new-link',full?'Try again':privateMeeting?'Sign in to join':'Ask for a new link','primary')}<p class="fine" data-note></p>`;
+}
+function render(i) {
+ const m=models[i];const root=document.getElementById('phone-'+i);
+ root.innerHTML=`<div class="screen" data-screen="${i}">${m.state==='invite'?invite(m,i):['listening','speaking','sound'].includes(m.state)?call(m):['full','expired','private'].includes(m.state)?unavailable(m):m.state==='connecting'?`${screenTop('Joining')}${meeting}<div class="spinner"></div><div class="recovery" role="status"><h3>Connecting you…</h3><p>Opening your direct connection. Your camera is off.</p></div><div class="spacer"></div>${button('back','Back to invitation')}`:m.state==='left'?`${screenTop('Meeting ended for you')}${meeting}<div class="recovery"><h3>You left the meeting</h3><p>Your microphone and camera are off. The other participants can keep talking.</p></div><div class="spacer"></div>${button('listen','Rejoin to listen','primary')}${button('back','Back to invitation')}`:recovery(m)}</div>`;
+}
+function change(i,state){models[i].state=state;models[i].more=false;render(i);document.getElementById('phone-'+i).scrollTop=0;}
+function join(i){const m=models[i];if(m.state==='invite'){
+ const input=document.getElementById('name-'+i);if(!input.reportValidity())return;m.name=input.value.trim();if(!m.name){input.setCustomValidity('Enter your name');input.reportValidity();input.setCustomValidity('');return;}}
+ if(m.outcome==='allowed'){change(i,'connecting');setTimeout(()=>{if(models[i].state==='connecting')change(i,'speaking');},650);}else change(i,m.outcome);
+}
+document.addEventListener('submit',event=>{const form=event.target.closest('[data-join]');if(!form)return;event.preventDefault();join(Number(form.dataset.join));});
+document.addEventListener('click',event=>{
+ const tab=event.target.closest('[data-tab]');if(tab){const i=Number(tab.dataset.tab);document.querySelectorAll('.column').forEach((c,j)=>c.classList.toggle('selected',j===i));document.querySelectorAll('[data-tab]').forEach((b,j)=>b.setAttribute('aria-selected',String(j===i)));return;}
+ const b=event.target.closest('[data-action]');if(!b)return;const screen=b.closest('[data-screen]');if(!screen)return;const i=Number(screen.dataset.screen),m=models[i],action=b.dataset.action;
+ if(action==='listen'){const input=document.getElementById('name-'+i);if(input){if(!input.reportValidity())return;m.name=input.value.trim();if(!m.name)return;}change(i,'listening');}
+ else if(action==='join'||action==='retry')join(i);
+ else if(action==='help'){m.help=!m.help;render(i);}
+ else if(action==='hear')change(i,'listening');
+ else if(action==='use-mic'){m.outcome='allowed';join(i);}
+ else if(action==='mute')change(i,'listening');
+ else if(action==='camera'){m.camera=!m.camera;render(i);const note=document.querySelector(`#phone-${i} [data-note]`);if(note)note.textContent='Camera permission is simulated in this concept.';}
+ else if(action==='more'){m.more=!m.more;render(i);}
+ else if(action==='leave')change(i,'left');
+ else if(action==='refresh')change(i,'rejoin');
+ else if(action==='back'){m.outcome='allowed';change(i,'invite');}
+ else if(action==='recheck')change(i,'invite');
+ else {const note=document.querySelector(`#phone-${i} [data-note]`);if(note)note.textContent=action==='account'?'Account sign-in remains an optional secondary route.':action==='people'?'People and chat open as a full-width sheet over the call.':action==='audio-help'?'Speaker playback and microphone permission have separate recovery actions.':'The host provides a replacement meeting link.';}
+});
+document.addEventListener('change',event=>{if(!event.target.matches('[data-scenario]'))return;const i=Number(event.target.dataset.scenario),s=event.target.value;models[i].outcome=s==='invite'?'allowed':s;if(i===0&&s==='allowed')change(i,'invite');else change(i,s);});
+models.forEach((_,i)=>render(i));
+</script>
+</body>
+</html>

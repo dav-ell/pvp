@@ -1,0 +1,36 @@
+name: pvp_desktop
+description: Private peer-to-peer calls from your macOS menu bar.
+publish_to: none
+version: 1.0.20+21
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  crypto: ^3.0.6
+  flutter_webrtc: ^1.6.2+hotfix.3
+  flutter_svg: ^2.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/
+    - assets/brand/
+    - assets/fonts/InstrumentSerif-OFL.txt
+    - assets/fonts/Manrope-OFL.txt
+  fonts:
+    - family: Manrope
+      fonts:
+        - asset: assets/fonts/Manrope.ttf
+    - family: InstrumentSerif
+      fonts:
+        - asset: assets/fonts/InstrumentSerif-Regular.ttf

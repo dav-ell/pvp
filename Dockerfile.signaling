@@ -1,0 +1,16 @@
+FROM rust:1-bookworm AS build
+WORKDIR /src
+COPY signaling signaling
+COPY web web
+COPY recovery recovery
+COPY packages packages
+RUN cargo build --locked --release --manifest-path signaling/Cargo.toml
+
+FROM debian:bookworm-slim
+RUN useradd --system --uid 10001 pvp && mkdir -m 0700 /data && chown pvp:pvp /data
+COPY --from=build /src/signaling/target/release/pvp-signaling /usr/local/bin/pvp-signaling
+USER pvp
+ENV PVP_BIND=0.0.0.0:8787 PVP_DATABASE=/data/pvp.sqlite
+VOLUME /data
+EXPOSE 8787
+ENTRYPOINT ["pvp-signaling"]

@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-06",
+  "nativeVersion": "1.0.13+14",
+  "productionVersion": "0.3.12",
+  "status": "deployed; native app installed and reopened",
+  "installedApp": "/Users/davell/Applications/PVP.app",
+  "publicDownload": "https://lopixel.space/downloads/PVP-macOS-1.0.13.zip",
+  "changes": [
+    "Camera forwarding begins at six joined participants and stops at five; self is included and screen sharing does not add a participant.",
+    "Direct encoded frames are labeled Direct; Peer-forwarded video and report forwarder require an intermediate participant.",
+    "Early ICE candidates retained, room negotiation serialized, peer recovery and streamless native track reception.",
+    "Screen Maximize/Restore in both clients, capture resolution preserved, maximized screen bandwidth priority and compact native tile controls."
+  ],
+  "validation": {
+    "browserTests": 28,
+    "flutterTests": 40,
+    "serverTests": 18,
+    "flutterAnalysis": "clean",
+    "fiveParticipantCall": "passed: direct video, no encoded forwarding packets, audio playback/energy, 1080p screen share, maximize priority, peer recovery and teardown",
+    "sixParticipantCall": "passed: actual second hop, correct route labels and exports, stops forwarding on transition to five, 1080p screen share, audio, recovery and teardown",
+    "nativeBrowserIntegration": "passed: five encrypted browser media receivers, bidirectional chat and accepted files, native opaque forwarding to second-hop browser and teardown",
+    "productionPreflight": "unprivileged isolated health, assets, registration, persistent session and meeting API",
+    "publicAssets": "byte-identical to tested sources; full HTTPS download SHA256 matches signed archive",
+    "database": "integrity ok; users, friends, meetings, member rosters, moderation, access policies and blocks unchanged",
+    "nativeSignature": "strict deep verification; universal x86_64/arm64; installed executable matches package"
+  },
+  "sha256": {
+    "dist/PVP-macOS-1.0.13.zip": "c52aafe6a6e28e336b18af8d1dcc266fa22920f6c0bcc16b397258bee2bffe0d",
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "00199dd79b8d516667d293341b9aa69f68cd485006c1a74e5ea2f18090cae617",
+    "web/group-quality.js": "24922ac733db2a8c385fe774b315a5d03dbcb4f74c326953ff2001e84f8da653",
+    "web/group-video.js": "e20504863d1cda50f4eec309c277432bde67f840997633242d632bf04b45464d",
+    "web/group-calls.js": "fc465abb638f36fb7194451e9db741babd1735e458ea79bdd9f6d69fa1da5330",
+    "desktop/lib/core/group_quality.dart": "2e29fbc0d6f4b0564cf8967884239f43f49ff48bd0bc900c07fd0805078a0f8e"
+  },
+  "rollback": {
+    "server": "/var/backups/pvp/group-video-fix-2026-10-06-1791290406",
+    "caddy": "/var/backups/pvp/group-video-fix-download-1791290404",
+    "native": "/Users/davell/Documents/github/pvp/.build/group-video-fix/installed-app-backup-20261006-084031/PVP.app",
+    "portableDatabase": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261006T123617Z-92124.sqlite"
+  },
+  "limitations": [
+    "Direct-only networking still cannot guarantee cellular NAT reachability; the reported phone failure has not been reproduced on physical devices.",
+    "Synthetic local call validation, not a WAN quality benchmark.",
+    "Apple Development signed; not notarized."
+  ]
+}

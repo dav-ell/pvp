@@ -1,0 +1,4 @@
+PVP Call · Apache License 2.0
+Extracted from dav-ell/pvp browser security, group quality, and connection inspector modules.
+The transport-independent mesh and explicit media lifecycle are new reusable abstractions.
+No account system, signaling service, UI framework, telemetry, or media relay is included.

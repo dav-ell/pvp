@@ -1,0 +1,37 @@
+{
+  "name": "PVP",
+  "promise": "A room for your people.",
+  "colors": {
+    "paper": "#f8f9f5",
+    "surface": "#ffffff",
+    "ink": "#223c32",
+    "muted": "#657268",
+    "line": "#dfe4da",
+    "accent": "#d4e69d",
+    "accentInk": "#30462b",
+    "stage": "#191c20",
+    "stageSurface": "#2a2e34",
+    "stageText": "#f8f5ef",
+    "stageMuted": "#c1bdb6",
+    "danger": "#ac3939",
+    "success": "#2e684c",
+    "focus": "#426653"
+  },
+  "radius": {
+    "control": 8,
+    "panel": 12,
+    "pill": 28
+  },
+  "spacing": {
+    "xs": 4,
+    "sm": 8,
+    "md": 16,
+    "lg": 24,
+    "xl": 32
+  },
+  "motion": {
+    "response": 110,
+    "travel": 180,
+    "settle": 280
+  }
+}

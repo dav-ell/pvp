@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-05",
+  "nativeVersion": "1.0.12+13",
+  "productionVersion": "0.3.11",
+  "installedApp": "/Users/davell/Applications/PVP.app",
+  "publicDownload": "https://lopixel.space/downloads/PVP-macOS-1.0.12.zip",
+  "signing": "Universal Intel/Apple silicon, Apple Development signed; not notarized",
+  "changes": [
+    "Separate meeting library, creation and details views",
+    "Persistent create and join actions outside scrolling content",
+    "Access, ownership, attendance and member roles made visible",
+    "Blank-name validation, 15-invite capacity, duplicate-submit prevention and actionable empty states"
+  ],
+  "validation": {
+    "flutterAnalysis": "clean",
+    "flutterTests": 38,
+    "browserTests": 26,
+    "responsivePreview": "mobile 390x844 and compact desktop 860x540; primary action remains visible; no horizontal overflow",
+    "serverPreflight": "isolated unprivileged health, assets, persistent session, recurring meeting and admin metadata",
+    "productionHealth": "0.3.11 healthy; pvp-signaling, caddy, pvp-relay and frps active"
+  },
+  "serverBackup": "/var/backups/pvp/meetings-ux-2026-10-05-1791246441",
+  "caddyBackup": "/var/backups/pvp/meetings-ux-download-1791246440",
+  "nativeBackup": "/Users/davell/Documents/github/pvp/.build/meetings-ux/installed-app-backup-20261005-202657/PVP.app",
+  "sha256": {
+    "dist/PVP-macOS-1.0.12.zip": "9699eb043db004c063b231a5f89b042f4e23c2d4213fec8579985de0701c93f9",
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "51da98e8196daaa0ab142fc4ed282ef305e561a8c11ed2a6bc28a743ad1509f1",
+    "desktop/lib/ui/meetings.dart": "b0243f08f034080d52b8ec4be66e5dc0abf7182decc574bd510dce7852df6234",
+    "web/index.html": "71008d2d08ce17475373b092067a646f6199fed12c689d45f2afcb0d4f3bed23",
+    "web/styles.css": "b0f66fbc004486a5ee8c9cd21dd5224a0361198f7dd6f945776e321ce44c0a60",
+    "web/meetings.js": "53784899e4dda2301b0be1d1252161cbfc080607c97412a193e7a2092d69fc36"
+  }
+}

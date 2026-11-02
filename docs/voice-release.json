@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-12",
+  "productionVersion": "0.3.13",
+  "nativeVersion": "1.0.14+15",
+  "status": "deployed; signed Mac app installed and opened",
+  "publicDownload": "https://lopixel.space/downloads/PVP-macOS-1.0.14.zip",
+  "sha256": {
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "3f842aa8f4a078912706e8b1860f0afb0f08522778186e0a27c69b1a58de5ab5",
+    "dist/PVP-macOS-1.0.14.zip": "926754d43c3bbf31bce84d2fb94fe9509f0d32234e6184556dc8d5d9235187b4",
+    "web/index.html": "60e34029984758a4f2f1c0874e5bce86345f51951e4f3c119a279b17d3ce77e5",
+    "web/security.js": "a0e04cd9aab538c1585148be17e49e9f07d2a9db13bfe19593a59e4ba85ab6b6",
+    "web/meetings.js": "53784899e4dda2301b0be1d1252161cbfc080607c97412a193e7a2092d69fc36",
+    "web/styles.css": "a6b3850c8487b7df88104aa4b99f50774b30eed6728b5d841e023bf9dbf29ea9",
+    "web/inspector.js": "0949acdd0dbb4bce491a054cbb8366462e3ca47f111fda2fdb498e648acf6ad7",
+    "web/icon.svg": "e35acc218e30dd446b18627512dd78e7091533ade6ec663f25b7b02564d88aff",
+    "web/group-quality.js": "d777f1abc238bb59e03cd26b6369cabcd3518539b142c5cb9978276d3d1c7b8c",
+    "web/group-video.js": "7240aea641bf4ebd338182eb4c98281a4dbaeaccc1a40098181cd2bc67227ce0",
+    "web/group-calls.js": "627e3128db4ea7e94dbf0a83a63df1ef037d4c855ca4c2b1dedf405279168d2c",
+    "web/manifest.webmanifest": "fa75cfeee4555ba90fe408d4c7c9498e4a52bbcd9b594539b13a8bea6cd24b31",
+    "web/meeting-chat.js": "ff15414f04b30bb7467e479f71951e7feff158ead581625ace1157745b231abe",
+    "web/bandwidth.js": "49dc7c7760ed280b077f74bc1c242436a747d0a48620266b3914be820c811efc",
+    "web/app.js": "e2edd5efa33f21ad8cd7a154c33e8835151914a6b3168b40879bb76655928a7d",
+    "packages/pvp-call/src/security.js": "534aa8f9250b75dc3d8b79141867601af70e5b0810d74f1a40ad047d130208e5",
+    "packages/pvp-call/src/mesh.js": "763eeee194994454761220b1e7207bd68d23b4e700edd1dc30b9909a6efe7307",
+    "packages/pvp-call/src/inspector.js": "d8d5426e5fe7d675dcd81147840e24146c70241c4a86ab8be59e282c8befb6ee",
+    "packages/pvp-call/src/media.js": "a64ba3f1ffbf364f07d7a251a5b330799559d73b6e075a807d5a4f26a5ec40aa",
+    "packages/pvp-call/src/index.js": "86f43be491fa42331f6135ecaa552006801c9e170fb0ff0e55141463c031ff79",
+    "packages/pvp-call/src/quality.js": "7a689d823924d93d6b60d7e98b240a1dde4af953abb2edc1b422e319a8c3110c",
+    "packages/pvp-call/src/room.js": "b58f9f62275cca892f87d329b095fcba9923537b7013f627a96bcfb10d8c9efe",
+    "dist/PVP-macOS-1.0.14/PVP.app/Contents/MacOS/PVP": "ff2aba242e2eb5b4dc69c7abc485df7163e7225833a235aa925e97dcd3204c74",
+    "dist/PVP-macOS-1.0.14/PVP.app/Contents/Frameworks/App.framework/App": "dcb8fb057a6e0f425abe24bd6185aed9050dc7c6c58cd72fc887c9ab95861b36"
+  },
+  "installedApp": "/Users/davell/Applications/PVP.app",
+  "changes": [
+    "Discord-inspired dark friends layout, compact friend rows, search and online filtering in web and Flutter.",
+    "Friend-discoverable P2P rooms grow from solo to sixteen participants.",
+    "All calls start with microphone-only capture; video and screen sharing are explicit in-call choices. Camera opt-out releases capture without replacing microphone tracks or peer connections.",
+    "Bounded early initiator ICE candidates are accepted before the offer, preserving the candidate budget."
+  ],
+  "validation": {
+    "serverTests": 25,
+    "browserTests": 36,
+    "flutterTests": 47,
+    "flutterAnalysis": "clean",
+    "browserGroupRegression": "six-person encrypted audio, opt-in video, forwarded media, screen share, peer recovery and teardown passed",
+    "nativeBrowserVoice": "native receives browser audio and subsequent opted-in video on the same peer connections; passed with injected native capture",
+    "productionPreflight": "unprivileged isolated startup, secure sessions, meeting API, and twenty byte-identical assets passed",
+    "publicVoiceRoom": "three real browser peers passed voice discovery, direct connection growth, camera denial, opted-in video reception, mute preservation, capture release and return to solo",
+    "publicArtifacts": "HTTPS health 0.3.13, all twenty source-identical assets, complete signed Mac archive hash matched",
+    "database": "integrity and foreign keys ok; durable accounts, friendships, meetings, roles and access policies preserved; exactly three verification accounts removed",
+    "nativeSignature": "Apple Development signed; strict deep verification; universal arm64/x86_64",
+    "installedApp": "1.0.14+15 opened; executable and compiled Dart framework match signed archive; live TLS connection to 143.198.19.179:443 verified"
+  },
+  "rollback": {
+    "serverAndDatabase": "/var/backups/pvp/voice-2026-10-12-1791863419",
+    "caddy": "/var/backups/pvp/voice-2026-10-12-1791863419/Caddyfile",
+    "native": "/Users/davell/Documents/github/pvp/.build/voice-release/installed-app-backup-20261012-235145/PVP.app",
+    "portableDatabase": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261013T035300Z-82161.sqlite"
+  },
+  "limitations": [
+    "Apple Development signed, not notarized.",
+    "Media tests use generated browser tracks and injected native capture; physical devices and separate external networks are not newly verified.",
+    "Direct-only P2P retains its existing NAT/firewall limitations."
+  ]
+}

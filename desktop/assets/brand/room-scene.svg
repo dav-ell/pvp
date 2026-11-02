@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 510" fill="none">
+ <path d="m56 346 244-122 244 122v12L300 480 56 358Z" fill="#bcc8ad"/>
+ <path d="m56 346 244-122 244 122-244 122Z" fill="#e2e6d7"/>
+ <path d="M56 156 300 34v190L56 346Z" fill="#c9d5bc"/>
+ <path d="m300 34 244 122v190L300 224Z" fill="#d9e1cf"/>
+ <path d="m300 34 244 122-7 4L300 42 63 160l-7-4Z" fill="#edf0e6"/>
+ <path d="M300 42v182" stroke="#afbd9f" stroke-width="1"/>
+ <path d="M398 273V156c0-37 66-4 66 33v117Z" fill="#264e40"/>
+ <path d="M398 273V156c0-37 66-4 66 33v117l-9-5V185c0-27-48-53-48-25v117Z" fill="#aabca0"/>
+ <path d="m407 277 48 24-142 71-92-2Z" fill="#f4f2bc"/>
+ <path d="m455 185-30-9v110l30 15Z" fill="#c6d87e"/>
+ <path d="m432 233 3 1v8l-3-1Z" fill="#264e40"/>
+ <path d="M105 174v74l87-43v-74Z" fill="#f0f2e9"/>
+ <path d="m113 178 71-35v56l-71 35Z" fill="#799782"/>
+ <path d="m148 160 1 56m-36-10 71-35" stroke="#dfe7d6" stroke-width="3"/>
+ <path d="m113 221 70-35v13l-70 35Z" fill="#b7cda9"/>
+ <path d="m281 266 5 3v26l-5-3Zm51-4 5-3v27l-5 3Z" fill="#315340"/>
+ <ellipse cx="301" cy="381" rx="104" ry="34" fill="#b9c4aa" fill-opacity=".5"/>
+ <path d="m283 333 1 67 16 8 17-8 1-67Z" fill="#a04d34"/>
+ <path d="m300 339 0 69 17-8 1-67Z" fill="#843f2f"/>
+ <path d="M216 323v12c0 26 170 57 170 0v-12Z" fill="#bb6242"/>
+ <ellipse cx="301" cy="323" rx="85" ry="42" fill="#de8a60"/>
+ <ellipse cx="301" cy="320" rx="84" ry="40" fill="#e6a078"/>
+ <ellipse cx="300" cy="318" rx="13" ry="6" fill="#f9e6bd"/>
+ <path d="M293 308v9c0 4 14 4 14 0v-9" fill="#f9e6bd"/>
+ <ellipse cx="300" cy="308" rx="7" ry="3.5" fill="#fff7de"/>
+ <path d="m217 388-38-19v40l6 3v-29l26 13v29l6 3Z" fill="#315340"/>
+ <path d="m179 347 38 19 26-13v28l-26 14-38-19Z" fill="#48705a"/>
+ <path d="m179 347 38 19 26-13-38-19Z" fill="#6d8c6a"/>
+ <path d="m179 323 38 19v24l-38-19Z" fill="#48705a"/>
+ <path d="m179 323 5-3 38 19-5 3Z" fill="#89a17e"/>
+ <path d="m217 342 5-3v23l-5 4Z" fill="#315340"/>
+ <path d="m384 383-27 14v30l6-3v-24l15-8v25l6-3Z" fill="#315340"/>
+ <path d="m357 357 38-19 25 13v26l-38 19-25-13Z" fill="#48705a"/>
+ <path d="m357 357 38-19 25 13-38 19Z" fill="#6d8c6a"/>
+ <path d="m382 346 38-19v24l-38 19Z" fill="#48705a"/>
+ <path d="m377 343 38-19 5 3-38 19Z" fill="#89a17e"/>
+ <path d="m377 343 5 3v24l-5-3Z" fill="#315340"/>
+ <path d="m277 270 27 13v-24l-27-14Z" fill="#48705a"/>
+ <path d="m277 245 39-19 27 14-39 19Z" fill="#6d8c6a"/>
+ <path d="m304 259 39-19v24l-39 19Z" fill="#315340"/>
+ <path d="m277 221 39-19v24l-39 19Z" fill="#48705a"/>
+ <path d="m277 221 39-19 5 3-39 19Z" fill="#89a17e"/>
+ <path d="m316 202 5 3v24l-5-3Z" fill="#315340"/>
+</svg>

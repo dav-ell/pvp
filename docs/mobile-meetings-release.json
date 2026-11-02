@@ -1,0 +1,172 @@
+{
+  "status": "deployed and verified over public HTTPS",
+  "deployedAtUTC": "2026-10-18T02:29:02.240109+00:00",
+  "productionVersion": "0.3.20",
+  "origin": "https://lopixel.space",
+  "changes": [
+    "Dedicated invitation entry for signed-in members and accountless guests, without the marketing page or desktop navigation.",
+    "Join to listen without microphone capture; Use mic upgrades the existing encrypted peer connection.",
+    "Immediate microphone requests, persistent permission/device recovery and canceled late-capture disposal.",
+    "Full-width phone call UI, 16px fields, reachable controls, safe areas, People/chat/More sheets and preserved browser zoom.",
+    "Safe refresh/rejoin, live reconnect preserving mute, and deliberate duplicate-tab ownership.",
+    "Independent audio playback fixes camera-off silence; autoplay recovery remains visible until successful."
+  ],
+  "validation": {
+    "browserRegressionSuite": {
+      "passed": 47,
+      "failed": 0
+    },
+    "currentMobileSuite": {
+      "engines": [
+        "Chromium",
+        "Playwright WebKit"
+      ],
+      "passed": 2,
+      "failed": 0,
+      "includes": [
+        "denied/missing/busy/unanswered microphone",
+        "late grant cleanup after listen",
+        "actual remote audio clock progression before cameras",
+        "listener as SDP offerer and answerer",
+        "mic upgrade without replacing peer connections",
+        "refresh and leave",
+        "live reconnect with mute",
+        "duplicate-tab preview and takeover",
+        "320\u2013430px entry and 320/390/700px call layouts"
+      ]
+    },
+    "publicHTTPSIntegration": {
+      "passed": 3,
+      "failed": 0,
+      "suites": [
+        "guest access, encrypted audio/video, autoplay retry, chat and moderation",
+        "Chromium mobile meeting flow",
+        "WebKit mobile meeting flow"
+      ]
+    },
+    "rustTests": {
+      "passed": 28,
+      "failed": 0
+    },
+    "clippy": "passed with warnings denied",
+    "voiceRoomRegression": "passed",
+    "nativeListenerInterop": "passed against real native WebRTC receiver for two browser listener-to-mic upgrades; native capture uses an empty stream fixture",
+    "nativeTestAnalysis": "passed",
+    "sixParticipantNativeSuite": "Inconsistent: several runs failed the all-renderers-at-least-480p assertion. One run passed encrypted audio/video, bandwidth and bidirectional text/file transfer before failing an offscreen chat-text UI assertion; that fixture now scrolls to the first message. The resolution variance was not isolated. No native production code was changed.",
+    "physicalIPhone": "Not performed: native permission dialogs, focus zoom, keyboard, audio routing and background suspension remain device checks.",
+    "publicWebKitDiagnostic": "A closing/displaced tab logged a request-abort/access-control diagnostic; all public scenarios passed."
+  },
+  "deployment": {
+    "deployed": true,
+    "version": "0.3.20",
+    "sha256": "633e4ea32c64b9505416f30544a71f3c8a9583fa51182bc207a25514fae96593",
+    "backup": "/var/backups/pvp/mobile-meetings-2026-10-18-1792290356",
+    "activeConnectionsBeforeRestart": 0,
+    "durableCounts": {
+      "users": 8,
+      "friends": 6,
+      "meetings": 5,
+      "meeting_members": 10,
+      "meeting_controls": 1,
+      "meeting_access": 5,
+      "meeting_blocks": 0,
+      "discovery_preferences": 0
+    },
+    "assetsVerified": 26,
+    "caddyUnchanged": true
+  },
+  "verification": {
+    "health": {
+      "media": "direct-p2p",
+      "status": "ok",
+      "version": "0.3.20"
+    },
+    "binarySha256": "633e4ea32c64b9505416f30544a71f3c8a9583fa51182bc207a25514fae96593",
+    "caddyUnchanged": true,
+    "macArchiveSha256": "3c273e28a1de08650634f060df31969abff61675869fff427a304846c7220ef1",
+    "services": {
+      "pvp-signaling": {
+        "NRestarts": "0",
+        "MemoryCurrent": "1069056",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "caddy": {
+        "NRestarts": "0",
+        "MemoryCurrent": "76120064",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "pvp-relay": {
+        "NRestarts": "3",
+        "MemoryCurrent": "49172480",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "frps": {
+        "NRestarts": "0",
+        "MemoryCurrent": "21065728",
+        "ActiveState": "active",
+        "SubState": "running"
+      }
+    },
+    "databaseIntegrity": "ok",
+    "foreignKeyViolations": 0,
+    "durableRecordsExactlyPreserved": true,
+    "temporaryVerificationAccountsRemoved": 3,
+    "counts": {
+      "users": 8,
+      "friends": 6,
+      "meetings": 5,
+      "meeting_members": 10,
+      "meeting_controls": 1,
+      "meeting_access": 5,
+      "meeting_blocks": 0,
+      "discovery_preferences": 0
+    },
+    "activeConnections": 9
+  },
+  "offVMDatabaseBackup": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261018T021724Z-37585.sqlite",
+  "assets": {
+    "/": "d6cb24c2b1bc096159dd046f611be5d50576d7f145befc17fc7b3579eaa9453a",
+    "/security.js": "a0e04cd9aab538c1585148be17e49e9f07d2a9db13bfe19593a59e4ba85ab6b6",
+    "/meetings.js": "57e46f22b0a9edd46e226f7ee5bf8d837eb557fe1ce46bc8ababac70a3eacf11",
+    "/styles.css": "3da45a0ab5883e57dbc2ef0d74f61aedabc80d6b68bbe6c849035d95fb48bc86",
+    "/inspector.js": "0949acdd0dbb4bce491a054cbb8366462e3ca47f111fda2fdb498e648acf6ad7",
+    "/icon.svg": "e35acc218e30dd446b18627512dd78e7091533ade6ec663f25b7b02564d88aff",
+    "/group-quality.js": "d777f1abc238bb59e03cd26b6369cabcd3518539b142c5cb9978276d3d1c7b8c",
+    "/group-video.js": "640e7bd38d261e4e2ae57fd1c5902c2b8075b31c2f5a6b7fa4831d4e10c41f56",
+    "/group-calls.js": "b58e2f37a77df0d02936140b32a7f53b3140c86b8d40eb674c0d5dd8a7213a48",
+    "/manifest.webmanifest": "fa75cfeee4555ba90fe408d4c7c9498e4a52bbcd9b594539b13a8bea6cd24b31",
+    "/meeting-chat.js": "ff15414f04b30bb7467e479f71951e7feff158ead581625ace1157745b231abe",
+    "/bandwidth.js": "7e6cc98ef21143e0e852938165922c5bfe594c2956593bafe831a3a1c83f2402",
+    "/app.js": "0d0a7ed75435ff6fc846f7a8a6533222fbb2ef678918942a494d1e2cab76b66d",
+    "/packages/pvp-call/src/security.js": "534aa8f9250b75dc3d8b79141867601af70e5b0810d74f1a40ad047d130208e5",
+    "/packages/pvp-call/src/mesh.js": "763eeee194994454761220b1e7207bd68d23b4e700edd1dc30b9909a6efe7307",
+    "/packages/pvp-call/src/inspector.js": "d8d5426e5fe7d675dcd81147840e24146c70241c4a86ab8be59e282c8befb6ee",
+    "/packages/pvp-call/src/media.js": "a64ba3f1ffbf364f07d7a251a5b330799559d73b6e075a807d5a4f26a5ec40aa",
+    "/packages/pvp-call/src/index.js": "86f43be491fa42331f6135ecaa552006801c9e170fb0ff0e55141463c031ff79",
+    "/packages/pvp-call/src/quality.js": "7a689d823924d93d6b60d7e98b240a1dde4af953abb2edc1b422e319a8c3110c",
+    "/packages/pvp-call/src/room.js": "b58f9f62275cca892f87d329b095fcba9923537b7013f627a96bcfb10d8c9efe",
+    "/motion.js": "f8da31e5f76e6e9e43c03c6b3047854d88eea245133b1e74b794c1843d6430a5",
+    "/motion.css": "5a7b5233ff84d907ea7739b6a4010f1da3a71decc37165552ead330b64a859b2",
+    "/playback.js": "d0c5a6e2e57977a1c2dfa06c3f5aeed569fc393ea50700b57c22c66a792211ea",
+    "/meeting-join.js": "6b3fde4b328a8aa604ce27822fc100c4a1b7921d13962f1c2b3fed2529d7718d",
+    "/meeting-route.js": "5ed7b68b25437796c279442ceae4816fa146a5ab11b8d7be414267b2dc427538",
+    "/meeting-mobile.css": "32235100c94492206ad1ef94614b9de264bacca96ac24f46158b69380efb22a1"
+  },
+  "publicAssetsVerified": 26,
+  "macDownload": {
+    "version": "1.0.18+19",
+    "url": "https://lopixel.space/downloads/PVP-macOS-1.0.18.zip",
+    "unchanged": true,
+    "sha256": "3c273e28a1de08650634f060df31969abff61675869fff427a304846c7220ef1",
+    "httpStatus": 200
+  },
+  "rollback": {
+    "binary": "/var/backups/pvp/mobile-meetings-2026-10-18-1792290356/pvp-signaling",
+    "database": "/var/backups/pvp/mobile-meetings-2026-10-18-1792290356/pvp.sqlite",
+    "previousVersion": "0.3.19",
+    "note": "Restore the previous binary atomically and restart pvp-signaling. Retain the live database; this browser release changes no schema."
+  }
+}

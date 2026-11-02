@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-14",
+  "productionVersion": "0.3.17",
+  "status": "published at https://lopixel.space; browser data saver verified",
+  "changes": [
+    "Independent send and receive video saver modes: automatic, off, 400, 128, 64 Kbps and audio only",
+    "Cellular/metered hints and live connection-change handling",
+    "Camera and screen video caps in direct and group calls; forwarding fallback when limited"
+  ],
+  "validation": {
+    "serverTests": 25,
+    "webTests": 43,
+    "publicAssets": "22 HTTPS asset hashes match candidate",
+    "publicBrowser": "Cellular LTE hint detection, six options, independent persisted choices after reload and mobile layout passed",
+    "native": "unchanged"
+  },
+  "deployment": {
+    "health": {
+      "media": "direct-p2p",
+      "status": "ok",
+      "version": "0.3.17"
+    },
+    "rollback": "/var/backups/pvp/data-saver-2026-10-14-1792027148",
+    "binarySha256": "7f4295d742160e2b1ecc7c8e24f96b3d889bcc96a0f11a8280e19056f1aa544a",
+    "verifiedAssets": 22,
+    "databaseIntegrity": "ok",
+    "durableRecordsMatchBackup": {
+      "users": true,
+      "friends": true,
+      "meetings": true,
+      "meeting_members": true,
+      "meeting_controls": true,
+      "meeting_access": true,
+      "meeting_blocks": true
+    },
+    "services": [
+      "active",
+      "active",
+      "active",
+      "active"
+    ]
+  },
+  "assets": {
+    "/": "dd162b5cffd32f7f495f672b51612b8afc90596d223eebb51eef73217bb5ec39",
+    "/security.js": "a0e04cd9aab538c1585148be17e49e9f07d2a9db13bfe19593a59e4ba85ab6b6",
+    "/meetings.js": "cbd06e1b14d91799efa265aa52d83654dd7816139d8d8fe9b40322d90192f2ce",
+    "/styles.css": "88642f68be459581b5600e5f8d1f3484e9e2103d8b68ce93a710cf37225084a8",
+    "/inspector.js": "0949acdd0dbb4bce491a054cbb8366462e3ca47f111fda2fdb498e648acf6ad7",
+    "/icon.svg": "e35acc218e30dd446b18627512dd78e7091533ade6ec663f25b7b02564d88aff",
+    "/group-quality.js": "d777f1abc238bb59e03cd26b6369cabcd3518539b142c5cb9978276d3d1c7b8c",
+    "/group-video.js": "640e7bd38d261e4e2ae57fd1c5902c2b8075b31c2f5a6b7fa4831d4e10c41f56",
+    "/group-calls.js": "aeb628d30f4457c1532d80601cb969f03a26ce41341beb9a5f65d8bca3838321",
+    "/manifest.webmanifest": "fa75cfeee4555ba90fe408d4c7c9498e4a52bbcd9b594539b13a8bea6cd24b31",
+    "/meeting-chat.js": "ff15414f04b30bb7467e479f71951e7feff158ead581625ace1157745b231abe",
+    "/bandwidth.js": "7e6cc98ef21143e0e852938165922c5bfe594c2956593bafe831a3a1c83f2402",
+    "/app.js": "ddfb63e2f8eea7c18b8da43ea8539ad564437539c5f424169da22968f548db83",
+    "/packages/pvp-call/src/security.js": "534aa8f9250b75dc3d8b79141867601af70e5b0810d74f1a40ad047d130208e5",
+    "/packages/pvp-call/src/mesh.js": "763eeee194994454761220b1e7207bd68d23b4e700edd1dc30b9909a6efe7307",
+    "/packages/pvp-call/src/inspector.js": "d8d5426e5fe7d675dcd81147840e24146c70241c4a86ab8be59e282c8befb6ee",
+    "/packages/pvp-call/src/media.js": "a64ba3f1ffbf364f07d7a251a5b330799559d73b6e075a807d5a4f26a5ec40aa",
+    "/packages/pvp-call/src/index.js": "86f43be491fa42331f6135ecaa552006801c9e170fb0ff0e55141463c031ff79",
+    "/packages/pvp-call/src/quality.js": "7a689d823924d93d6b60d7e98b240a1dde4af953abb2edc1b422e319a8c3110c",
+    "/packages/pvp-call/src/room.js": "b58f9f62275cca892f87d329b095fcba9923537b7013f627a96bcfb10d8c9efe",
+    "/motion.js": "f8da31e5f76e6e9e43c03c6b3047854d88eea245133b1e74b794c1843d6430a5",
+    "/motion.css": "5a7b5233ff84d907ea7739b6a4010f1da3a71decc37165552ead330b64a859b2"
+  }
+}

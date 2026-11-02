@@ -1,0 +1,209 @@
+/* PVP Signal — response 110 ms / travel 180 ms / settle 280 ms. */
+:root {
+  --motion-response: var(--pvp-response);
+  --motion-travel: var(--pvp-travel);
+  --motion-settle: var(--pvp-settle);
+  --ease-signal: cubic-bezier(.16, 1, .3, 1);
+  --ease-press: cubic-bezier(.2, .8, .2, 1);
+  --signal-color: var(--pvp-focus);
+}
+
+:is(.button, .icon-button, .call-control, .nav-item, .meeting-list-item,
+    .segmented button, .tabs button) {
+  transition: transform var(--motion-response) var(--ease-press),
+    background-color var(--motion-travel) ease,
+    border-color var(--motion-travel) ease,
+    color var(--motion-response) ease,
+    box-shadow var(--motion-travel) ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .friend-card:hover { background-color: #e8eedf55; }
+}
+
+:is(.button, .icon-button, .call-control, .nav-item, .meeting-list-item,
+    .segmented button, .tabs button):not(:disabled):active {
+  transform: scale(.985);
+  transition-duration: 65ms;
+}
+.button:disabled:hover { transform: none; }
+:is(.brand-mark, .friend-card .avatar, .nav-item > .icon, .meeting-chevron) {
+  transition: transform var(--motion-settle) var(--ease-signal);
+}
+.friend-card { transition: background-color var(--motion-travel) ease, box-shadow var(--motion-travel) ease; }
+:is(input, select, textarea) {
+  transition: border-color var(--motion-response) ease, box-shadow var(--motion-travel) ease;
+}
+:is(input, select, textarea):focus-visible { box-shadow: 0 0 0 4px #8052161a; }
+:is(button, a, input, select, textarea):focus-visible { outline-color: var(--signal-color); }
+
+/* Navigation has one moving signal instead of a set of blinking selections. */
+.sidebar nav { position: relative; }
+.pvp-nav-signal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  border-radius: 3px;
+  background: var(--signal-color);
+
+  pointer-events: none;
+  transition: transform var(--motion-settle) var(--ease-signal),
+    width var(--motion-travel) var(--ease-signal);
+}
+.nav-item.active > .icon { color: var(--signal-color); }
+.tabs button::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -17px;
+  height: 2px;
+  background: var(--signal-color);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--motion-settle) var(--ease-signal);
+}
+.tabs button.selected::after { transform: scaleX(1); }
+
+/* Enter immediately; every view is usable throughout its arrival. */
+.workspace main > section:not([hidden]) {
+  animation: pvp-arrive var(--motion-settle) var(--ease-signal) backwards;
+}
+#app-view:not([hidden]) { animation: pvp-fade var(--motion-travel) ease backwards; }
+.auth-card { animation: pvp-arrive 360ms var(--ease-signal) backwards; }
+.auth-story .story-content { animation: pvp-arrive 420ms var(--ease-signal) backwards; }
+#name-label:not([hidden]) { animation: pvp-arrive var(--motion-travel) var(--ease-signal) backwards; }
+.workspace > :is(.call-view, .group-view):not([hidden]),
+.call-settings:not([hidden]) {
+  animation: pvp-connect var(--motion-settle) var(--ease-signal) backwards;
+}
+.group-tile { animation: pvp-connect var(--motion-settle) var(--ease-signal) backwards; }
+.group-incoming:not([hidden]) { animation: pvp-invite var(--motion-settle) var(--ease-signal) backwards; }
+.group-grid.maximized > .group-tile:not(.maximized) { animation: none; }
+.group-tile.speaking {
+  transition: border-color 90ms ease, box-shadow 90ms ease;
+}
+.group-tile:not(.speaking) {
+  transition: border-color 240ms ease, box-shadow 240ms ease;
+}
+
+dialog[open] { animation: pvp-connect var(--motion-settle) var(--ease-signal) backwards; }
+dialog[open]::backdrop { animation: pvp-fade var(--motion-travel) ease backwards; }
+.toast:not([hidden]) { animation: pvp-toast-in var(--motion-settle) var(--ease-signal) backwards; }
+.toast.pvp-toast-leaving { animation: pvp-toast-out var(--motion-travel) ease both; }
+.meeting-list-item { animation: pvp-arrive var(--motion-settle) var(--ease-signal) backwards; }
+
+/* Supporting browsers keep the backdrop and surface alive just for the exit.
+   Closing still restores focus immediately through the native dialog API. */
+@supports (transition-behavior: allow-discrete) {
+  dialog {
+    opacity: 0;
+    transform: translateY(8px) scale(.975);
+    transition: opacity var(--motion-travel) ease,
+      transform var(--motion-travel) var(--ease-signal),
+      overlay var(--motion-travel) allow-discrete,
+      display var(--motion-travel) allow-discrete;
+  }
+  dialog[open] { opacity: 1; transform: translateY(0) scale(1); animation: none; }
+  dialog::backdrop {
+    opacity: 0;
+    transition: opacity var(--motion-travel) ease,
+      overlay var(--motion-travel) allow-discrete,
+      display var(--motion-travel) allow-discrete;
+  }
+  dialog[open]::backdrop { opacity: 1; animation: none; }
+  @starting-style {
+    dialog[open] { opacity: 0; transform: translateY(8px) scale(.975); }
+    dialog[open]::backdrop { opacity: 0; }
+  }
+}
+
+/* The paired wave is PVP's signature: two people, one direct connection.
+   It is reserved for ringing/connecting and settles after three waves. */
+#incoming-avatar::before, #incoming-avatar::after,
+#call-view[data-connecting] #call-avatar::before,
+#call-view[data-connecting] #call-avatar::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border: 1px solid var(--signal-color);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  animation: pvp-signal 1700ms cubic-bezier(.2, .5, .3, 1) 3;
+}
+#incoming-avatar::after,
+#call-view[data-connecting] #call-avatar::after { animation-delay: 340ms; }
+.call-controls { animation: pvp-arrive 360ms var(--ease-signal) backwards; }
+.call-control .icon { transition: transform var(--motion-settle) var(--ease-signal); }
+.call-control[aria-pressed=true] .icon { transform: scale(.9); }
+.status-dot { transition: background-color var(--motion-travel) ease, box-shadow var(--motion-settle) ease; }
+
+/* A single greeting passes across the line when the sign-in screen arrives. */
+.art-one { animation: pvp-hello-one 650ms var(--ease-signal) backwards; }
+.art-two { animation: pvp-hello-two 650ms 70ms var(--ease-signal) backwards; }
+.art-line { position: relative; }
+.art-line::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--signal-color);
+  animation: pvp-handshake 1000ms 300ms var(--ease-signal) backwards;
+}
+
+@keyframes pvp-arrive {
+  from { opacity: .3; transform: translate3d(0, 10px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes pvp-connect {
+  from { opacity: .3; transform: translate3d(0, 8px, 0) scale(.975); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes pvp-fade { from { opacity: .3; } to { opacity: 1; } }
+@keyframes pvp-toast-in {
+  from { opacity: 0; transform: translate3d(-50%, 12px, 0) scale(.97); }
+  to { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
+}
+@keyframes pvp-toast-out {
+  to { opacity: 0; transform: translate3d(-50%, 5px, 0); }
+}
+@keyframes pvp-invite {
+  from { opacity: .3; transform: translate(-50%, calc(-50% + 8px)) scale(.975); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes pvp-signal {
+  0% { opacity: 0; transform: scale(.92); }
+  18% { opacity: .55; }
+  100% { opacity: 0; transform: scale(1.38); }
+}
+@keyframes pvp-hello-one {
+  from { opacity: .3; transform: translateX(-14px) rotate(-12deg); }
+  to { opacity: 1; transform: translateX(0) rotate(-7deg); }
+}
+@keyframes pvp-hello-two {
+  from { opacity: .3; transform: translateX(14px) rotate(12deg); }
+  to { opacity: 1; transform: translateX(0) rotate(6deg); }
+}
+@keyframes pvp-handshake {
+  0% { opacity: 0; transform: translateX(0); }
+  25% { opacity: 1; }
+  85%, 100% { opacity: 0; transform: translateX(55px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  :is(.button, .icon-button, .call-control, .nav-item, .meeting-list-item,
+      .segmented button, .tabs button):is(:hover, :active),
+  .brand:hover .brand-mark, .friend-card:hover .avatar,
+  .nav-item:hover > .icon, .meeting-list-item:hover .meeting-chevron { transform: none; }
+}

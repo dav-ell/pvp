@@ -1,0 +1,2248 @@
+{
+  "scope": "Isolated local service, production client assets, simulated media outcomes; no production accounts or writes",
+  "engines": {
+    "chromium": {
+      "initial": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 913,
+        "guestField": {
+          "x": 30,
+          "y": 585,
+          "width": 330,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "clip",
+          "clientWidth": 328,
+          "scrollWidth": 328
+        },
+        "guestJoin": {
+          "x": 30,
+          "y": 736,
+          "width": 330,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 328,
+          "scrollWidth": 328
+        },
+        "sidebarWidth": 0,
+        "sidebarFraction": 0,
+        "workspace": {
+          "x": 0,
+          "width": 0
+        },
+        "meetingJoin": null,
+        "linkField": null,
+        "groupVisible": false,
+        "connectionLabel": "Connecting\u2026",
+        "toast": "",
+        "toastVisible": false,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [],
+        "sent": [],
+        "errors": []
+      },
+      "denied": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "clip",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 735,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 198,
+          "y": 357,
+          "width": 175,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "clip",
+          "clientWidth": 174,
+          "scrollWidth": 716
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "Allow microphone access in your browser to join a call.",
+        "toastVisible": true,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 42.10000002384186,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": []
+      },
+      "widths": [
+        {
+          "viewport": {
+            "width": 320,
+            "height": 640,
+            "scale": 1
+          },
+          "documentWidth": 320,
+          "documentHeight": 640,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "clip",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 160,
+          "sidebarFraction": 50,
+          "workspace": {
+            "x": 160,
+            "width": 160
+          },
+          "meetingJoin": {
+            "x": 257,
+            "y": 751,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 194,
+            "y": 371,
+            "width": 161,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "clip",
+            "clientWidth": 160,
+            "scrollWidth": 716
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Allow microphone access in your browser to join a call.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 42.10000002384186,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 360,
+            "height": 740,
+            "scale": 1
+          },
+          "documentWidth": 360,
+          "documentHeight": 740,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "clip",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 160,
+          "sidebarFraction": 44,
+          "workspace": {
+            "x": 160,
+            "width": 200
+          },
+          "meetingJoin": {
+            "x": 257,
+            "y": 751,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 194,
+            "y": 371,
+            "width": 161,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "clip",
+            "clientWidth": 160,
+            "scrollWidth": 716
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Allow microphone access in your browser to join a call.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 42.10000002384186,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 390,
+            "height": 700,
+            "scale": 1
+          },
+          "documentWidth": 390,
+          "documentHeight": 700,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "clip",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 160,
+          "sidebarFraction": 41,
+          "workspace": {
+            "x": 160,
+            "width": 230
+          },
+          "meetingJoin": {
+            "x": 271,
+            "y": 730,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 194,
+            "y": 349,
+            "width": 175,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "clip",
+            "clientWidth": 174,
+            "scrollWidth": 716
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Allow microphone access in your browser to join a call.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 42.10000002384186,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 430,
+            "height": 800,
+            "scale": 1
+          },
+          "documentWidth": 430,
+          "documentHeight": 800,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "clip",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 160,
+          "sidebarFraction": 37,
+          "workspace": {
+            "x": 160,
+            "width": 270
+          },
+          "meetingJoin": {
+            "x": 311,
+            "y": 700,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 194,
+            "y": 349,
+            "width": 215,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "clip",
+            "clientWidth": 214,
+            "scrollWidth": 716
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Allow microphone access in your browser to join a call.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 42.10000002384186,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 844,
+            "height": 390,
+            "scale": 1
+          },
+          "documentWidth": 844,
+          "documentHeight": 390,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "clip",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 200,
+          "sidebarFraction": 24,
+          "workspace": {
+            "x": 200,
+            "width": 644
+          },
+          "meetingJoin": {
+            "x": 721,
+            "y": 584,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 236,
+            "y": 271,
+            "width": 580,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "clip",
+            "clientWidth": 580,
+            "scrollWidth": 716
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Allow microphone access in your browser to join a call.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 42.10000002384186,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        }
+      ],
+      "deniedAfterToast": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "clip",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 725,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 187,
+          "y": 340,
+          "width": 176,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "clip",
+          "clientWidth": 174,
+          "scrollWidth": 716
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "Allow microphone access in your browser to join a call.",
+        "toastVisible": false,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 42.10000002384186,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": []
+      },
+      "refresh": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "clip",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 732,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 194,
+          "y": 351,
+          "width": 175,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "clip",
+          "clientWidth": 174,
+          "scrollWidth": 716
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "",
+        "toastVisible": false,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": []
+      },
+      "pending": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "clip",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 725,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 187,
+          "y": 340,
+          "width": 176,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "clip",
+          "clientWidth": 174,
+          "scrollWidth": 716
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "",
+        "toastVisible": false,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 51.199999928474426,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": [],
+        "joinButtonDisabled": false
+      },
+      "missing": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "clip",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 725,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 187,
+          "y": 340,
+          "width": 176,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "clip",
+          "clientWidth": 174,
+          "scrollWidth": 716
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "Camera or microphone not found. Choose System default in Call settings.",
+        "toastVisible": true,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 51,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": [],
+        "joinButtonDisabled": false
+      },
+      "busy": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "clip",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 725,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 187,
+          "y": 340,
+          "width": 176,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "clip",
+          "clientWidth": 174,
+          "scrollWidth": 716
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "Your camera or microphone is unavailable. Close other apps using it and try again.",
+        "toastVisible": true,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 56.700000047683716,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": [],
+        "joinButtonDisabled": false
+      },
+      "allowed": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "clip",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 778,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 198,
+          "y": 357,
+          "width": 175,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "clip",
+          "clientWidth": 174,
+          "scrollWidth": 716
+        },
+        "groupVisible": true,
+        "connectionLabel": "Ready for a hello",
+        "toast": "",
+        "toastVisible": false,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 51.799999952316284,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong",
+          "meeting-enter"
+        ],
+        "errors": [],
+        "joinButtonDisabled": true
+      },
+      "slowGuestAdmission": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "clip",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 730,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 198,
+          "y": 351,
+          "width": 175,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "clip",
+          "clientWidth": 174,
+          "scrollWidth": 716
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "Allow microphone access in your browser to join a call.",
+        "toastVisible": true,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 6133.199999928474,
+            "userActivation": false
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": []
+      }
+    },
+    "webkit": {
+      "initial": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 913,
+        "guestField": {
+          "x": 30,
+          "y": 581,
+          "width": 330,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 328,
+          "scrollWidth": 328
+        },
+        "guestJoin": {
+          "x": 30,
+          "y": 731,
+          "width": 330,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 328,
+          "scrollWidth": 328
+        },
+        "sidebarWidth": 0,
+        "sidebarFraction": 0,
+        "workspace": {
+          "x": 0,
+          "width": 0
+        },
+        "meetingJoin": null,
+        "linkField": null,
+        "groupVisible": false,
+        "connectionLabel": "Connecting\u2026",
+        "toast": "",
+        "toastVisible": false,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [],
+        "sent": [],
+        "errors": []
+      },
+      "denied": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 732,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 198,
+          "y": 353,
+          "width": 175,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 174,
+          "scrollWidth": 697
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "Allow microphone access in your browser to join a call.",
+        "toastVisible": true,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 39,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": []
+      },
+      "widths": [
+        {
+          "viewport": {
+            "width": 320,
+            "height": 640,
+            "scale": 1
+          },
+          "documentWidth": 320,
+          "documentHeight": 640,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 160,
+          "sidebarFraction": 50,
+          "workspace": {
+            "x": 160,
+            "width": 160
+          },
+          "meetingJoin": {
+            "x": 257,
+            "y": 751,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 193,
+            "y": 369,
+            "width": 161,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 160,
+            "scrollWidth": 697
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Allow microphone access in your browser to join a call.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 39,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 360,
+            "height": 740,
+            "scale": 1
+          },
+          "documentWidth": 360,
+          "documentHeight": 740,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 160,
+          "sidebarFraction": 44,
+          "workspace": {
+            "x": 160,
+            "width": 200
+          },
+          "meetingJoin": {
+            "x": 257,
+            "y": 750,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 192,
+            "y": 369,
+            "width": 161,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 160,
+            "scrollWidth": 697
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Allow microphone access in your browser to join a call.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 39,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 390,
+            "height": 700,
+            "scale": 1
+          },
+          "documentWidth": 390,
+          "documentHeight": 700,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 160,
+          "sidebarFraction": 41,
+          "workspace": {
+            "x": 160,
+            "width": 230
+          },
+          "meetingJoin": {
+            "x": 271,
+            "y": 728,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 191,
+            "y": 346,
+            "width": 175,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 174,
+            "scrollWidth": 697
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Allow microphone access in your browser to join a call.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 39,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 430,
+            "height": 800,
+            "scale": 1
+          },
+          "documentWidth": 430,
+          "documentHeight": 800,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 160,
+          "sidebarFraction": 37,
+          "workspace": {
+            "x": 160,
+            "width": 270
+          },
+          "meetingJoin": {
+            "x": 311,
+            "y": 680,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 191,
+            "y": 346,
+            "width": 215,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 214,
+            "scrollWidth": 697
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Allow microphone access in your browser to join a call.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 39,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 844,
+            "height": 390,
+            "scale": 1
+          },
+          "documentWidth": 844,
+          "documentHeight": 390,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 200,
+          "sidebarFraction": 24,
+          "workspace": {
+            "x": 200,
+            "width": 644
+          },
+          "meetingJoin": {
+            "x": 721,
+            "y": 583,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 235,
+            "y": 270,
+            "width": 580,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 580,
+            "scrollWidth": 697
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Allow microphone access in your browser to join a call.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 39,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        }
+      ],
+      "deniedAfterToast": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 725,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 187,
+          "y": 340,
+          "width": 176,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 174,
+          "scrollWidth": 697
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "Allow microphone access in your browser to join a call.",
+        "toastVisible": false,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 39,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": []
+      },
+      "refresh": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 729,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 198,
+          "y": 351,
+          "width": 175,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 174,
+          "scrollWidth": 697
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "",
+        "toastVisible": false,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": []
+      },
+      "pending": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 725,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 187,
+          "y": 340,
+          "width": 176,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 174,
+          "scrollWidth": 697
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "",
+        "toastVisible": false,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 45,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": [],
+        "joinButtonDisabled": false,
+        "retry": {
+          "viewport": {
+            "width": 390,
+            "height": 700,
+            "scale": 1
+          },
+          "documentWidth": 390,
+          "documentHeight": 700,
+          "guestField": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "guestJoin": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "font": "13px",
+            "hidden": true,
+            "overflow": "visible",
+            "clientWidth": 0,
+            "scrollWidth": 0
+          },
+          "sidebarWidth": 160,
+          "sidebarFraction": 41,
+          "workspace": {
+            "x": 160,
+            "width": 230
+          },
+          "meetingJoin": {
+            "x": 271,
+            "y": 624,
+            "width": 107,
+            "height": 36,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 105,
+            "scrollWidth": 105
+          },
+          "linkField": {
+            "x": 187,
+            "y": 239,
+            "width": 176,
+            "height": 38,
+            "font": "13px",
+            "hidden": false,
+            "overflow": "visible",
+            "clientWidth": 174,
+            "scrollWidth": 697
+          },
+          "groupVisible": false,
+          "connectionLabel": "Ready for a hello",
+          "toast": "Finish your current call first.",
+          "toastVisible": true,
+          "listenButton": false,
+          "inlineGuestError": "",
+          "microphoneRequests": [
+            {
+              "audio": true,
+              "video": false,
+              "elapsedSinceJoin": 45,
+              "userActivation": true
+            }
+          ],
+          "sent": [
+            "room-capabilities",
+            "pong"
+          ],
+          "errors": []
+        }
+      },
+      "missing": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 725,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 187,
+          "y": 340,
+          "width": 176,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 174,
+          "scrollWidth": 697
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "Camera or microphone not found. Choose System default in Call settings.",
+        "toastVisible": true,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 41,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": [],
+        "joinButtonDisabled": false
+      },
+      "busy": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 725,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 187,
+          "y": 340,
+          "width": 176,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 174,
+          "scrollWidth": 697
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "Your camera or microphone is unavailable. Close other apps using it and try again.",
+        "toastVisible": true,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 37,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": [],
+        "joinButtonDisabled": false
+      },
+      "allowed": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 771,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 192,
+          "y": 346,
+          "width": 175,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 174,
+          "scrollWidth": 697
+        },
+        "groupVisible": true,
+        "connectionLabel": "Ready for a hello",
+        "toast": "",
+        "toastVisible": false,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 40,
+            "userActivation": true
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong",
+          "meeting-enter"
+        ],
+        "errors": [],
+        "joinButtonDisabled": true
+      },
+      "slowGuestAdmission": {
+        "viewport": {
+          "width": 390,
+          "height": 700,
+          "scale": 1
+        },
+        "documentWidth": 390,
+        "documentHeight": 700,
+        "guestField": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "guestJoin": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "font": "13px",
+          "hidden": true,
+          "overflow": "visible",
+          "clientWidth": 0,
+          "scrollWidth": 0
+        },
+        "sidebarWidth": 160,
+        "sidebarFraction": 41,
+        "workspace": {
+          "x": 160,
+          "width": 230
+        },
+        "meetingJoin": {
+          "x": 271,
+          "y": 730,
+          "width": 107,
+          "height": 36,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 105,
+          "scrollWidth": 105
+        },
+        "linkField": {
+          "x": 196,
+          "y": 351,
+          "width": 175,
+          "height": 38,
+          "font": "13px",
+          "hidden": false,
+          "overflow": "visible",
+          "clientWidth": 174,
+          "scrollWidth": 697
+        },
+        "groupVisible": false,
+        "connectionLabel": "Ready for a hello",
+        "toast": "Allow microphone access in your browser to join a call.",
+        "toastVisible": true,
+        "listenButton": false,
+        "inlineGuestError": "",
+        "microphoneRequests": [
+          {
+            "audio": true,
+            "video": false,
+            "elapsedSinceJoin": 6142,
+            "userActivation": false
+          }
+        ],
+        "sent": [
+          "room-capabilities",
+          "pong"
+        ],
+        "errors": []
+      }
+    }
+  },
+  "limitations": [
+    "Mobile contexts run desktop Chromium/WebKit with touch and iPhone viewport; these are not physical iPhones.",
+    "Microphone outcomes are injected test fixtures, not OS permission-dialog tests.",
+    "Focus zoom and browser pull-to-refresh gestures were not reproduced on physical iOS.",
+    "Production client files are replayed against an isolated local service; no production accounts or writes."
+  ],
+  "production": {
+    "/": {
+      "sha256": "34922c2e91cf13789b7274cb367e66790a2da5ac7e6804aa63c67a25148da0b5",
+      "matchesWorkspace": true
+    },
+    "/styles.css": {
+      "sha256": "3da45a0ab5883e57dbc2ef0d74f61aedabc80d6b68bbe6c849035d95fb48bc86",
+      "matchesWorkspace": true
+    },
+    "/app.js": {
+      "sha256": "08a26f5adf87309106cec5a534ff14bf9ba2b146149ea2f79afd059e6292566c",
+      "matchesWorkspace": false
+    },
+    "/meetings.js": {
+      "sha256": "411d8f6af44f5b4d42d94c16eabe47356a6ff4836312aa4cd8b793b12c82f281",
+      "matchesWorkspace": true
+    },
+    "/group-calls.js": {
+      "sha256": "c19c75f3305b648adffbc28bff6903e2977c5ad134c89533cf508d772e2a3008",
+      "matchesWorkspace": false
+    },
+    "/health": {
+      "sha256": "87dce991e5ae3fe901ff5c9e068c1d18e91a049f88afa56f44e74a5500b25491",
+      "matchesWorkspace": null,
+      "health": {
+        "media": "direct-p2p",
+        "status": "ok",
+        "version": "0.3.19"
+      }
+    }
+  }
+}

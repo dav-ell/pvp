@@ -8,6 +8,25 @@ pub mod stun;
 pub mod hole_punch;
 pub mod sender;
 pub mod receiver;
+pub mod relay;
+
+/// Portable `cvt_color` across OpenCV builds.
+/// Newer OpenCV (e.g. Homebrew 4.x) requires `AlgorithmHint`; Fedora MinGW 4.7 does not.
+pub fn cvt_color(
+    src: &impl opencv::core::ToInputArray,
+    dst: &mut impl opencv::core::ToOutputArray,
+    code: i32,
+) -> opencv::Result<()> {
+    #[cfg(target_os = "windows")]
+    {
+        opencv::imgproc::cvt_color(src, dst, code, 0)
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        use opencv::core::AlgorithmHint;
+        opencv::imgproc::cvt_color(src, dst, code, 0, AlgorithmHint::ALGO_HINT_DEFAULT)
+    }
+}
 
 // --- Configuration ---
 pub const AUDIO_SAMPLE_RATE: u32 = 48000;
@@ -118,4 +137,60 @@ impl<'a> YUVSource for MatAsYuv<'a> {
 
     /// Returns a slice containing the V plane data.
     fn v(&self) -> &[u8] { self.v }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn packet_header_size_matches_layout() {
+        assert_eq!(PACKET_HEADER_SIZE, 25);
+        assert_eq!(1 + 4 + 2 + 2 + 16, PACKET_HEADER_SIZE);
+    }
+
+    #[test]
+    fn audio_constants_match_documented_voip_params() {
+        assert_eq!(AUDIO_SAMPLE_RATE, 48000);
+        assert_eq!(AUDIO_CHANNELS, 1);
+        assert_eq!(AUDIO_FRAME_SIZE, 960); // 20ms @ 48kHz
+        assert_eq!(MAX_PAYLOAD_SIZE, 1300);
+    }
+
+    #[test]
+    fn packet_type_from_u8() {
+        assert_eq!(PacketType::from_u8(0), Some(PacketType::Video));
+        assert_eq!(PacketType::from_u8(1), Some(PacketType::Audio));
+        assert_eq!(PacketType::from_u8(2), None);
+        assert_eq!(PacketType::Video as u8, 0);
+        assert_eq!(PacketType::Audio as u8, 1);
+    }
+
+    #[test]
+    fn packet_header_round_trip() {
+        let header = PacketHeader {
+            packet_type: PacketType::Audio,
+            seq_num: 0x1122_3344,
+            frag_idx: 2,
+            total_frags: 5,
+            iv: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+        };
+        let bytes = header.serialize();
+        assert_eq!(bytes.len(), PACKET_HEADER_SIZE);
+        assert_eq!(bytes[0], PacketType::Audio as u8);
+        let decoded = PacketHeader::deserialize(&bytes).expect("deserialize");
+        assert_eq!(decoded.packet_type, PacketType::Audio);
+        assert_eq!(decoded.seq_num, 0x1122_3344);
+        assert_eq!(decoded.frag_idx, 2);
+        assert_eq!(decoded.total_frags, 5);
+        assert_eq!(decoded.iv, header.iv);
+    }
+
+    #[test]
+    fn packet_header_rejects_short_and_bad_type() {
+        assert!(PacketHeader::deserialize(&[0u8; 10]).is_err());
+        let mut bad = vec![0u8; PACKET_HEADER_SIZE];
+        bad[0] = 99; // invalid PacketType
+        assert!(PacketHeader::deserialize(&bad).is_err());
+    }
 }

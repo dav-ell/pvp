@@ -1,0 +1,67 @@
+platform :osx, '13.0'
+require 'fileutils'
+
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+}
+
+def flutter_root
+  generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'ephemeral', 'Flutter-Generated.xcconfig'), __FILE__)
+  unless File.exist?(generated_xcode_build_settings_path)
+    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure \"flutter pub get\" is executed first"
+  end
+
+  File.foreach(generated_xcode_build_settings_path) do |line|
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    return matches[1].strip if matches
+  end
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Flutter-Generated.xcconfig, then run \"flutter pub get\""
+end
+
+require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
+
+flutter_macos_podfile_setup
+
+target 'Runner' do
+  use_frameworks!
+
+  flutter_install_all_macos_pods File.dirname(File.realpath(__FILE__))
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+
+# Keep the shared pub cache untouched. Build a project-local copy whose queued
+# callbacks check the weak renderer before directly reading instance variables.
+# Native leave/kick testing reproduced a nil dereference in renderFrame:.
+def pvp_safe_video_renderer(target, installer)
+  refs = target.source_build_phase.files.map(&:file_ref).compact.select { |r| File.basename(r.path) == 'FlutterRTCVideoRenderer.m' }
+  raise 'Expected one flutter_webrtc renderer source' unless refs.length == 1
+  ref = refs.first
+  source = ref.real_path
+  text = File.read(source)
+  needle = 'FlutterRTCVideoRenderer* strongSelf = weakSelf;'
+  raise 'Review PVP renderer patch for this flutter_webrtc version' unless text.scan(needle).length == 3
+  guard = "#{needle}\n      if (strongSelf == nil) { return; }"
+  text = text.gsub(needle, guard) unless text.include?('if (strongSelf == nil) { return; }')
+  output = installer.sandbox.root + 'PVPWebRTCRenderer'
+  FileUtils.mkdir_p(output)
+  unless source.dirname == output
+    Dir.glob(source.dirname + '*.h').each { |header| FileUtils.cp(header, output) }
+  end
+  File.write(output + 'FlutterRTCVideoRenderer.m', text)
+  ref.path = 'PVPWebRTCRenderer/FlutterRTCVideoRenderer.m'
+  ref.source_tree = 'SOURCE_ROOT'
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_macos_build_settings(target)
+    pvp_safe_video_renderer(target, installer) if target.name == 'flutter_webrtc'
+  end
+end

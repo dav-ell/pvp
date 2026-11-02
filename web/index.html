@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="theme-color" content="#f8f9f5"><meta name="description" content="A room for your people. Create a reusable room, share the link, and come back together.">
+  <title>PVP · A room for your people.</title>
+  <link rel="icon" href="/icon.svg" type="image/svg+xml"><link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/brand-tokens.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/meeting-mobile.css"><script src="/meeting-route.js"></script><link rel="stylesheet" href="/motion.css"><link rel="stylesheet" href="/polish.css"><link rel="stylesheet" href="/network.css"><script type="module" src="/app.js"></script><script type="module" src="/network.js"></script>
+</head>
+<body>
+<!-- PVP Lucide icon license
+ISC License
+
+Copyright (c) 2026 Lucide Icons and Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+- - -
+
+The following Lucide icons are derived from the Feather project:
+
+airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out
+
+The MIT License (MIT) (for the icons listed above)
+
+Copyright (c) 2013-present Cole Bemis
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-->
+<svg class="icon-defs" xmlns="http://www.w3.org/2000/svg"><defs><symbol id="i-room" viewBox="0 0 24 24"><path d="M4 3h9v18H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="m13 3 8 3v12l-8 3Z"/><path d="M16.5 12h.01"/></symbol><symbol id="i-globe" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="10" />
+  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+  <path d="M2 12h20" />
+</symbol><symbol id="i-video" viewBox="0 0 24 24">
+  <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
+  <rect x="2" y="6" width="14" height="12" rx="2" />
+</symbol><symbol id="i-people" viewBox="0 0 24 24">
+  <path d="M18 21a8 8 0 0 0-16 0" />
+  <circle cx="10" cy="8" r="5" />
+  <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
+</symbol><symbol id="i-clock" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="10" />
+  <path d="M12 6v6h4" />
+</symbol><symbol id="i-settings" viewBox="0 0 24 24">
+  <path d="M14 17H5" />
+  <path d="M19 7h-9" />
+  <circle cx="17" cy="17" r="3" />
+  <circle cx="7" cy="7" r="3" />
+</symbol><symbol id="i-plus" viewBox="0 0 24 24">
+  <path d="M5 12h14" />
+  <path d="M12 5v14" />
+</symbol><symbol id="i-arrow" viewBox="0 0 24 24">
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</symbol><symbol id="i-search" viewBox="0 0 24 24">
+  <path d="m21 21-4.34-4.34" />
+  <circle cx="11" cy="11" r="8" />
+</symbol><symbol id="i-shield" viewBox="0 0 24 24">
+  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+  <path d="m9 12 2 2 4-4" />
+</symbol><symbol id="i-mic" viewBox="0 0 24 24">
+  <path d="M12 19v3" />
+  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+  <rect x="9" y="2" width="6" height="13" rx="3" />
+</symbol><symbol id="i-off" viewBox="0 0 24 24">
+  <path d="M22 2 2 22" />
+</symbol><symbol id="i-phone" viewBox="0 0 24 24">
+  <path d="M10.1 13.9a14 14 0 0 0 3.732 2.668 1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2 18 18 0 0 1-12.728-5.272" />
+  <path d="M22 2 2 22" />
+  <path d="M4.76 13.582A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 .244.473" />
+</symbol><symbol id="i-close" viewBox="0 0 24 24">
+  <path d="M18 6 6 18" />
+  <path d="m6 6 12 12" />
+</symbol><symbol id="i-bell" viewBox="0 0 24 24">
+  <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+  <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
+</symbol><symbol id="i-check" viewBox="0 0 24 24">
+  <path d="M20 6 9 17l-5-5" />
+</symbol><symbol id="i-logout" viewBox="0 0 24 24">
+  <path d="m16 17 5-5-5-5" />
+  <path d="M21 12H9" />
+  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+</symbol><symbol id="i-download" viewBox="0 0 24 24">
+  <path d="M12 15V3" />
+  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+  <path d="m7 10 5 5 5-5" />
+</symbol></defs></svg>
+
+<section id="meeting-entry-view" hidden aria-labelledby="guest-heading">
+ <div class="meeting-entry-card"><header class="meeting-entry-brand"><a class="brand" href="/" aria-label="PVP home"><span class="brand-mark"><svg><use href="#i-room"/></svg></span>pvp</a><span class="meeting-badge">Room invitation</span></header>
+ <section id="guest-meeting"><p id="guest-eyebrow" class="tiny-label">YOU’RE INVITED</p><h1 id="guest-heading">Join a room</h1><p id="guest-description" class="muted">Loading your invitation…</p>
+ <p id="guest-network-note" class="meeting-fine" hidden>This room shares its anonymous size on the public homepage. Names, links and addresses stay private.</p>
+ <p id="guest-zoom-note" class="meeting-hint" hidden>A separate PVP meeting for this Zoom invitation. Anyone with the meeting ID or PVP link can join. Zoom passcodes and host roles do not carry over; this room has no admin.</p>
+ <form id="guest-form" hidden><label>Your name<input id="guest-name" required maxlength="60" autocomplete="name" placeholder="How people know you"></label>
+ <p class="meeting-device"><svg class="icon"><use href="#i-video"/></svg>Camera off</p>
+ <button id="guest-listen" class="button secondary wide" type="submit">Join to listen</button>
+ <button id="guest-submit" class="button primary wide" type="button">Join with microphone</button></form>
+ <p id="guest-status" role="status" aria-live="polite"></p><p id="guest-error" class="form-error" role="alert"></p><button id="guest-takeover" class="button secondary wide" type="button" hidden>Use this tab</button><button id="guest-cancel" class="button secondary wide" type="button" hidden>Cancel joining</button>
+ <details class="meeting-help"><summary>Microphone help</summary><p>Check this site’s microphone permission in your browser. If it is blocked for the browser itself, check its microphone access in your phone’s Settings. Return here and try the microphone again.</p><p>If this browser cannot request access, copy the invitation link and open it in your usual browser. You can always choose to listen without microphone access.</p></details>
+ <details class="meeting-help"><summary>Privacy and meeting controls</summary><p>Calls are encrypted and connect directly. Participants can see your network address. The host and admins can mute or remove participants.</p></details><p class="meeting-fine">Direct calls share your network address with participants.</p>
+ <button id="guest-sign-in" class="button subtle wide" type="button">Sign in instead</button><button id="guest-back-rooms" class="button subtle wide" type="button" hidden>Back to rooms</button><button id="guest-manage" class="button subtle wide" type="button" hidden>Room settings</button></section></div>
+</section>
+
+<section id="auth-view" class="auth-view network-home">
+ <header class="front-nav"><a class="brand" href="/" aria-label="PVP home"><span class="brand-mark"><svg><use href="#i-room"/></svg></span>pvp</a><span class="front-note">A place to return to.</span><div class="front-actions"><button id="home-trust" class="button subtle" type="button">Connection evidence</button><button id="landing-signin" class="button secondary" type="button">Sign in <span aria-hidden="true">↗</span></button></div></header>
+ <section class="network-hero" aria-labelledby="network-heading">
+  <div id="room-network" class="room-network" aria-label="Peer-to-peer room illustration"></div>
+  <div class="network-copy"><p class="network-eyebrow">A LITTLE CLOSER, WHEREVER YOU ARE</p><h1 id="network-heading">Your people.<br>One connection away.</h1><p class="network-description">A room to return to. Conversations that connect you directly.</p><div class="network-actions"><button id="network-create" class="button primary" type="button">Create a room <span aria-hidden="true">↗</span></button><button id="network-join" class="button secondary" type="button">I have a link</button></div><span class="network-fine">No account needed. Come and go as you like.</span></div>
+  <footer class="network-footer"><div><span id="network-state" class="network-state" role="status">P2P, illustrated</span><span id="network-count" class="network-count">Checking shared room activity…</span></div><div class="network-tools"><button id="network-mode" type="button" class="button subtle" hidden>See an example</button><button id="network-motion" class="icon-button" type="button" aria-label="Pause network motion" aria-pressed="false">Ⅱ</button><details class="network-key"><summary>How to read this <span aria-hidden="true">↗</span></summary><div><strong>One dot. One peer.</strong><p>A cluster represents a room. The lines illustrate direct peer connections; they are not measurements of live media.</p><p>Live shapes use anonymous room sizes, shared only when a host opts in. No names, links, IP addresses, or locations are published.</p><p><strong>Video can travel via peers.</strong> At six or more participants, compatible browser groups can forward video from its source through other peers. The stronger branches and traveling dots illustrate one video source; faint links show direct audio. Direct video remains the fallback.</p><p>A filled dot is the source. A double ring marks a peer passing video onward. Motion illustrates the design, not actual packets.</p><p>In the labeled examples, peers gently join and leave over time. Live shapes change only when the shared room counts change.</p><p>Several peers can share an IP address. A dot represents a participant, not a unique IP.</p></div></details></div></footer>
+ </section>
+  <div class="auth-panel"><div class="auth-card">
+    <section id="guest-home" tabindex="-1" aria-labelledby="guest-home-title"><span class="tiny-label">COME ON IN</span><h2 id="guest-home-title">Make room.</h2><p class="muted">Create your place. Send the link. Settle in.</p>
+      <form id="guest-create-form"><label>Your name<input id="home-guest-name" required maxlength="60" autocomplete="name" placeholder="How people know you"></label><label>Room name<input id="home-meeting-name" maxlength="80" placeholder="e.g. The kitchen table"></label><button id="home-create-link" class="button primary wide" type="submit">Create room</button><p id="home-error" class="form-error" role="alert"></p></form>
+      <details class="migration-help"><summary>Moving an existing group?</summary><p>Create a separate PVP room from a numbered Zoom invitation. Everyone joins here; Zoom host controls and passcodes do not transfer.</p><button class="button subtle wide" id="home-zoom" type="button">Use a Zoom invitation</button></details>
+      <form id="home-join-form"><label>Have an invitation?<input id="home-meeting-link" required placeholder="Paste a PVP room link"></label><button class="button secondary wide" type="submit">Open invitation</button></form>
+      <p class="meeting-fine">Anyone with your link can join. Host controls stay with this guest session. Signing out or clearing site data loses those controls.</p>
+    </section>
+    <p id="auth-error" class="form-error" role="alert"></p><button id="show-account" class="button subtle wide" type="button" aria-expanded="false" aria-controls="account-auth">Sign in or create an account</button><div id="account-auth" hidden><span class="tiny-label">OPTIONAL ACCOUNT</span><h2 id="auth-title">Welcome back.</h2><p id="auth-description" class="muted">Sign in for saved rooms and people. Guests can always join with a link.</p>
+    <div class="segmented auth-tabs"><button id="login-tab" class="selected" type="button">Sign in</button><button id="register-tab" type="button">Create account</button></div>
+    <form id="auth-form">
+      <label id="name-label" hidden>Your name<input id="display-name" maxlength="60" autocomplete="name" placeholder="How friends know you"></label>
+      <label>Username<input id="username" required minlength="3" maxlength="32" pattern="[a-zA-Z0-9_]+" autocomplete="username" placeholder="your_username" autocapitalize="none" spellcheck="false"></label>
+      <label>Password<input id="password" required type="password" maxlength="128" autocomplete="current-password" placeholder="Your password"></label>
+      <button id="auth-submit" class="button primary wide" type="submit">Sign in <svg class="icon"><use href="#i-arrow"/></svg></button>
+    </form><p class="auth-footnote">Friend requests need to be accepted.<br>Only your people can call you.</p>
+    <div class="mac-download" data-mac-download hidden><a class="button secondary wide" href="/downloads/PVP-macOS-1.0.20.zip" download><svg class="icon"><use href="#i-download"/></svg>Download for Mac</a><p>Receive calls from your menu bar.<br>macOS 13+ · Apple silicon &amp; Intel · v1.0.20</p></div>
+  </div></div><span class="panel-footer"></span></div>
+</section>
+
+<dialog id="zoom-dialog" aria-labelledby="zoom-title"><div class="dialog-heading"><h2 id="zoom-title">Use a Zoom invitation</h2><button id="zoom-close" class="icon-button" aria-label="Close Zoom link">×</button></div>
+ <p>Paste your Zoom invitation to meet here with encrypted P2P voice and video. The same meeting ID always brings your group to the same room.</p>
+ <p class="muted">Everyone joins here in PVP; people using Zoom remain in Zoom.</p>
+ <p class="meeting-fine">Anyone with the meeting ID can join. Zoom passcodes and host roles don’t carry over.</p>
+ <form id="zoom-form"><label>Zoom link or invitation<textarea id="zoom-input" required maxlength="16384" rows="3" placeholder="Paste a Zoom link, full invitation, or meeting ID" spellcheck="false"></textarea></label><button id="zoom-open" class="button primary wide" type="submit">Create PVP room</button></form><p id="zoom-error" class="form-error" role="alert"></p>
+ <section id="zoom-result" hidden><h3>Your reusable PVP link</h3><p>Reuse this link, or paste the original Zoom invitation next time.</p><label>PVP meeting link<input id="zoom-pvp-link" readonly></label><div class="zoom-actions"><button id="zoom-join" class="button primary" type="button">Open room invitation</button><button id="zoom-copy" class="button secondary" type="button">Copy PVP link</button><button id="zoom-copy-message" class="button secondary" type="button">Copy message for your group</button></div><p id="zoom-copy-status" role="status" aria-live="polite"></p></section>
+ <details class="meeting-help"><summary>Privacy and host controls</summary><p>Anyone with the Zoom meeting ID or PVP link can join this room. Zoom passcodes, waiting rooms, and host roles do not carry over. Pasting first gives no admin rights. Zoom-linked rooms currently have no admin; create a regular PVP link for host controls.</p><p>Media is encrypted between participants. Direct connections share your network address with the group. Up to 16 people; some networks cannot establish direct connections.</p><p>Named personal links and registration links need the numbered join link from the Zoom invitation.</p></details>
+</dialog>
+
+<div id="app-view" class="app-shell" hidden>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-mark"><svg><use href="#i-room"/></svg></span>pvp<span class="brand-tag">A PLACE TO RETURN TO</span></a>
+    <p class="nav-label">YOUR PLACE</p>
+    <nav aria-label="Main navigation">
+      <button id="meeting-links-nav" class="nav-item active"><svg class="icon"><use href="#i-room"/></svg>Rooms</button>
+      <button class="nav-item" data-view="people"><svg class="icon"><use href="#i-people"/></svg>People<span id="people-count" class="nav-count">0</span></button>
+      <button class="nav-item" data-view="settings"><svg class="icon"><use href="#i-settings"/></svg>Settings</button>
+      <button id="guest-account-nav" class="nav-item" hidden>Sign in / Create account</button>
+    </nav>
+    <details class="sidebar-extras"><summary>More ways to connect</summary><button class="nav-item" data-view="recent"><svg class="icon"><use href="#i-clock"/></svg>Recent calls</button><button id="zoom-nav" class="nav-item">Use a Zoom invitation</button></details>
+    <details class="voice-directory"><summary>Drop in with friends</summary><button id="open-voice" class="nav-item personal-room" disabled title="Join voice in your room"><svg class="icon"><use href="#i-mic"/></svg><span><strong>Your room</strong><small>Ready when you are</small></span></button><div id="voice-rooms"></div><details class="voice-help"><summary>About voice rooms</summary><p>Friends can drop in. Rooms may include friends of friends.</p></details><p id="voice-empty" class="muted">No friends hanging out yet.</p></details><div class="sidebar-bottom"><button id="return-call" class="nav-item" hidden>Return to call</button><div class="sidebar-tools"><a class="icon-button" data-mac-download hidden href="/downloads/PVP-macOS-1.0.20.zip" download title="Download for Mac" aria-label="Download for Mac"><svg class="icon"><use href="#i-download"/></svg></a></div><div class="sidebar-note"><svg class="icon"><use href="#i-shield"/></svg><strong>Same familiar room.</strong><p>Leave when you need to. Come back to the same link.</p></div>
+    <div class="profile"><span id="my-avatar" class="avatar small"></span><div><strong id="my-name"></strong><button id="copy-username" class="username" title="Copy your username"></button></div><button id="logout" class="icon-button" title="Sign out" aria-label="Sign out"><svg class="icon"><use href="#i-logout"/></svg></button></div></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><span id="breadcrumb">Friends</span><span class="connection-status"><span id="connection-dot" class="status-dot"></span><span id="connection-label">Connecting…</span></span></header>
+    <main>
+      <section id="people-view">
+        <div class="page-heading"><div><p class="eyebrow">DIRECT CONNECTION. GOOD COMPANY.</p><h1>People</h1><p class="muted">Call someone or invite them to your room.</p></div><button class="button secondary" id="meetings-button" type="button">Create room</button><button class="button primary" id="add-friend"><svg class="icon"><use href="#i-plus"/></svg>Add a friend</button></div>
+        <div class="people-layout"><div class="people-main">
+          <div class="people-toolbar"><div class="tabs"><button id="friends-tab" class="selected">All <span id="friends-count">0</span></button><button id="online-tab">Online</button><button id="requests-tab">Requests <span id="requests-count">0</span></button></div><label class="search"><svg class="icon"><use href="#i-search"/></svg><input id="friend-search" type="search" placeholder="Find a friend" aria-label="Find a friend"></label></div>
+          <div id="friend-list" class="friend-grid"></div>
+          <div id="friends-empty" class="empty-state"><div class="empty-art"><svg><use href="#i-people"/></svg></div><h2>No friends yet.</h2><p>Add a friend by username.</p><button id="empty-add" class="button secondary"><svg class="icon"><use href="#i-plus"/></svg>Add a friend</button></div>
+          <details class="people-options"><summary>Call several people</summary><p class="muted">For a temporary conversation, invite your friends together. Create a room when you want a link to return to.</p><button id="new-group" class="button secondary" type="button">Start group call</button></details><div class="invite-strip"><span class="invite-icon"><svg class="icon"><use href="#i-arrow"/></svg></span><div><strong>Good conversations start with an invitation.</strong><p>Share your username so your friends can find you.</p></div><button id="share-username" class="button subtle">Copy username</button></div>
+        </div>
+
+        </div><footer class="page-footer"><span><svg class="icon"><use href="#i-shield"/></svg>Private by design. Direct by connection.</span><span>Built for a little more together.</span></footer>
+      </section>
+      <section id="recent-view" hidden><div class="page-heading"><div><p class="eyebrow">PICK UP WHERE YOU LEFT OFF</p><h1>Recent calls.</h1><p class="muted"></p></div></div><div id="history-list" class="history-list"></div></section>
+      <section id="settings-view" hidden><div class="page-heading"><div><h1>Settings</h1></div><span id="settings-saved" class="saved-note" role="status">Saved on this device</span></div>
+        <aside class="preview-panel"><div class="card-heading"><span class="tiny-label">YOUR SIDE OF THE CALL</span><span class="live-label">PREVIEW</span></div><div class="preview-stage"><video id="preview-video" muted autoplay playsinline hidden></video><div id="preview-placeholder"><svg class="icon"><use href="#i-video"/></svg><p>A little face time?</p><span>Check your camera before saying hello.</span><button id="start-preview" class="button preview-button">Turn on preview</button></div></div><div class="preview-controls"><span id="preview-caption">Camera is off</span><button id="preview-switch-camera" class="button secondary" type="button">Switch camera</button><button id="stop-preview" class="icon-button" title="Stop preview" aria-label="Stop preview" hidden><svg class="icon"><use href="#i-close"/></svg></button></div><div class="preview-quality"><span class="quality-symbol">↗</span><div><strong id="quality-summary">Balanced · 720p</strong><p id="bandwidth-summary">Up to 1.8 Mbps video</p></div><button id="open-settings" class="icon-button" title="Adjust call quality" aria-label="Adjust call quality"><svg class="icon"><use href="#i-settings"/></svg></button></div><div class="preview-tip"><span class="tiny-label">A SMALL REMINDER</span><p>The best calls don’t need an occasion.<br>Sometimes, “how’s your day?” is enough.</p></div></aside>
+        <div class="settings-card"><h2>Friend discovery</h2><label><input type="checkbox" id="discovery-enabled" disabled> Show me in friend autocomplete</label><details><summary>About this setting</summary><p>Saved to your account. Friends can still add you by your exact username.</p></details><p id="discovery-status" role="status"></p></div><div class="settings-grid"><div class="settings-card"><h2>Picture & bandwidth</h2><p class="muted">Changes apply to your next call and any active call.</p>
+          <h3>Data saver</h3><label>Send video<select id="data-send"><option value="auto">Automatic · 128 Kbps on cellular / metered</option><option value="off">Off · use quality settings</option><option value="low">Low · 400 Kbps</option><option value="verylow">Very low · 128 Kbps</option><option value="minimal">Minimal · 64 Kbps</option><option value="none">None · audio only</option></select></label><label>Receive video<select id="data-receive"><option value="auto">Automatic · 128 Kbps on cellular / metered</option><option value="off">Off · use quality settings</option><option value="low">Low · 400 Kbps</option><option value="verylow">Very low · 128 Kbps</option><option value="minimal">Minimal · 64 Kbps</option><option value="none">None · audio only</option></select></label><p id="data-connection" class="settings-note" role="status"></p><details><summary>About this setting</summary><p>Limits camera and screen sharing in both directions, per participant. Audio stays on; audio, chat, file transfers and network overhead use additional data. Receive limits require an updated sender. Automatic detection depends on browser support and may miss LTE or tethering. Settings are saved on this device.</p></details><label>Quality preset<select id="quality-preset"><option value="saver">Data saver · 360p</option><option value="balanced">Balanced · 720p</option><option value="studio">High quality · 1080p</option><option value="custom">Custom</option></select></label>
+          <div class="field-pair"><label>Resolution<select id="resolution"><option value="360">360p</option><option value="480">480p</option><option value="720">720p HD</option><option value="1080">1080p Full HD</option></select></label><label>Frame rate<select id="frame-rate"><option value="15">15 fps</option><option value="24">24 fps</option><option value="30">30 fps</option><option value="60">60 fps</option></select></label></div>
+          <label class="range-label">Video bandwidth limit<output id="bandwidth-value" for="bandwidth"></output><input id="bandwidth" type="range" min="128" max="8000" step="8"></label><div class="range-ends"><span>128 Kbps</span><span>8 Mbps</span></div>
+          <label>Audio bandwidth<select id="audio-bitrate"><option value="24">24 Kbps · save data</option><option value="48">48 Kbps · balanced</option><option value="64">64 Kbps · clear voice</option><option value="96">96 Kbps · high quality</option></select></label><details><summary>About this setting</summary><p>These limits control outgoing media. Actual quality adapts to the network and your camera; protocol traffic adds a small overhead.</p></details>
+        </div><div><div class="settings-card"><h2>Camera & microphone</h2><p class="muted">Use preview to grant access and discover your devices.</p><label>Camera<select id="camera-device"><option value="">System default</option></select></label><label>Microphone<select id="mic-device"><option value="">System default</option></select></label><label class="audio-toggle" title="Reduces speaker sound picked up by your microphone."><input id="echo-cancellation" type="checkbox" checked>Echo cancellation</label><meter id="mic-level" class="mic-level" min="0" max="1" value="0" aria-label="Microphone activity"></meter><p id="mic-feedback" class="settings-note">Start a device check to test your microphone.</p><button id="settings-preview" class="button secondary"><svg class="icon"><use href="#i-video"/></svg>Check devices</button><p id="device-feedback" class="muted"></p></div><div class="settings-card notification-card"><svg class="icon"><use href="#i-bell"/></svg><div><h2>Don’t miss a hello.</h2><p class="muted">Show incoming call notifications while PVP is open in the background.</p><button id="enable-sound" class="button subtle">Enable call sound</button><p class="settings-note">Keep this page open to receive calls. The Mac app can receive them from the menu bar.</p><button id="notifications" class="button subtle">Enable notifications</button></div></div><div class="privacy-card"><svg class="icon"><use href="#i-shield"/></svg><div><strong>A direct line to your friend.</strong><p>PVP handles invitations and ringing. Your camera and microphone are sent over an encrypted peer connection.</p></div></div></div></div>
+      </section>
+<section id="meetings-dialog" hidden aria-labelledby="meetings-title"><div class="dialog-heading"><h1 id="meetings-title">Rooms</h1></div><div id="meetings-content"></div><footer id="meetings-footer" class="meetings-footer"></footer></section>
+<section id="voice-link-view" hidden><div class="page-heading"><h1>Join a voice room</h1></div><p class="muted">Drop in with your friends. You must be friends with someone in this room to join.</p><button id="voice-link-join" class="button primary">Join voice room</button></section>
+    </main>
+  </div>
+</div>
+
+<dialog id="group-picker"><form id="group-picker-form"></form></dialog>
+
+<dialog id="meeting-chat-dialog" aria-labelledby="meeting-chat-title"><div class="dialog-heading"><h2 id="meeting-chat-title">Meeting chat</h2><button id="meeting-chat-close" class="icon-button" aria-label="Close chat">×</button></div><p id="meeting-chat-status" class="muted"></p><div id="meeting-chat-messages" aria-live="polite"></div><form id="meeting-chat-form"><label>Message<textarea id="meeting-chat-text" maxlength="4000" rows="2" placeholder="Message everyone in this call" required></textarea></label><div class="chat-compose"><button id="meeting-chat-send" class="button primary" type="submit">Send</button><button id="meeting-chat-attach" class="button secondary" type="button">Attach file</button><input id="meeting-chat-file" type="file" hidden></div></form><p class="chat-note">Files up to 100 MiB · Recipients accept before transfer</p></dialog>
+<section id="group-incoming" class="group-incoming" hidden><h2>Group call invitation</h2><p id="group-invite-roster"></p><p id="group-invite-detail"></p><div class="group-actions"><button id="group-decline" class="button secondary">Decline</button><button id="group-join" class="button primary">Join call</button></div></section>
+<section id="group-view" class="group-view" hidden aria-label="Group call"><header class="call-heading"><button id="group-back" class="icon-button" aria-label="Back to app"></button><h2 id="group-heading">Call</h2><div class="call-window-actions"><button id="group-trust" class="button subtle call-evidence" type="button">Connection evidence</button><button id="group-people" class="icon-button" aria-label="People"></button><button id="group-copy-link" class="icon-button" aria-label="Copy invitation link" hidden></button></div><p id="group-roster" hidden></p></header><p id="group-call-status" role="status" aria-live="polite"></p><div id="group-sharing" class="sharing-banner" hidden><span>Sharing screen</span><button id="group-stop-sharing" class="button secondary">Stop sharing</button></div><div id="meeting-mic-recovery" hidden><p id="meeting-mic-status" role="status"></p><div class="group-actions"><button id="meeting-mic-retry" class="button secondary">Try microphone again</button><button id="meeting-mic-cancel" class="button secondary" hidden>Cancel microphone request</button><button id="meeting-mic-help" class="button secondary">Microphone help</button></div><p id="meeting-mic-guide" hidden>Allow this site to use your microphone in your browser’s site settings. Also check the browser’s microphone permission in your phone Settings. Return and try again. Listening continues while you fix access.</p></div><div id="group-health" class="call-health"><button id="group-quality-summary" class="quality-summary" type="button">Quality · waiting for media</button><p class="mic-status" role="status" hidden></p><div class="muted-nudge" role="status" hidden><span>You’re muted. Want to speak?</span><button type="button" data-unmute="group">Unmute</button><button type="button" data-dismiss-nudge aria-label="Dismiss muted reminder">×</button></div></div><div id="group-grid" class="group-grid"><article class="group-tile self" data-motion-key="self"><video id="group-self-video" muted autoplay playsinline></video><div class="group-tile-caption"><span id="group-self-label">You</span></div></article></div><button id="group-solo-invite" class="button secondary solo-invite" hidden>Invite</button><footer class="group-actions call-dock"><button id="group-mic" class="button secondary">Mute</button><button id="group-hand" class="button secondary" hidden>Raise hand</button><button id="group-camera" class="button secondary">Turn camera on</button><span id="group-desktop-actions"><button id="group-chat-open" class="button secondary">Chat</button><button id="group-share" class="button secondary">Share screen</button><button id="group-add" class="button secondary">People</button></span><button id="group-more" class="button secondary">More</button><button id="group-leave" class="button danger">Leave</button></footer><button id="group-play" class="button primary playback-banner" hidden>Hear meeting</button></section>
+<dialog id="group-more-dialog" class="context-sheet" aria-labelledby="group-more-title"><div class="dialog-heading"><h2 id="group-more-title">More</h2><button id="group-more-close" class="icon-button" aria-label="Back to call"></button></div><div id="group-more-content"><button id="group-audio-open" class="button secondary">Audio & video</button><button id="group-connection-open" class="button secondary">Connection</button><button id="group-fullscreen" class="button secondary">Full screen</button><label class="sheet-switch">Show control labels<input type="checkbox" data-control-labels role="switch"></label></div></dialog>
+<dialog id="group-audio-dialog" class="context-sheet" aria-labelledby="group-audio-title"><div class="dialog-heading"><h2 id="group-audio-title">Audio & video</h2><button id="group-audio-close" class="icon-button" aria-label="Back to call"></button></div><div id="group-advanced"><button id="group-switch-camera" class="button secondary">Flip camera</button><label>Microphone<select id="group-mic-device"><option value="">System default</option></select></label><label>Camera<select id="group-camera-device"><option value="">System default</option></select></label><label class="sheet-switch">Echo cancellation<input id="group-echo-cancellation" type="checkbox" role="switch" checked></label><label>Quality<select id="group-quality"><option value="custom" disabled>Custom settings</option><option value="saver">Data saver</option><option value="balanced" selected>Balanced</option><option value="studio">High quality</option></select></label><details><summary>About audio processing</summary><p>Echo cancellation reduces speaker sound picked up by your microphone. Muted sound reminders are processed on this device; they do not unmute or send audio.</p></details></div></dialog>
+<dialog id="group-people-dialog" class="context-sheet" aria-labelledby="group-people-title"><div class="dialog-heading"><h2 id="group-people-title">People</h2><button id="group-people-close" class="icon-button" aria-label="Back to call"></button></div><div id="group-people-content"></div><button id="group-people-invite" class="button secondary">Invite</button></dialog>
+<dialog id="group-inspector"><div class="dialog-heading"><h2 id="group-inspector-title">Peer connection</h2><button id="group-inspect-close" type="button" class="button secondary">Close</button></div><p id="group-bandwidth" hidden></p><p id="group-connection-bandwidth"></p><div id="group-bandwidth-controls" class="connection-controls"></div><p id="group-bandwidth-status" class="settings-note"></p><pre id="group-inspector-detail"></pre><button id="group-export" class="button primary">Export all peer observations</button></dialog>
+<dialog id="friend-dialog"><form id="friend-form"><div class="dialog-heading"><h2>Add a friend</h2><button id="close-friend" type="button" class="icon-button" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button></div><p class="muted">Send a request. You can call each other once they accept.</p><label>Their username<input id="friend-username" list="friend-suggestions" autofocus required maxlength="33" placeholder="@your_friend" autocomplete="off" autocapitalize="none" spellcheck="false"></label><datalist id="friend-suggestions"></datalist><p id="friend-discovery-status" role="status"></p><p id="friend-error" class="form-error" role="alert"></p><button class="button primary wide" type="submit">Send request<svg class="icon"><use href="#i-arrow"/></svg></button></form></dialog>
+
+<dialog id="incoming-dialog" class="incoming-dialog"><span class="tiny-label">A FAMILIAR FACE IS CALLING</span><span id="incoming-avatar" class="avatar large"></span><h2 id="incoming-name"></h2><p class="muted">Incoming encrypted voice call</p><div class="incoming-actions"><button id="decline-call" class="button danger"><svg class="icon"><use href="#i-phone"/></svg>Decline</button><button id="accept-call" class="button primary"><svg class="icon"><use href="#i-video"/></svg>Answer</button></div><p id="incoming-error" class="form-error" role="alert"></p></dialog>
+
+<section id="call-view" class="call-view" hidden aria-label="Active call"><video id="remote-video" autoplay playsinline></video><div class="call-top"><button id="call-back" class="icon-button" aria-label="Back to app"></button><div><h2 id="call-name"></h2></div><span id="call-network" class="call-network">Connecting…</span><button id="call-trust" class="button subtle call-evidence" type="button">Connection evidence</button><button id="call-fullscreen" class="button secondary">Full screen</button></div><div id="call-placeholder" class="call-placeholder"><span id="call-avatar" class="avatar extra-large"></span><h2 id="call-status">Calling…</h2><p id="call-detail">Waiting for your friend to answer.</p></div><div class="self-video" id="direct-self-preview"><video id="local-video" muted autoplay playsinline></video><span>You</span></div><button id="enable-playback" class="button primary enable-playback" hidden>Enable your friend’s audio</button><div class="call-bottom"><div id="call-health" class="call-health"><button id="call-quality-summary" class="quality-summary" type="button">Quality · waiting for media</button><p class="mic-status" role="status" hidden></p><div class="muted-nudge" role="status" hidden><span>You’re muted. Want to speak?</span><button type="button" data-unmute="direct">Unmute</button><button type="button" data-dismiss-nudge aria-label="Dismiss muted reminder">×</button></div></div><p id="call-bandwidth" class="call-stats">Your bandwidth · measuring…</p><p id="call-stats" class="call-stats">Encrypted · direct peer-to-peer</p><div class="call-controls"><button id="toggle-mic" class="call-control" title="Mute microphone" aria-label="Mute microphone" aria-pressed="false"><svg class="icon"><use href="#i-mic"/></svg></button><button id="toggle-camera" class="call-control" title="Turn camera on" aria-label="Turn camera on" aria-pressed="false"><svg class="icon"><use href="#i-video"/></svg></button><button id="switch-camera" class="call-control" type="button" title="Switch camera" aria-label="Switch camera">↻</button><button id="share-screen" class="call-control" title="Share screen" aria-label="Share screen" aria-pressed="false">▣</button><button id="call-more" class="call-control" aria-label="More">More</button><span id="call-secondary-actions"><button id="connection-inspector" class="call-control" title="Connection inspector" aria-label="Connection inspector"><svg class="icon"><use href="#i-globe"/></svg></button><button id="call-quality" class="call-control" title="Change call quality" aria-label="Change call quality"><svg class="icon"><use href="#i-settings"/></svg></button></span><button id="end-call" class="call-control end-call" title="End call" aria-label="End call"><svg class="icon"><use href="#i-phone"/></svg></button></div><span id="call-timer">00:00</span></div><div id="call-sharing" class="sharing-banner" hidden><span>Sharing screen</span><button id="call-stop-sharing" class="button secondary">Stop sharing</button></div><div id="call-settings" class="call-settings" hidden><h3>Audio & video</h3><label class="sheet-switch">Show control labels<input type="checkbox" data-control-labels role="switch"></label><label>Microphone<select id="in-call-mic"><option value="">System default</option></select></label><label class="audio-toggle" title="Reduces speaker sound picked up by your microphone."><input id="in-call-echo-cancellation" type="checkbox" checked>Echo cancellation</label><meter id="call-mic-level" class="mic-level" min="0" max="1" value="0" aria-label="Call microphone activity"></meter><p id="call-mic-feedback" class="settings-note">Checking microphone…</p><p class="settings-note">Muted sound reminders stay on this device. Your microphone stays muted until you choose to unmute.</p><p id="call-security" class="settings-note" aria-live="polite" title="Compare all six groups in person or through another trusted app. This checks the certificates for this connection, not a permanent account identity."></p><label>Preset<select id="in-call-preset"><option value="saver">Data saver · 360p</option><option value="balanced">Balanced · 720p</option><option value="studio">High quality · 1080p</option><option value="custom">Custom settings</option></select></label><label>Send video · data saver<select id="call-data-send"><option value="auto">Automatic · 128 Kbps on cellular / metered</option><option value="off">Off · use quality settings</option><option value="low">Low · 400 Kbps</option><option value="verylow">Very low · 128 Kbps</option><option value="minimal">Minimal · 64 Kbps</option><option value="none">None · audio only</option></select></label><label>Receive video · data saver<select id="call-data-receive"><option value="auto">Automatic · 128 Kbps on cellular / metered</option><option value="off">Off · use quality settings</option><option value="low">Low · 400 Kbps</option><option value="verylow">Very low · 128 Kbps</option><option value="minimal">Minimal · 64 Kbps</option><option value="none">None · audio only</option></select></label><p id="in-call-quality" class="muted"></p><button id="close-call-settings" class="button subtle">Done</button></div></section>
+<dialog id="call-more-dialog" class="context-sheet" aria-labelledby="call-more-title"><div class="dialog-heading"><h2 id="call-more-title">More</h2><button id="call-more-close" class="icon-button" aria-label="Back to call"></button></div><div id="call-more-content"></div><label class="sheet-switch">Show control labels<input type="checkbox" data-control-labels role="switch"></label></dialog>
+<dialog id="inspector-dialog" class="inspector-dialog" aria-labelledby="inspector-title">
+<div class="dialog-heading"><h2 id="inspector-title">Connection info & bandwidth</h2><button id="close-inspector" class="icon-button" aria-label="Close inspector">×</button></div>
+<p class="muted">Live observations from this device. Independently verify the endpoints with tcpdump.</p>
+<p id="connection-bandwidth"></p><div id="connection-bandwidth-controls" class="connection-controls"></div><p id="connection-bandwidth-status" class="settings-note"></p>
+<p id="inspector-sampled" class="inspector-source"></p>
+<h3 id="inspector-route">Media path not yet verified</h3>
+<div class="connection-path"><div class="connection-endpoint"><span>Your media endpoint</span><code id="inspector-local">Address unavailable</code><small id="inspector-local-type"></small></div><div class="connection-arrow" aria-label="Bidirectional selected path">↔</div><div class="connection-endpoint"><span>Peer media endpoint</span><code id="inspector-remote">Address unavailable</code><small id="inspector-remote-type"></small></div></div>
+<p id="inspector-transport"></p><p id="inspector-counters"></p><p id="inspector-encryption"></p>
+<h3>Signaling · control connection</h3><p id="inspector-signaling"></p><p class="inspector-source">Source: browser WebSocket URL and state. Actual socket IPs and ports are unavailable through the browser API. Signaling stays open for presence and call control.</p>
+<h3>STUN discovery and ICE checks</h3><p id="inspector-servers"></p><div id="inspector-candidates" class="inspector-table"></div><div id="inspector-pairs" class="inspector-table"></div>
+<p class="inspector-source">Configured URLs are not packet observations. Candidates are tested possibilities; only the selected pair describes the active media path. Missing fields remain unavailable.</p>
+<h3>Incoming and outgoing media</h3><div id="inspector-media" class="inspector-table"></div>
+<h3>Verify independently</h3><p class="inspector-source">Run in Terminal; tcpdump may request administrator authentication. PVP does not run these commands. Stop with Control-C. Filters match both directions at the observed remote endpoint, or the local host socket if the peer IP is hidden.</p><label>Capture platform<select id="inspector-platform"><option value="mac">macOS</option><option value="linux">Linux</option></select></label><pre id="inspector-command" class="inspector-command"></pre><button id="copy-inspector-command" class="button secondary" disabled>Copy tcpdump command</button>
+<p class="inspector-source">Local captures show addresses before router NAT. Your mapped public address/port can differ from the local socket. VPNs may require another interface (list with tcpdump -D). RTP counters and packet captures count different layers.</p>
+<h3>Timeline · events, not packets</h3><div id="inspector-events" class="inspector-events"></div>
+<div class="inspector-footer"><p class="inspector-source">App-reported evidence, not tamper-proof proof. Reports contain IP addresses. Kept in memory and downloaded only when you choose; no credentials or media.</p><button id="export-inspector" class="button primary">Save report</button></div>
+</dialog>
+<dialog id="trust-dialog" class="trust-dialog" aria-labelledby="trust-title"><div class="dialog-heading"><h2 id="trust-title">Connection evidence</h2><button id="trust-close" type="button" class="icon-button" aria-label="Back to conversation">×</button></div><div id="trust-content"></div></dialog>
+<button id="call-return-strip" class="call-return-strip" hidden>Return to call</button><div id="toast" class="toast" role="status" hidden></div>
+</body></html>

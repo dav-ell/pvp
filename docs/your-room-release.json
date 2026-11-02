@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-13",
+  "productionVersion": "0.3.14",
+  "nativeVersion": "1.0.15+16",
+  "status": "deployed; signed Mac app installed and opened",
+  "publicDownload": "https://lopixel.space/downloads/PVP-macOS-1.0.15.zip",
+  "changes": [
+    "Your room is a standing sidebar destination with a voice icon and Ready when you are status in both clients.",
+    "Entering your personal room retains the Your room heading; friends can join once you enter voice.",
+    "Microphone access remains explicit when entering voice; no room creation affordance is shown."
+  ],
+  "sha256": {
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "1630f05d7c5518f09e6063501d24d6235477580a151333f3f97f1fc3e3eb7b92",
+    "dist/PVP-macOS-1.0.15.zip": "5d60119e63553f6720df434d0bfc46cf84b3098916fc23d15113640ae582652a",
+    "dist/PVP-macOS-1.0.15/PVP.app/Contents/MacOS/PVP": "1844ec89c9bc3f9fbd8fc012f86619c6de0a2175ae3d6d9af63f324fb2fcf325",
+    "dist/PVP-macOS-1.0.15/PVP.app/Contents/Frameworks/App.framework/App": "6c92dd277b165822b722c50531e857a828a9ca0478d37dfccef80b7d70aacb2f"
+  },
+  "validation": {
+    "flutterAnalysis": "clean",
+    "flutterLayoutAndGroupTests": 6,
+    "browserVoiceRoom": "passed: discovery, microphone-only capture, opt-in video, mute, return to solo and teardown",
+    "productionPreflight": "passed: unprivileged startup, twenty source-identical assets, secure sessions and recurring meeting API",
+    "publicUI": "Your room and Ready when you are verified; no Open your room label",
+    "publicVoiceRoom": "passed: three browser peers, denied camera, opt-in video, mute preservation, return to solo and teardown",
+    "publicArtifacts": "HTTPS health 0.3.14; all twenty source-identical assets; full signed Mac archive hash matched",
+    "database": "durable records preserved at deployment; exactly three test users removed; integrity and foreign keys ok",
+    "native": "signed universal arm64/x86_64; installed 1.0.15+16; strict deep signature verified; TLS connection to lopixel.space established"
+  },
+  "assets": {
+    "/": "c93e6361739933e22bc20ed22b4e92a016dadf30c95921c2ea2847b368172e2d",
+    "/security.js": "a0e04cd9aab538c1585148be17e49e9f07d2a9db13bfe19593a59e4ba85ab6b6",
+    "/meetings.js": "53784899e4dda2301b0be1d1252161cbfc080607c97412a193e7a2092d69fc36",
+    "/styles.css": "02683191aed03e01291156f7f6763f81adbefe4cc034decee57ed91bdf8997d2",
+    "/inspector.js": "0949acdd0dbb4bce491a054cbb8366462e3ca47f111fda2fdb498e648acf6ad7",
+    "/icon.svg": "e35acc218e30dd446b18627512dd78e7091533ade6ec663f25b7b02564d88aff",
+    "/group-quality.js": "d777f1abc238bb59e03cd26b6369cabcd3518539b142c5cb9978276d3d1c7b8c",
+    "/group-video.js": "7240aea641bf4ebd338182eb4c98281a4dbaeaccc1a40098181cd2bc67227ce0",
+    "/group-calls.js": "80cb63b9942d8f6ac8614b9507e6e39e91755a83e82026ecb6e6fe5d596ef554",
+    "/manifest.webmanifest": "fa75cfeee4555ba90fe408d4c7c9498e4a52bbcd9b594539b13a8bea6cd24b31",
+    "/meeting-chat.js": "ff15414f04b30bb7467e479f71951e7feff158ead581625ace1157745b231abe",
+    "/bandwidth.js": "49dc7c7760ed280b077f74bc1c242436a747d0a48620266b3914be820c811efc",
+    "/app.js": "a6937ee682c672926e56219ae1b9953e46781d3f8bc63bc39d41b55849a51c50",
+    "/packages/pvp-call/src/security.js": "534aa8f9250b75dc3d8b79141867601af70e5b0810d74f1a40ad047d130208e5",
+    "/packages/pvp-call/src/mesh.js": "763eeee194994454761220b1e7207bd68d23b4e700edd1dc30b9909a6efe7307",
+    "/packages/pvp-call/src/inspector.js": "d8d5426e5fe7d675dcd81147840e24146c70241c4a86ab8be59e282c8befb6ee",
+    "/packages/pvp-call/src/media.js": "a64ba3f1ffbf364f07d7a251a5b330799559d73b6e075a807d5a4f26a5ec40aa",
+    "/packages/pvp-call/src/index.js": "86f43be491fa42331f6135ecaa552006801c9e170fb0ff0e55141463c031ff79",
+    "/packages/pvp-call/src/quality.js": "7a689d823924d93d6b60d7e98b240a1dde4af953abb2edc1b422e319a8c3110c",
+    "/packages/pvp-call/src/room.js": "b58f9f62275cca892f87d329b095fcba9923537b7013f627a96bcfb10d8c9efe"
+  },
+  "installedApp": "/Users/davell/Applications/PVP.app",
+  "rollback": {
+    "serverAndDatabase": "/var/backups/pvp/your-room-2026-10-12-1791864026",
+    "native": "/Users/davell/Documents/github/pvp/.build/your-room-release/installed-app-backup-20261013-000042/PVP.app",
+    "portableDatabase": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261013T040155Z-94185.sqlite"
+  }
+}

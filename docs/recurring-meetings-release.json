@@ -1,0 +1,35 @@
+{
+  "nativeVersion": "1.0.7+8",
+  "signalingVersion": "0.3.6",
+  "installedVersion": "1.0.10+11",
+  "productionVersion": "0.3.9",
+  "upgradeStatus": "deployed; subsequently updated with recurring meeting admin controls",
+  "artifacts": {
+    "dist/PVP-macOS-1.0.7.zip": "f325da4c3cd3933d8907a577859ea72fab8729bb01f298dd9a277d5ce02a5c25",
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "874825238946dcd5bb28ad0a72a55a059aad04f3eda672dc12c5d8ec57536b62"
+  },
+  "validation": {
+    "browserTests": 20,
+    "flutterTests": 19,
+    "serverTests": 14,
+    "browserGroupRegressionTests": 2,
+    "signedNativeRecurringMeetingIntegration": "passed: Mac creation, actual macOS URL handoff without capture, one native plus five browsers, real direct encrypted audio/video, opaque forwarding and reuse",
+    "analysisClippyAndLauncher": "passed",
+    "candidatePreflight": "passed: unprivileged health/assets/persistent session and recurring meeting creation/get",
+    "publicAssets": "match repository source hashes",
+    "nativePhysicalCapture": "not exercised; synthetic streams and native receive/forwarding",
+    "networkScope": "local synthetic-media integration, not a WAN benchmark"
+  },
+  "macAppBackup": "/Users/davell/Documents/github/pvp/.build/meetings/installed-app-backup-20261004-223304/PVP.app",
+  "productionBackup": "/var/backups/pvp/meetings-2026-10-04-1791167565",
+  "portableDatabaseBackup": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261005T023324Z-50324.sqlite",
+  "portableBackupIntegrity": "ok; mode 0600; accounts, sessions, friends, meetings and meeting_members tables verified",
+  "deploymentScript": ".build/meetings/deploy-authorized.sh",
+  "migrationPolicy": "restore consistent complete SQLite database and retain lopixel.space domain; no expiry; owner may revoke membership/link",
+  "limitations": [
+    "TURN disabled; networks requiring media relays may not connect.",
+    "Mac package is development-signed and not notarized.",
+    "Off-VM backup is a snapshot, not an automatically scheduled backup job."
+  ],
+  "latestRelease": "meeting-chat-release.json"
+}

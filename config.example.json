@@ -1,0 +1,9 @@
+{
+  "encryption_key": "REPLACE_WITH_openssl_rand_-hex_32",
+  "relay": {
+    "server": "143.198.19.179:19132",
+    "token": "REPLACE_WITH_SHARED_RELAY_TOKEN",
+    "room": "default",
+    "prefer_p2p": true
+  }
+}

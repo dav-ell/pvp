@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-05",
+  "nativeVersion": "1.0.10+11",
+  "signalingVersion": "0.3.9",
+  "installedVersion": "1.0.10+11",
+  "productionVersion": "0.3.9",
+  "upgradeStatus": "live in combined concurrent meeting-chat/quality release; own deployment guards preserved newer installed app and production binary",
+  "cameraPolicy": "Up to eight joined attendees: balanced 480p up to 24fps for quiet and speaking participants, studio 720p; no upscaling low-resolution capture. Nine-plus retains large-group optimization.",
+  "videoBudget": "Default Balanced scales from 1800 kbps to 600 kbps per remote attendee, capped by eight-attendee threshold at 4200 kbps. Explicit custom and Data Saver limits retained.",
+  "artifacts": {
+    "dist/PVP-macOS-1.0.10.zip": "d6814c9b8d8f580eaf48d42a30c4750e9b237eec81e8b967ac55ffd8600ba3a2",
+    "/usr/local/bin/pvp-signaling": "6c4c88c5384cd9ebb9e7faaf11b4475f9f15e224ef7d9840486133469d908e75"
+  },
+  "validation": {
+    "browserRegressionTests": 22,
+    "flutterTests": 23,
+    "serverTests": 18,
+    "eightPersonOverlay": "passed: actual decoded camera remains at least 480p after microphone mute",
+    "eightPersonDirectFallback": "passed: real RTP received at least 480p, screen sharing/cleanup regression retained",
+    "nineToEightTransition": "passed: baseline returns to 480p after departure without rejoining",
+    "signedNativeIntegration": "passed: all five received browser camera renderers at least 480p; real encrypted media and opaque forwarding; admin mute/kick regression passed",
+    "policyTests": "passed: quiet/speaking, actual capture height, eight/nine boundary, studio, saver, custom budget and balanced scaling",
+    "analysisAndClippy": "passed on quality-only snapshot",
+    "liveSources": "public group-quality.js, group-calls.js and group-video.js match current shared source and contain the tested quality changes",
+    "installedNative": "strict signature verification; includes compiled group_quality.dart and 480p UI; downloaded archive executables match installed app",
+    "download": "full HTTPS SHA256 verified against canonical combined release archive; temporary quality-only upload replaced with the current installed combined app",
+    "limitations": "synthetic local media tests; no physical camera detail assessment or WAN performance benchmark"
+  },
+  "sourceIsolation": ".build/group-quality/isolated excludes concurrent meeting-chat edits for independent quality validation; production includes both sets of changes",
+  "productionBackup": "/var/backups/pvp/meeting-chat-2026-10-05-1791234386",
+  "nativeBackup": "/Users/davell/Documents/github/pvp/.build/meeting-chat/installed-app-backup-20261005-170626/PVP.app",
+  "signing": "universal Intel/Apple silicon, development-signed; not notarized"
+}

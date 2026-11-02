@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-05",
+  "nativeVersion": "1.0.10+11",
+  "signalingVersion": "0.3.9",
+  "installedVersion": "1.0.10+11",
+  "productionVersion": "0.3.9",
+  "upgradeStatus": "deployed and Mac app reopened",
+  "downloadUrl": "https://lopixel.space/downloads/PVP-macOS-1.0.10.zip",
+  "artifacts": {
+    "dist/PVP-macOS-1.0.10.zip": "d6814c9b8d8f580eaf48d42a30c4750e9b237eec81e8b967ac55ffd8600ba3a2",
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "6c4c88c5384cd9ebb9e7faaf11b4475f9f15e224ef7d9840486133469d908e75"
+  },
+  "transport": "Reliable ordered SCTP data channels in existing peer DTLS connections; direct mesh delivery; no chat payloads sent to signaling or video forwarders",
+  "persistence": "Live in-memory chat only; cleared on leaving/kick/sign-out; no history replay to late joiners",
+  "limits": {
+    "textCharacters": 4000,
+    "attachmentBytes": 104857600,
+    "incomingRetainedBytes": 104857600,
+    "outgoingRetainedBytes": 104857600,
+    "historyEntries": 200,
+    "chunkBytes": 16384,
+    "aggregatePacedPayloadBytesPerSecondApproximate": 262144,
+    "stallSeconds": 30,
+    "offersExpireSeconds": 300
+  },
+  "validation": {
+    "browserRegressionTests": 26,
+    "finalBrowserChatProtocolAndIntegrationTests": 6,
+    "flutterTests": 28,
+    "serverTests": 18,
+    "signedNativeBrowserIntegration": "passed: five browser peers plus Mac; bidirectional Unicode text and 70,000-byte binary files with byte comparison; consent before transfer; native image preview widget; native Chat dialog; live encrypted media/opaque forwarding; mute/kick/reuse regressions; chat cleared on leaving",
+    "browserImagesAndSecurity": "passed: actual image decode, literal HTML text, received binary download byte comparison, malformed metadata, unsolicited data rejection, wrong offsets, corrupt hashes, memory cap, departure and cancellation",
+    "delayedChannelTeardown": "passed: retired peer channel is closed after leaving; native/browser integration still passes with guards",
+    "retiredNativeSendFailure": "passed: send failure from replaced channel cannot remove replacement",
+    "clippyAndAnalyze": "passed",
+    "publicVerification": "health 0.3.9; HTML/JS/CSS match source; CSP permits local image Blobs; full HTTPS archive hash matches signed release",
+    "installedMac": "1.0.10+11 universal arm64/x86_64; strict code signature verified; executable hash matches release; app reopened",
+    "productionDatabase": "integrity ok; users, friends, meeting roster, controls, open policies and blocks preserved; no chat database tables",
+    "nativeFilePanels": "sandboxed NSOpenPanel/NSSavePanel compiled and reviewed; native picker/save dialogs not automated",
+    "mediaScope": "synthetic local integration; physical capture and WAN performance not exercised"
+  },
+  "productionBackup": "/var/backups/pvp/meeting-chat-2026-10-05-1791234386",
+  "finalDeploymentBackup": "/var/backups/pvp/meeting-chat-2026-10-05-1791234641",
+  "caddyBackup": "/var/backups/pvp/chat-caddy-2026-10-05-1791234385",
+  "macAppBackup": "/Users/davell/Documents/github/pvp/.build/meeting-chat/installed-app-backup-20261005-170626/PVP.app",
+  "finalInstallBackup": "/Users/davell/Documents/github/pvp/.build/meeting-chat/installed-app-backup-20261005-171109/PVP.app",
+  "portableDatabaseBackup": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261005T211132Z-22567.sqlite",
+  "portableBackupIntegrity": "ok; mode 0600",
+  "signing": "development-signed and hardened/sandboxed; not notarized",
+  "deploymentLog": ".build/meeting-chat/deploy.log"
+}

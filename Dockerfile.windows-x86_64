@@ -1,0 +1,47 @@
+# Cross-build pvp.exe for Windows x86_64 (MinGW) from Linux (Docker Desktop on Mac OK).
+# Uses Fedora mingw64 OpenCV/Qt runtime DLLs packaged beside the exe.
+FROM --platform=linux/amd64 fedora:40
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN dnf -y update && dnf -y install \
+    curl ca-certificates git cmake clang clang-devel llvm-devel \
+    make nasm pkgconf-pkg-config \
+    mingw64-gcc mingw64-gcc-c++ mingw64-binutils \
+    mingw64-pkg-config \
+    mingw64-opencv \
+    mingw64-opus \
+    mingw64-zlib \
+    mingw64-libpng \
+    mingw64-libjpeg-turbo \
+    mingw64-libtiff \
+    mingw64-libwebp \
+    mingw64-openjpeg2 \
+    mingw64-winpthreads-static \
+    zip unzip \
+    && dnf clean all
+
+# Rust (host builds for Windows GNU target)
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable \
+    && . "$HOME/.cargo/env" \
+    && rustup target add x86_64-pc-windows-gnu
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# MinGW sysroot
+ENV MINGW_PREFIX=/usr/x86_64-w64-mingw32/sys-root/mingw
+ENV PKG_CONFIG_ALLOW_CROSS=1
+ENV PKG_CONFIG_SYSROOT_DIR=/usr/x86_64-w64-mingw32/sys-root
+ENV PKG_CONFIG_PATH=${MINGW_PREFIX}/lib/pkgconfig
+ENV CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER=x86_64-w64-mingw32-gcc
+ENV CC_x86_64_pc_windows_gnu=x86_64-w64-mingw32-gcc
+ENV CXX_x86_64_pc_windows_gnu=x86_64-w64-mingw32-g++
+ENV AR_x86_64_pc_windows_gnu=x86_64-w64-mingw32-ar
+
+# OpenCV for opencv-rust
+ENV OPENCV_INCLUDE_PATHS=${MINGW_PREFIX}/include/opencv4
+ENV OPENCV_LINK_PATHS=${MINGW_PREFIX}/lib
+ENV OPENCV_LINK_LIBS=opencv_core470,opencv_imgproc470,opencv_highgui470,opencv_videoio470,opencv_imgcodecs470
+ENV OPENCV_STATIC=0
+ENV LIBCLANG_PATH=/usr/lib64
+
+WORKDIR /src
+# Build happens via docker run -v mount (see scripts/package-windows-x86_64.sh)

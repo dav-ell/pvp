@@ -1,0 +1,36 @@
+{
+  "nativeVersion": "1.0.5+6",
+  "signalingVersion": "0.3.4",
+  "artifacts": {
+    "dist/PVP-macOS-1.0.5.zip": "498c3cdaa66a11cd75607e234f1e2aea69927befefa3fa71d9918441ba70aae2",
+    ".build/group-release/pvp-signaling": "f22fc3490cde8af762b7ff3d9ba6e5f97a6c1a9857d02adf242036a86f8a6bff"
+  },
+  "validation": {
+    "browserGroupParticipants": 16,
+    "browserGroupTests": 2,
+    "browserDirectFallbackParticipants": 16,
+    "browserDirectFallbackTests": 2,
+    "legacyBrowserTests": 17,
+    "flutterTests": 14,
+    "serverTests": 9,
+    "signedNativeGroupIntegration": "passed: one Mac and five browser participants, direct encrypted media reception and opaque forwarding to a second-hop browser",
+    "signedNativeLegacyIntegration": "passed: existing incoming/outgoing calls, screen sharing, native-native DTLS and menu-bar lifecycle",
+    "analysisClippyAndLauncher": "passed",
+    "nativePhysicalCapture": "not exercised",
+    "networkScope": "local synthetic sources; not a WAN benchmark or a 16-native-device validation"
+  },
+  "installedVersion": "1.0.10+11",
+  "productionVersion": "0.3.9",
+  "upgradeStatus": "deployed; subsequently updated with recurring meeting admin controls",
+  "candidatePreflight": "passed: unprivileged health, embedded assets and registration",
+  "deploymentScript": ".build/group-release/deploy-authorized.sh",
+  "limitations": [
+    "Native-origin and unsupported-browser video uses a direct RTP mesh, not the forwarding tree.",
+    "TURN is disabled; networks without a direct path may not connect.",
+    "The Mac package is development-signed and not notarized.",
+    "Account/membership and certificate negotiation trust the signaling service; no MLS or durable identity-key pinning."
+  ],
+  "macAppBackup": "/Users/davell/Documents/github/pvp/.build/group-release/installed-app-backup-20261004-213402/PVP.app",
+  "productionBackup": "/var/backups/pvp/group-calls-2026-10-04-1791164029",
+  "latestRelease": "meeting-chat-release.json"
+}

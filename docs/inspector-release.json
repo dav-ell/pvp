@@ -1,0 +1,42 @@
+{
+  "app_version": "1.0.3+4",
+  "signaling_version": "0.3.2",
+  "artifacts": {
+    "dist/PVP-macOS-1.0.3.zip": "af2f7d9628faee75140114cbe6288f445e227158e6bbd0a0724f58c39ffe1b82",
+    ".build/inspector-release/pvp-signaling": "e5c2a776dad8b1f972de5cfa5f04c6908c586047a3a411aa433b7474394ea0a9"
+  },
+  "validation": {
+    "browser_and_security_local": 17,
+    "flutter_unit": 10,
+    "flutter_analysis": "passed",
+    "rust_signaling": 5,
+    "rust_signaling_clippy": "passed",
+    "rust_launcher_check": "passed",
+    "native_compatibility_and_inspector": "passed",
+    "physical_native_microphone": "not verified; previous test blocked by macOS permission",
+    "mac_signature": "deep and strict verified",
+    "release_tone_fixture": "absent",
+    "browser_production": 5,
+    "native_production_and_inspector": "passed"
+  },
+  "installation": {
+    "app": "/Users/davell/Applications/PVP.app",
+    "version": "1.0.3",
+    "previous_app": "/Users/davell/Documents/github/pvp/.build/PVP-before-inspector-1.0.2-1791135636.app",
+    "previous_executable_sha256": "c515e433f2755a83e59a4f9de29d76338d4c66f560ecbcd148c35f157f00aa38"
+  },
+  "deployment": {
+    "origin": "https://lopixel.space",
+    "health_version": "0.3.2",
+    "sqlite_integrity": "ok",
+    "temporary_accounts_removed": 8,
+    "services_active": [
+      "pvp-signaling",
+      "caddy",
+      "pvp-relay",
+      "frps"
+    ],
+    "upgrade_gate": "no active signaling WebSockets",
+    "backup": "/var/backups/pvp/inspector-2026-10-04-1791135590"
+  }
+}

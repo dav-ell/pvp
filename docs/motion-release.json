@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-14",
+  "productionVersion": "0.3.15",
+  "nativeVersion": "1.0.16+17",
+  "status": "deployed; signed universal Mac app published, installed and opened",
+  "publicDownload": "https://lopixel.space/downloads/PVP-macOS-1.0.16.zip",
+  "changes": [
+    "Shared PVP Signal motion timing and paired ringing waves across browser and native clients.",
+    "Fast screen and dialog arrivals, tactile controls, traveling browser navigation marker, stable friend and chat updates.",
+    "Reduced-motion support, including live preference changes and immediate call-surface disposal.",
+    "Add a friend dialog focuses the username field immediately."
+  ],
+  "sha256": {
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "dc61dda00f1b62232f64f598748468fcd9b40304aeaefb4338c30c4daa874ffb",
+    "dist/PVP-macOS-1.0.16.zip": "30044b1156e578314b73161cae00aedf20abd73238fa8d3534efcebd8251a456",
+    "dist/PVP-macOS-1.0.16/PVP.app/Contents/MacOS/PVP": "d2fee0fb94e8cf3af05d621d7dfc8bd374660eaf0b43b2139a9e04fb157da83c",
+    "dist/PVP-macOS-1.0.16/PVP.app/Contents/Frameworks/App.framework/App": "0ba7eaa31f109cc89afce41535ea383dd1cbf05b9d4445edee50a82a0f3b5563"
+  },
+  "validation": {
+    "flutterAnalysis": "clean",
+    "flutterUnitAndWidgetTests": 51,
+    "serverTests": 25,
+    "webTests": 41,
+    "productionPreflight": "passed: unprivileged startup, 22 source-identical assets, secure persistent sessions, recurring meeting API",
+    "publicMotion": "passed: immediate and rapid navigation, dialog autofocus and Escape return focus, live reduced-motion preference",
+    "publicVoiceRoom": "passed: three browsers, microphone-only entry, room discovery, video opt-in, denied camera, preserved mute, return to solo and teardown",
+    "publicArtifacts": "HTTPS health 0.3.15; all 22 asset hashes match source; complete 32,647,424-byte Mac download matches signed archive",
+    "database": "durable account, friendship, meeting roster, role, access-policy and block records preserved at deployment; exactly three temporary verification accounts removed; integrity and foreign keys verified",
+    "native": "universal arm64/x86_64; installed 1.0.16+17; strict deep signature and executable/framework hashes verified; production TLS connection established",
+    "services": "pvp-signaling, Caddy, pvp-relay and frps active; only signaling restarted and Caddy reloaded"
+  },
+  "assets": {
+    "/": "41a142a815e5513a7456cbeb031ea032af1f7e2a5a0f64197fb4cd5022d504e0",
+    "/security.js": "a0e04cd9aab538c1585148be17e49e9f07d2a9db13bfe19593a59e4ba85ab6b6",
+    "/meetings.js": "cbd06e1b14d91799efa265aa52d83654dd7816139d8d8fe9b40322d90192f2ce",
+    "/styles.css": "b903025bba4a84ad65ede576f531858c4be8c612548b18b0cfdf5cab665e6221",
+    "/inspector.js": "0949acdd0dbb4bce491a054cbb8366462e3ca47f111fda2fdb498e648acf6ad7",
+    "/icon.svg": "e35acc218e30dd446b18627512dd78e7091533ade6ec663f25b7b02564d88aff",
+    "/group-quality.js": "d777f1abc238bb59e03cd26b6369cabcd3518539b142c5cb9978276d3d1c7b8c",
+    "/group-video.js": "7240aea641bf4ebd338182eb4c98281a4dbaeaccc1a40098181cd2bc67227ce0",
+    "/group-calls.js": "06cecc93f80d48089018615dccc93296e0775035781ec7badbba94a98f729c3e",
+    "/manifest.webmanifest": "fa75cfeee4555ba90fe408d4c7c9498e4a52bbcd9b594539b13a8bea6cd24b31",
+    "/meeting-chat.js": "ff15414f04b30bb7467e479f71951e7feff158ead581625ace1157745b231abe",
+    "/bandwidth.js": "49dc7c7760ed280b077f74bc1c242436a747d0a48620266b3914be820c811efc",
+    "/app.js": "8ece9efa2139be80d444e33f09801af8aa5698d3e5d0dfd8498b87ea37c46c79",
+    "/packages/pvp-call/src/security.js": "534aa8f9250b75dc3d8b79141867601af70e5b0810d74f1a40ad047d130208e5",
+    "/packages/pvp-call/src/mesh.js": "763eeee194994454761220b1e7207bd68d23b4e700edd1dc30b9909a6efe7307",
+    "/packages/pvp-call/src/inspector.js": "d8d5426e5fe7d675dcd81147840e24146c70241c4a86ab8be59e282c8befb6ee",
+    "/packages/pvp-call/src/media.js": "a64ba3f1ffbf364f07d7a251a5b330799559d73b6e075a807d5a4f26a5ec40aa",
+    "/packages/pvp-call/src/index.js": "86f43be491fa42331f6135ecaa552006801c9e170fb0ff0e55141463c031ff79",
+    "/packages/pvp-call/src/quality.js": "7a689d823924d93d6b60d7e98b240a1dde4af953abb2edc1b422e319a8c3110c",
+    "/packages/pvp-call/src/room.js": "b58f9f62275cca892f87d329b095fcba9923537b7013f627a96bcfb10d8c9efe",
+    "/motion.js": "f8da31e5f76e6e9e43c03c6b3047854d88eea245133b1e74b794c1843d6430a5",
+    "/motion.css": "5a7b5233ff84d907ea7739b6a4010f1da3a71decc37165552ead330b64a859b2"
+  },
+  "installedApp": "/Users/davell/Applications/PVP.app",
+  "rollback": {
+    "serverAndDatabase": "/var/backups/pvp/motion-2026-10-14-1791998718",
+    "native": "/Users/davell/Documents/github/pvp/.build/motion-release/installed-app-backup-20261014-140312/PVP.app",
+    "portableDatabase": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261014T180434Z-65412.sqlite"
+  }
+}

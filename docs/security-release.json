@@ -1,0 +1,14 @@
+{
+  "app_version": "1.0.1+2",
+  "signaling_version": "0.3.0",
+  "original_artifacts_preserved": {
+    "dist/PVP-macOS.zip": "f405a6d3c9e1fd2b8ccc72b76349a1905def0afe43bd56da743e9ece0b13994e",
+    "/Users/davell/Applications/PVP.app/Contents/MacOS/PVP": "e6a14ff21accda13153ddea9e4bc4aabd643280e76d15d04b2468728249ad6aa"
+  },
+  "artifacts": {
+    "dist/PVP-macOS-1.0.1.zip": "9abcf0b216ea420247a7be5327d728d837781973cf76324d53316164060ea047",
+    ".build/security-release/pvp-signaling": "a8da0d2291e3ce412453bbc81703a5991ac687cde255bb26e358df92a0329675"
+  },
+  "signaling_target": "x86_64-unknown-linux-musl",
+  "signaling_compiler": "rustc 1.95.0; cargo-zigbuild 0.23.4; Zig 0.13.0"
+}

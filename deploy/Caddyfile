@@ -1,0 +1,91 @@
+lopixel.space {
+    encode zstd gzip
+    header Strict-Transport-Security "max-age=31536000"
+    handle /downloads/PVP-macOS-1.0.10.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.10.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.10.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.10.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.9.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.9.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.8.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.8.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.11.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.11.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.12.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.12.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.13.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.13.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.14.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.14.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.15.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.15.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.16.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.16.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.17.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.17.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.18.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.18.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.19.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.19.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle /downloads/PVP-macOS-1.0.20.zip {
+        root * /var/www/pvp
+        header Content-Disposition "attachment; filename=\"PVP-macOS-1.0.20.zip\""
+        header X-Content-Type-Options nosniff
+        file_server
+    }
+    handle {
+        reverse_proxy 127.0.0.1:8787
+    }
+}

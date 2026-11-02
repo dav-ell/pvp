@@ -1,0 +1,28 @@
+[Unit]
+Description=PVP friends and call signaling (media stays peer-to-peer)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=pvp
+Group=pvp
+WorkingDirectory=/var/lib/pvp
+Environment=PVP_BIND=127.0.0.1:8787
+Environment=PVP_DATABASE=/var/lib/pvp/pvp.sqlite
+EnvironmentFile=/etc/pvp/signaling.env
+ExecStart=/usr/local/bin/pvp-signaling
+Restart=on-failure
+RestartSec=3
+StateDirectory=pvp
+StateDirectoryMode=0700
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+UMask=0077
+MemoryMax=150M
+
+[Install]
+WantedBy=multi-user.target

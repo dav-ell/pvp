@@ -1,0 +1,14 @@
+.git
+target
+**/target
+.build
+node_modules
+dist
+.DS_Store
+config.json
+**/*.sqlite*
+**/*.db*
+.env
+.cargo-win
+target-win
+docs/screenshots

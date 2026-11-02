@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-05",
+  "nativeVersion": "1.0.9+10",
+  "signalingVersion": "0.3.8",
+  "installedVersion": "1.0.10+11",
+  "productionVersion": "0.3.9",
+  "upgradeStatus": "deployed and Mac app reopened",
+  "artifacts": {
+    "dist/PVP-macOS-1.0.9.zip": "931c3ca8deeae60fdf4de91f2703181feffc30fbb3f47eab0a664ad54e67a91c",
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "bd42427caa220ee88ac80b4d4e47cf9c8edd56066061b2dbf6cd3df3ffc638ee"
+  },
+  "downloadUrl": "https://lopixel.space/downloads/PVP-macOS-1.0.9.zip",
+  "admission": "Private default; explicit creation option allows any signed-in PVP user with the link; no anonymous guest accounts. Preview does not enroll. Join enrolls an ordinary member, with sixteen enrolled members including owner.",
+  "moderation": "Persistent account block on kick; owner can restore accepted friends with Add member; owner/admin privileges unchanged.",
+  "validation": {
+    "serverTests": 18,
+    "browserTests": 20,
+    "flutterTests": 21,
+    "signedNativeOpenMeetingIntegration": "passed: open creation without invited roster, six native/browser participants, real encrypted media/opaque forwarding and admin mute/kick checks",
+    "nonFriendBrowserMedia": "passed: open preview without capture/enrollment; non-friend joins ordinary member; real encrypted incoming audio with DTLS/SRTP; outsider admin denial; kick ends call and denies rejoin",
+    "persistence": "open policy and kick block survive snapshot/restore; private denial, revoked links and sixteen-member cap tested",
+    "clippyAndAnalyze": "passed",
+    "mobileLayout": "passed after wrapping navigation into two columns",
+    "screenShareRegression": "passed; test waits sender completion before checking replaced-track cleanup",
+    "candidatePreflight": "passed: unprivileged server, persistent login and open meeting creation/metadata",
+    "publicVerification": "health 0.3.8; HTML/JS/CSS match source; full HTTPS downloaded archive hash matches signed release",
+    "nativeCapture": "synthetic local integrations; physical microphone and WAN reliability not tested"
+  },
+  "productionBackup": "/var/backups/pvp/open-meetings-2026-10-05-1791222782",
+  "caddyBackup": "/var/backups/pvp/open-caddy-2026-10-05-1791222781",
+  "macAppBackup": "/Users/davell/Documents/github/pvp/.build/open-meetings/installed-app-backup-20261005-135301/PVP.app",
+  "portableDatabaseBackup": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261005T175318Z-95981.sqlite",
+  "portableBackupIntegrity": "ok; mode 0600; access, block and control tables verified",
+  "signing": "universal Apple silicon/Intel development-signed; not notarized",
+  "deploymentLog": ".build/open-meetings/deploy.log",
+  "latestRelease": "meeting-chat-release.json"
+}

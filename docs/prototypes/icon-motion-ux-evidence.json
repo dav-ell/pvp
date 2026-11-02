@@ -1,0 +1,27 @@
+{
+  "scope": "Standalone simulated concept only; no app or production changes",
+  "engines": {
+    "chromium": {
+      "widths": [
+        320,
+        360,
+        390,
+        430
+      ],
+      "errors": [],
+      "states": "mute, capture upgrade, sheet navigation, focus return, label preference, mic recovery, playback, reconnect, leave/rejoin, clipboard acknowledgement, reduced motion",
+      "icons": 29
+    },
+    "webkit": {
+      "widths": [
+        320,
+        360,
+        390,
+        430
+      ],
+      "errors": [],
+      "states": "mute, capture upgrade, sheet navigation, focus return, label preference, mic recovery, playback, reconnect, leave/rejoin, clipboard acknowledgement, reduced motion",
+      "icons": 29
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "nativeVersion": "1.0.4+5",
+  "signalingVersion": "0.3.3",
+  "artifacts": {
+    "dist/PVP-macOS-1.0.4.zip": "4a24bfe60898b82775ae03302f1de69fd0d572d40fd077c75be7dceb09e03a70",
+    ".build/screenshare-release/pvp-signaling": "836a4a801c17128e75d8a00717d185958c938822d0c152c1effa0105196fa8bd"
+  },
+  "validation": {
+    "browserTests": 17,
+    "flutterTests": 12,
+    "serverTests": 5,
+    "signedNativeIntegration": "passed; browser screen to Mac and camera restoration",
+    "flutterAnalysis": "passed",
+    "nativePhysicalCapture": "not exercised"
+  },
+  "installedVersion": "1.0.3+4",
+  "productionVersion": "0.3.2",
+  "upgradeStatus": "deferred: installed app running and active signaling WebSockets",
+  "deploymentScript": ".build/screenshare/deploy.sh"
+}

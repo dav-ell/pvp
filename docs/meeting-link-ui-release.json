@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-05",
+  "productionVersion": "0.3.7",
+  "nativeVersion": "1.0.8+9 (unchanged)",
+  "changes": [
+    "Browser People page Create meeting link button",
+    "Browser Meeting links sidebar entry",
+    "Creation form shown first; creation button focuses name field"
+  ],
+  "validation": "two meeting tests passed, candidate preflight passed, public HTML/meetings.js match source",
+  "artifactSha256": "4476091a96c00b49cd4f8449b10c3cc0fd656cfbbc63817981d5b81f2ca29f2c",
+  "deploymentLog": ".build/meeting-link-ui/deploy.log",
+  "latestRelease": "meeting-chat-release.json"
+}

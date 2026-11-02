@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-05",
+  "nativeVersion": "1.0.8+9",
+  "signalingVersion": "0.3.7",
+  "installedVersion": "1.0.10+11",
+  "productionVersion": "0.3.9",
+  "upgradeStatus": "deployed and Mac app reopened",
+  "artifacts": {
+    "dist/PVP-macOS-1.0.8.zip": "c6c925c60c3952ce4cbda19c21c362c22a4820c5cd2f136be6c0847d613f4192",
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "c0c031ea1e867d585ec1b0574495995c97ef27777d4b583597c548c403203ec0"
+  },
+  "validation": {
+    "browserTests": 20,
+    "flutterTests": 21,
+    "serverTests": 17,
+    "browserGroupRegressionTests": 2,
+    "signedNativeMeetingAdminIntegration": "passed: Mac owner appointment, browser admin moderation, fresh native receiver disabled, native forced mute/unmute protection, permission release leaves microphone off, kick stops capture and denies rejoin",
+    "signedNativeOrdinaryGroupRegression": "passed: one Mac and five browsers, encrypted media reception and opaque second-hop forwarding",
+    "analysisClippyAndLauncher": "passed",
+    "candidatePreflight": "passed: unprivileged health/assets/persistent cookie and durable meeting owner/admin metadata",
+    "publicAssets": "match repository hashes",
+    "productionDatabase": "integrity ok; users/friends/meetings/roster rows match predeployment snapshot; original two-column roster retained",
+    "installedApp": "universal arm64/x86_64, strict signature verification, 1.0.8+9, reopened with established TLS connection to existing VM",
+    "nativePhysicalCapture": "synthetic sources; physical microphone not exercised",
+    "networkScope": "local integrations, not a WAN benchmark"
+  },
+  "nativeFixes": [
+    "Apply moderation directly to peer receivers and verify native engine state, rather than relying on cached stream flags.",
+    "Keep app busy until capture teardown finishes after a kick.",
+    "Project-local WebRTC weak-renderer guards prevent queued frame callbacks dereferencing a disposed renderer; shared package cache unchanged."
+  ],
+  "compatibility": "Old apps retain ordinary calls/groups and unmuted recurring meetings; an enforced mute requires updated receivers, with an update message for older clients.",
+  "macAppBackup": "/Users/davell/Documents/github/pvp/.build/moderation/installed-app-backup-20261005-081552/PVP.app",
+  "productionBackup": "/var/backups/pvp/moderation-2026-10-05-1791202552",
+  "portableDatabaseBackup": "/Users/davell/Library/Application Support/PVP/Backups/pvp-20261005T121613Z-22806.sqlite",
+  "portableBackupIntegrity": "ok; mode 0600; meeting_controls table verified",
+  "deploymentScript": ".build/moderation/deploy-authorized.sh",
+  "limitations": [
+    "TURN disabled; networks requiring media relays may not connect.",
+    "Development-signed Mac app, not notarized.",
+    "Off-VM backup is a snapshot, not automatically scheduled."
+  ],
+  "latestWebRelease": "mac-download-release.json",
+  "latestRelease": "meeting-chat-release.json"
+}

@@ -1,0 +1,33 @@
+{
+  "name": "pvp-browser-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:recovery": "PVP_RECOVERY=1 PVP_DATABASE=\"${PVP_DATABASE:-fellowship.sqlite}\" cargo run --manifest-path signaling/Cargo.toml",
+    "test:recovery": "node --test tests/recovery.mjs",
+    "test": "node --test --test-concurrency=1 tests/network.mjs tests/bandwidth.mjs tests/group-quality.mjs tests/meeting-chat.mjs tests/inspector.mjs tests/media-health.mjs tests/security-proof.mjs tests/rooms-experience.mjs tests/e2e.mjs tests/security.mjs tests/sessions.mjs tests/meetings.mjs tests/raise-hand.mjs tests/guests.mjs tests/guest-links-zoom.mjs tests/mobile-meetings.mjs tests/motion.mjs tests/polish.mjs tests/recovery.mjs",
+    "test:security-proof": "node --test tests/security-proof.mjs",
+    "test:browser": "node --test --test-concurrency=1 tests/e2e.mjs",
+    "test:motion": "node --test tests/motion.mjs",
+    "test:native": "node scripts/test-native.mjs",
+    "test:voice:native": "PVP_TEST_VOICE=1 node scripts/test-native-groups.mjs",
+    "test:voice": "node --test tests/voice-rooms.mjs",
+    "test:groups": "node --test tests/groups.mjs",
+    "test:groups:16": "PVP_GROUP_TEST_SIZE=16 PVP_GROUP_DISABLE_LAST=1 node --test tests/groups.mjs",
+    "test:groups:native": "node scripts/test-native-groups.mjs",
+    "test:sessions": "node --test tests/sessions.mjs",
+    "test:sessions:native": "node scripts/test-native-sessions.mjs",
+    "test:meetings": "node --test tests/meetings.mjs tests/raise-hand.mjs",
+    "test:mobile": "node --test tests/mobile-meetings.mjs",
+    "test:guests": "node --test tests/guests.mjs tests/guest-links-zoom.mjs",
+    "test:zoom": "node --test tests/guest-links-zoom.mjs",
+    "test:meetings:native": "PVP_TEST_MEETINGS=1 node scripts/test-native-groups.mjs",
+    "sync:brand": "node scripts/sync-brand-tokens.mjs",
+    "test:rooms": "node --test tests/rooms-experience.mjs",
+    "test:media-health": "node --test tests/media-health.mjs",
+    "test:network": "node --test tests/network.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.0"
+  }
+}

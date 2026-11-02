@@ -26,10 +26,19 @@ use rubato::{Resampler, SincFixedIn, SincFixedOut, SincInterpolationType, SincIn
 // Local imports
 use network::{AUDIO_SAMPLE_RATE, AUDIO_CHANNELS, AUDIO_FRAME_SIZE};
 use network::sender::SendData;
+use cli::PeerConnectChoice;
 
 // Constants for audio buffering
 const AUDIO_BUFFER_SIZE: usize = AUDIO_FRAME_SIZE * 100;
 
+/// How media will be routed after connect.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum MediaPath {
+    /// Direct UDP to peer after hole punch.
+    DirectP2P,
+    /// Via pvp-relay (TURN-like) on a public host.
+    Relay,
+}
 
 // Main function using Tokio runtime
 #[tokio::main]
@@ -37,8 +46,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("Starting Peer Video Player (PVP) with Audio...");
 
     // --- Configuration ---
-    let key = config::read_key_from_json("config.json")?;
+    let app_cfg = config::load_config("config.json")?;
+    let key = app_cfg.encryption_key;
     println!("Encryption key loaded successfully.");
+    if let Some(ref r) = app_cfg.relay {
+        println!(
+            "Relay configured: server={} room=\"{}\" prefer_p2p={}",
+            r.server, r.room, r.prefer_p2p
+        );
+    } else {
+        println!("No relay in config.json — direct P2P only.");
+    }
 
     // --- Network Setup ---
     let local_addr = "0.0.0.0:5000"; // Listen on all interfaces, port 5000
@@ -51,7 +69,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
         Ok(public_addr) => {
             println!("\n*******************************************************");
             println!("*** Your public address is likely: {} ***", public_addr);
-            println!("*** Share this address with your peer.               ***");
+            println!("*** Share this address with your peer (for direct P2P). ***");
+            if app_cfg.relay.is_some() {
+                println!("*** Or both press Enter to meet via the TURN relay.  ***");
+            }
             println!("********************************************************\n");
             Some(public_addr)
         }
@@ -59,19 +80,79 @@ async fn main() -> Result<(), Box<dyn Error>> {
             eprintln!("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             eprintln!("!!! STUN query failed: {} !!!", e);
             eprintln!("!!! Could not determine public IP address.          !!!");
-            eprintln!("!!! NAT traversal might fail if direct connection   !!!");
-            eprintln!("!!! requires it (e.g., symmetric NATs).             !!!");
+            eprintln!("!!! Direct P2P may fail; use the TURN relay if set. !!!");
             eprintln!("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            eprintln!("Proceeding, but connection may fail.\n");
+            eprintln!("Proceeding...\n");
             None
         }
     };
-    let _ = public_socket_addr; // Keep potentially needed later
+    let _ = public_socket_addr;
 
-    // --- Peer Connection ---
-    let peer_addr = cli::read_peer_address();
-    let connected_peer_addr = network::hole_punch::perform_hole_punch(&socket, peer_addr).await?;
-    println!("Successfully established potential connection path to peer {}", connected_peer_addr);
+    // --- Peer Connection: prefer direct P2P, fall back to relay ---
+    let relay_available = app_cfg.relay.is_some();
+    let choice = cli::read_peer_connect_choice(relay_available);
+
+    let (media_dest, media_path, relay_keepalive_cfg) = match choice {
+        PeerConnectChoice::Direct(peer_addr) => {
+            match network::hole_punch::perform_hole_punch(&socket, peer_addr).await {
+                Ok(connected) => {
+                    println!(
+                        "Direct P2P path established to {} (hole punch ok).",
+                        connected
+                    );
+                    (connected, MediaPath::DirectP2P, None)
+                }
+                Err(e) => {
+                    eprintln!("Direct hole punch failed: {}", e);
+                    if let Some(ref rcfg) = app_cfg.relay {
+                        println!("Falling back to TURN relay {} ...", rcfg.server);
+                        let relay_addr = config::resolve_relay_addr(&rcfg.server)?;
+                        network::relay::join_relay(&socket, relay_addr, &rcfg.room, &rcfg.token)
+                            .await?;
+                        println!(
+                            "Relay path ready: media via {} room=\"{}\"",
+                            relay_addr, rcfg.room
+                        );
+                        (
+                            relay_addr,
+                            MediaPath::Relay,
+                            Some((rcfg.room.clone(), rcfg.token.clone(), relay_addr)),
+                        )
+                    } else {
+                        return Err(format!(
+                            "Hole punch failed and no relay configured: {}",
+                            e
+                        )
+                        .into());
+                    }
+                }
+            }
+        }
+        PeerConnectChoice::RelayOnly => {
+            let rcfg = app_cfg
+                .relay
+                .as_ref()
+                .ok_or("relay path requested but relay is not configured in config.json")?;
+            // If prefer_p2p is false we still get here via prompt; same join path.
+            let _ = rcfg.prefer_p2p;
+            let relay_addr = config::resolve_relay_addr(&rcfg.server)?;
+            network::relay::join_relay(&socket, relay_addr, &rcfg.room, &rcfg.token).await?;
+            println!(
+                "Relay path ready: media via {} room=\"{}\"",
+                relay_addr, rcfg.room
+            );
+            (
+                relay_addr,
+                MediaPath::Relay,
+                Some((rcfg.room.clone(), rcfg.token.clone(), relay_addr)),
+            )
+        }
+    };
+    println!(
+        "Media path: {:?} → destination {}",
+        media_path, media_dest
+    );
+    let connected_peer_addr = media_dest;
 
     // --- Video Setup ---
     let window_name = "Video Stream";
@@ -155,10 +236,21 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Clone the sender part of the combined channel for the main video loop
     let tx_combined_send_for_video = tx_combined_send.clone();
 
+    // Relay keepalive (re-JOIN) so the server does not expire this peer
+    let relay_keepalive_handle = if let Some((room, token, raddr)) = relay_keepalive_cfg {
+        let sock = Arc::clone(&socket);
+        Some(tokio::spawn(async move {
+            network::relay::relay_keepalive_task(sock, raddr, room, token).await;
+        }))
+    } else {
+        None
+    };
+
     // Spawn network tasks
     println!("Spawning network tasks...");
     let sender_handle = tokio::spawn(async move {
         // sender_task now uses rx_combined_send to receive both video and audio
+        // For relay path, destination is the relay; for P2P it is the peer.
         network::sender::sender_task(socket_for_sender, connected_peer_addr, key_for_sender, rx_combined_send).await
     });
     let receiver_handle = tokio::spawn(async move {
@@ -261,6 +353,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Wait for network tasks. Use try_join! to propagate panics if tasks fail.
     if let Err(e) = tokio::try_join!(sender_handle, receiver_handle) {
         eprintln!("Error joining network tasks: {}", e);
+    }
+
+    if let Some(h) = relay_keepalive_handle {
+        h.abort();
     }
 
 

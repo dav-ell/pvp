@@ -2,6 +2,7 @@ use crate::network::{
     PacketHeader, PacketType, AUDIO_SAMPLE_RATE, AUDIO_CHANNELS, AUDIO_FRAME_SIZE,
     PACKET_HEADER_SIZE,
 };
+use crate::network::relay;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use std::collections::HashMap;
@@ -11,10 +12,11 @@ use aes::cipher::{BlockDecryptMut, KeyIvInit};
 use aes::cipher::block_padding::{Pkcs7, UnpadError};
 use cbc::Decryptor as CbcDecryptorGeneric;
 use opencv::{
-    core::{Mat, CV_8UC1, AlgorithmHint},
+    core::{Mat, CV_8UC1},
     imgproc,
     prelude::{MatTrait, MatTraitConst}, // Added for data_mut, total, elem_size methods
 };
+use crate::network::cvt_color;
 use openh264::decoder::Decoder as H264Decoder; // Alias to avoid name clash
 use openh264::formats::YUVSource;
 use opus::{Decoder as OpusDecoder, Channels as OpusChannels}; // Alias to avoid name clash
@@ -73,6 +75,8 @@ pub async fn receiver_task(
     type ReassemblyBuffer = HashMap<u32, (Vec<Option<Vec<u8>>>, Instant)>; // (fragments, last_seen)
     let mut video_reassembly_buffer: ReassemblyBuffer = HashMap::new();
     let mut audio_reassembly_buffer: ReassemblyBuffer = HashMap::new();
+    let mut video_replay = pvp::packet_security::ReplayWindow::default();
+    let mut audio_replay = pvp::packet_security::ReplayWindow::default();
     let max_buffer_age = Duration::from_secs(2); // Discard incomplete frames/chunks older than this
 
     let mut recv_buf = vec![0u8; 2048]; // Reusable buffer for incoming UDP packets
@@ -109,6 +113,16 @@ pub async fn receiver_task(
 
         let packet_data = &recv_buf[..num_bytes];
 
+        // Ignore pvp-relay control frames (JOIN_OK, PEER_READY, PEER_GONE, etc.)
+        if relay::is_control_packet(packet_data) {
+            continue;
+        }
+
+        // Authenticate the entire header, IV and ciphertext before parsing,
+        // allocating reassembly state, decrypting, or invoking native codecs.
+        let Some(packet_data) = pvp::packet_security::open(packet_data, &key) else {
+            continue;
+        };
         // --- Packet Header Parsing and Validation ---
         if packet_data.len() < PACKET_HEADER_SIZE {
             eprintln!("Receiver: Received packet too small: {} bytes (from {})", packet_data.len(), src_addr);
@@ -128,7 +142,21 @@ pub async fn receiver_task(
 
 
         // Basic validation of fragment info
-        if header.total_frags == 0 || header.frag_idx >= header.total_frags {
+        let maximum = match header.packet_type {
+            PacketType::Video => 1024,
+            PacketType::Audio => 16,
+        };
+        let replay = match header.packet_type {
+            PacketType::Video => &mut video_replay,
+            PacketType::Audio => &mut audio_replay,
+        };
+        if !replay.accepts(header.seq_num) {
+            continue;
+        }
+        if header.total_frags == 0
+            || header.total_frags > maximum
+            || header.frag_idx >= header.total_frags
+        {
             eprintln!(
                 "Receiver ({:?}): Invalid fragment indices received from {}: seq {}, idx {}, total {}",
                 header.packet_type, src_addr, header.seq_num, header.frag_idx, header.total_frags
@@ -159,6 +187,9 @@ pub async fn receiver_task(
             PacketType::Audio => &mut audio_reassembly_buffer,
         };
 
+        if reassembly_buffer.len() >= 32 && !reassembly_buffer.contains_key(&header.seq_num) {
+            continue;
+        }
         // --- Fragment Insertion ---
         let total_frags_usize = header.total_frags as usize;
         let frag_idx_usize = header.frag_idx as usize;
@@ -214,6 +245,7 @@ pub async fn receiver_task(
         };
 
         if is_complete {
+            replay.complete(header.seq_num);
             // Frame/chunk is complete, remove it from the buffer to process
              // Use remove() which returns the value
             if let Some((completed_fragments_opts, _)) = reassembly_buffer.remove(&header.seq_num) {
@@ -343,12 +375,10 @@ async fn process_video_frame(
             }
 
             let mut bgr_frame = Mat::default(); // Destination for BGR data
-            if imgproc::cvt_color(
+            if cvt_color(
                 &yuv_mat,
                 &mut bgr_frame,
                 imgproc::COLOR_YUV2BGR_I420,
-                0,
-                AlgorithmHint::ALGO_HINT_DEFAULT,
             )
             .is_ok()
             {

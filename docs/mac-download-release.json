@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-05",
+  "productionVersion": "0.3.7",
+  "nativeVersion": "1.0.8+9",
+  "downloadUrl": "https://lopixel.space/downloads/PVP-macOS-1.0.8.zip",
+  "platforms": "macOS 13+, Apple silicon and Intel",
+  "ui": "Mac-only Download for Mac links on sign-in screen and authenticated sidebar; iPad MacIntel touch identity excluded",
+  "artifacts": {
+    "dist/PVP-macOS-1.0.8.zip": "c6c925c60c3952ce4cbda19c21c362c22a4820c5cd2f136be6c0847d613f4192",
+    "signaling/target/x86_64-unknown-linux-musl/release/pvp-signaling": "d1e39d96f45466ae96ed2c523cc28b4e3fc3802c803f34995b07dfe40f9649f4"
+  },
+  "validation": {
+    "platformVisibility": "passed: MacIntel, Win32, Linux, iPad MacIntel with touch",
+    "caddyConfiguration": "validated before reload",
+    "archiveUpload": "remote hash matches signed local archive",
+    "publicHttps": "passed: public HTML/JS/CSS match; Content-Disposition and nosniff verified; full downloaded archive SHA-256 matches signed release"
+  },
+  "deploymentLog": ".build/mac-download/deploy.log",
+  "signing": "development-signed; not notarized",
+  "productionBackup": "/var/backups/pvp/mac-download-2026-10-05-1791213063",
+  "caddyBackup": "/var/backups/pvp/download-caddy-2026-10-05-1791213062",
+  "latestRelease": "meeting-chat-release.json"
+}

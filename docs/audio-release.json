@@ -1,0 +1,32 @@
+{
+  "installed_version": "1.0.2",
+  "previous_app": "/Users/davell/Documents/github/pvp/.build/PVP-before-audio-1.0.0-1791119697.app",
+  "previous_executable_sha256": "e6a14ff21accda13153ddea9e4bc4aabd643280e76d15d04b2468728249ad6aa",
+  "app_version": "1.0.2+3",
+  "signaling_version": "0.3.1",
+  "artifacts": {
+    "dist/PVP-macOS-1.0.2.zip": "d30e5f0a9f69a29fc9400d3e5e0d06456701800307b8fb4a0fe83fd07959899c",
+    ".build/audio-release/pvp-signaling": "97214ca9075d1ea7fcbcbd23acfb41918a8a8b1eec4ea89b7d3c083444706a4b"
+  },
+  "validation": {
+    "browser_and_security_local": 14,
+    "browser_production": 5,
+    "flutter_unit": 7,
+    "flutter_analysis": "passed",
+    "rust_launcher_check": "passed",
+    "native_compatibility": "passed",
+    "native_outgoing_microphone": "blocked by macOS microphone permission",
+    "installed_signature": "verified deep and strict",
+    "original_release_archives": "unchanged"
+  },
+  "deployment": {
+    "origin": "https://lopixel.space",
+    "health_version": "0.3.1",
+    "sqlite_integrity": "ok",
+    "temporary_accounts_removed": 4,
+    "upgrade_gate": "no active signaling WebSockets",
+    "services_active": ["pvp-signaling", "caddy", "pvp-relay", "frps"],
+    "original_server_backup": "/var/backups/pvp/audio-2026-10-04-1791119548",
+    "final_swap_backup": "/var/backups/pvp/audio-final-2026-10-04-1791120484"
+  }
+}
