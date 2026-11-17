@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {chromium,webkit} from 'playwright';
+import { testBrowsers } from './browser-engines.mjs';
 import {spawn,execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {mkdtemp,rm,mkdir,writeFile} from 'node:fs/promises';
@@ -24,7 +24,7 @@ function fixture(){
   const native=navigator.mediaDevices;
   Object.defineProperty(navigator,'mediaDevices',{value:new Proxy(native,{get(t,k){if(k==='getUserMedia')return capture;const v=Reflect.get(t,k,t);return typeof v==='function'?v.bind(t):v;}})});
 }
-for(const [engine,type] of Object.entries({chromium,webkit}))test(`mobile meeting recovery, listening and media upgrade (${engine})`,{timeout:180000},async()=>{
+for(const [engine,type] of Object.entries(testBrowsers))test(`mobile meeting recovery, listening and media upgrade (${engine})`,{timeout:180000},async()=>{
   const temp=await mkdtemp(join(tmpdir(),'pvp-mobile-'));let server,browser;
   try{
     let base=process.env.PVP_TEST_URL;

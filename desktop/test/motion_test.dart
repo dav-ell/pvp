@@ -1,3 +1,6 @@
+import 'dart:ui' show PointerDeviceKind;
+import 'package:flutter/services.dart';
+import 'package:pvp_desktop/ui/polish.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pvp_desktop/ui/motion.dart';
@@ -28,6 +31,46 @@ Widget host(Widget child, {bool reduced = false}) => MaterialApp(
 );
 
 void main() {
+  testWidgets('idle call controls return on pointer and keyboard input', (
+    tester,
+  ) async {
+    var disposals = 0;
+    await tester.pumpWidget(
+      host(
+        CallControlActivity(
+          active: true,
+          child: Column(
+            children: [
+              LifecycleProbe(disposed: () => disposals++),
+              const CallChrome(child: Text('Call controls')),
+            ],
+          ),
+        ),
+      ),
+    );
+    double opacity() =>
+        tester.widget<AnimatedOpacity>(find.byType(AnimatedOpacity)).opacity;
+    expect(opacity(), 1);
+    await tester.pump(const Duration(milliseconds: 3200));
+    await tester.pumpAndSettle();
+    expect(opacity(), 0);
+    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    await mouse.addPointer(
+      location: tester.getCenter(find.text('Media surface')),
+    );
+    await tester.pumpAndSettle();
+    expect(opacity(), 1);
+    await tester.pump(const Duration(milliseconds: 3200));
+    await tester.pumpAndSettle();
+    expect(opacity(), 0);
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.pumpAndSettle();
+    expect(opacity(), 1);
+    expect(disposals, 0);
+    await mouse.removePointer();
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   testWidgets(
     'arrival never remounts its media child as the animation settles',
     (tester) async {

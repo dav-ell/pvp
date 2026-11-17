@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pvp_desktop/core/connection_evidence.dart';
 
@@ -55,7 +56,8 @@ void main() {
     final stats = fixture(), first = inspect(stats);
     expect(first.direct, true);
     expect(first.data['bytesSent'], 12345);
-    expect(endpointLabel(first.remote), '198.51.100.20:60000');
+    expect(first.remote?['address'], '198.51.100.20');
+    expect(first.remote?['port'], 60000);
     stats.last['selectedCandidatePairId'] = 'other';
     expect(inspect(stats).data['selectedPairId'], 'other');
     expect(inspect(stats).direct, false);
@@ -186,50 +188,36 @@ void main() {
       expect(proof().transportFailed, true);
     },
   );
-  test(
-    'capture command accepts real tuples and rejects hidden addresses and injection',
-    () {
-      expect(
-        captureCommand(inspect(fixture()).remote),
-        "sudo tcpdump -i pktap,all -nn -tttt 'udp and host 198.51.100.20 and port 60000'",
-      );
-      expect(
-        captureCommand({
-          'address': '2001:db8::1',
-          'port': 443,
-          'protocol': 'tcp',
-        }),
-        contains('tcp and host 2001:db8::1 and port 443'),
-      );
-      for (final address in [
-        '',
-        'peer.local',
-        "198.51.100.20'; echo malicious",
-        '999.1.2.3',
-      ]) {
-        expect(
-          captureCommand({'address': address, 'port': 1234, 'protocol': 'udp'}),
-          null,
-        );
-      }
-      final hiddenStats = fixture();
-      hiddenStats[1]['address'] = '';
-      final hidden = inspect(hiddenStats);
-      expect(endpointLabel(hidden.remote), 'Address unavailable:60000');
-      expect(
-        mediaCaptureCommand(hidden),
-        contains('host 192.0.2.10 and port 50000'),
-      );
-      expect(
-        captureCommand({
-          'address': '127.0.0.1',
-          'port': 65536,
-          'protocol': 'tcp',
-        }),
-        null,
-      );
-    },
-  );
+  test('exported observations omit addresses from every candidate path', () {
+    final stats = fixture();
+    stats[1].addAll({
+      'url': 'stun:203.0.113.55:3478',
+      'relatedAddress': '2001:db8::1',
+      'relatedPort': 60200,
+    });
+    final report = ConnectionEvidence.fromReports(
+      stats,
+      connectionState: 'connected',
+      iceState: 'connected',
+      configuredServers: ['stun:203.0.113.56:3478'],
+    ).publicObservation();
+    final encoded = jsonEncode(report);
+    for (final privateValue in [
+      '198.51.100.20',
+      '192.0.2.10',
+      '203.0.113.55',
+      '203.0.113.56',
+      '2001:db8::1',
+      '60000',
+      '60200',
+      'selectedPairId',
+    ]) {
+      expect(encoded, isNot(contains(privateValue)));
+    }
+    expect(report['remote'], {'candidateType': 'srflx', 'protocol': 'udp'});
+    expect(report['bytesSent'], 12345);
+    expect((report['pairs'] as List).first['selected'], true);
+  });
   for (final state in [
     'healthy',
     'relay',

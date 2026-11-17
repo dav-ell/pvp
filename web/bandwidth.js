@@ -37,14 +37,15 @@ export function bandwidthControls(root, caps, change) {
   const note=document.createElement('p'); note.className='settings-note';
   note.textContent='Video limits apply only to this participant, for this call. Receive limits require an updated sender. Audio and network overhead are additional. High limits do not guarantee higher quality.';root.append(note);
   for(const direction of ['receive','send'])for(const source of ['camera','screen']) {
-    const label=document.createElement('label');label.textContent=`${direction==='receive'?'Receive their':'Send your'} ${source==='screen'?'screen share':'camera'}`;
+    const field=document.createElement('div'), label=document.createElement('label');label.textContent=`${direction==='receive'?'Receive their':'Send your'} ${source==='screen'?'screen share':'camera'}`;
     const select=document.createElement('select');select.dataset.direction=direction;select.dataset.source=source;
+    select.id = `${root.id}-${direction}-${source}`; label.htmlFor = select.id;
     for(const [value,text] of [['','Automatic'],['0','None · no video'],['64','Super low · 64 Kbps'],['400','Low · 400 Kbps'],['1800','Balanced · 1.8 Mbps'],['4000','High · 4 Mbps'],['8000','Super high · 8 Mbps'],['custom','Custom…']]) {const option=document.createElement('option');option.value=value;option.textContent=text;select.append(option);}
     const input=document.createElement('input');input.type='number';input.min=32;input.max=8000;input.step=1;input.setAttribute('aria-label',`${label.textContent} custom Kbps`);
     const value=caps[direction][source];const preset=[0,64,400,1800,4000,8000].includes(value);select.value=value==null?'':preset?String(value):'custom';input.hidden=select.value!=='custom';input.value=value??400;
     const commit=n=>{if(n!==null&&(!Number.isInteger(n)||(n!==0&&n<32)||n>8000)){input.setCustomValidity('Choose 0 (no video) or 32–8000 Kbps.');input.reportValidity();return;}input.setCustomValidity('');change(direction,source,n);};
-    select.onchange=()=>{input.hidden=select.value!=='custom';if(!input.hidden)input.focus();else commit(select.value===''?null:Number(select.value));};input.onchange=()=>commit(Number(input.value));
-    label.append(select,input);root.append(label);
+    select.onchange=()=>{input.hidden=select.value!=='custom';if(!input.hidden)input.focus();else commit(select.value===''?null:Number(select.value));};input.onchange=()=>commit(input.valueAsNumber);
+    field.append(label,select,input);root.append(field);
   }
 }
 

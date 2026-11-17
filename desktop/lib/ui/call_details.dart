@@ -126,60 +126,69 @@ class CallDetailsBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 7),
       child: Column(
         children: [
-          Wrap(
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 13,
-            runSpacing: 4,
-            children: [
-              Text(
-                '$preset · target ${quality.label}',
-                style: const TextStyle(
-                  color: PvpBrandColors.stageMuted,
-                  fontSize: 11,
+          CallChrome(
+            child: Column(
+              children: [
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 13,
+                  runSpacing: 4,
+                  children: [
+                    Text(
+                      '$preset · target ${quality.label}',
+                      style: const TextStyle(
+                        color: PvpBrandColors.stageMuted,
+                        fontSize: 11,
+                      ),
+                    ),
+                    TextButton.icon(
+                      onPressed: () => proof(context),
+                      style: TextButton.styleFrom(
+                        foregroundColor: PvpBrandColors.accent,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        minimumSize: const Size(40, 32),
+                      ),
+                      icon: const PvpGlyph('link', size: 14),
+                      label: Text(
+                        group
+                            ? 'Connection proof · ${c.group.links.length} peers'
+                            : c.media.evidence?.trustSummary ??
+                                  'Connection proof unavailable',
+                        style: const TextStyle(fontSize: 11),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              TextButton.icon(
-                onPressed: () => proof(context),
-                style: TextButton.styleFrom(
-                  foregroundColor: PvpBrandColors.accent,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  minimumSize: const Size(40, 32),
+                Text(
+                  media.outgoingSummary,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: PvpBrandColors.stageMuted,
+                    fontSize: 10,
+                  ),
                 ),
-                icon: const PvpGlyph('link', size: 14),
-                label: Text(
-                  group
-                      ? 'Connection proof · ${c.group.links.length} peers'
-                      : c.media.evidence?.trustSummary ??
-                            'Connection proof unavailable',
-                  style: const TextStyle(fontSize: 11),
+                Text(
+                  media.limitsSummary,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: PvpBrandColors.stageMuted,
+                    fontSize: 10,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Text(
-            media.outgoingSummary,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: PvpBrandColors.stageMuted,
-              fontSize: 10,
+                if (group &&
+                    c.group.links.values.any((link) => link.forwardedBytes > 0))
+                  const Text(
+                    'RTP figures describe your media; forwarded video from others is additional.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: PvpBrandColors.stageMuted,
+                      fontSize: 10,
+                    ),
+                  ),
+              ],
             ),
           ),
-          Text(
-            media.limitsSummary,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: PvpBrandColors.stageMuted,
-              fontSize: 10,
-            ),
-          ),
-          if (group &&
-              c.group.links.values.any((link) => link.forwardedBytes > 0))
-            const Text(
-              'RTP figures describe your media; forwarded video from others is additional.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: PvpBrandColors.stageMuted, fontSize: 10),
-            ),
           if (media.microphoneNotice.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 5),

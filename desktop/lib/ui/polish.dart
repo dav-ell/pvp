@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'icon_aliases.dart';
@@ -63,6 +65,160 @@ ThemeData pvpStageTheme(BuildContext context) => Theme.of(context).copyWith(
   ),
 );
 
+/// Tracks input for the visible conversation while leaving the media mounted.
+class CallControlActivity extends StatefulWidget {
+  final bool active;
+  final Widget child;
+  const CallControlActivity({
+    super.key,
+    required this.active,
+    required this.child,
+  });
+
+  @override
+  State<CallControlActivity> createState() => _CallControlActivityState();
+}
+
+class _CallControlActivityState extends State<CallControlActivity> {
+  final hidden = ValueNotifier(false);
+  Timer? idle;
+  bool foreground = false;
+
+  @override
+  void initState() {
+    super.initState();
+    HardwareKeyboard.instance.addHandler(onKey);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final ticking = TickerMode.valuesOf(context).enabled;
+    final current = ModalRoute.isCurrentOf(context) ?? true;
+    foreground = ticking && current;
+    showControls();
+  }
+
+  @override
+  void didUpdateWidget(CallControlActivity oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.active != oldWidget.active) showControls();
+  }
+
+  bool onKey(KeyEvent event) {
+    if (foreground) showControls();
+    return false;
+  }
+
+  void showControls() {
+    hidden.value = false;
+    idle?.cancel();
+    if (widget.active && foreground) {
+      idle = Timer(const Duration(milliseconds: 3200), () {
+        hidden.value = true;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    HardwareKeyboard.instance.removeHandler(onKey);
+    idle?.cancel();
+    hidden.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => MouseRegion(
+    onEnter: (_) => showControls(),
+    onHover: (_) => showControls(),
+    child: Listener(
+      onPointerDown: (_) => showControls(),
+      onPointerSignal: (_) => showControls(),
+      child: _CallActivityScope(notifier: hidden, child: widget.child),
+    ),
+  );
+}
+
+class _CallActivityScope extends InheritedNotifier<ValueNotifier<bool>> {
+  const _CallActivityScope({required super.notifier, required super.child});
+}
+
+class CallChrome extends StatelessWidget {
+  final Widget child;
+  final bool top;
+  const CallChrome({super.key, required this.child, this.top = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final hidden =
+        context
+            .dependOnInheritedWidgetOfExactType<_CallActivityScope>()
+            ?.notifier
+            ?.value ??
+        false;
+    final duration = PvpMotion.duration(
+      context,
+      hidden ? PvpMotion.travel : PvpMotion.response,
+    );
+    return IgnorePointer(
+      ignoring: hidden,
+      child: ExcludeSemantics(
+        excluding: hidden,
+        child: AnimatedSlide(
+          offset: hidden ? Offset(0, top ? -.06 : .06) : Offset.zero,
+          duration: duration,
+          curve: PvpMotion.curve,
+          child: AnimatedOpacity(
+            opacity: hidden ? 0 : 1,
+            duration: duration,
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SharingIndicator extends StatelessWidget {
+  final VoidCallback onStop;
+  const SharingIndicator({super.key, required this.onStop});
+
+  @override
+  Widget build(BuildContext context) => Align(
+    alignment: Alignment.topCenter,
+    child: Padding(
+      padding: const EdgeInsets.all(12),
+      child: PvpArrival(
+        identity: 'screen sharing',
+        distance: 4,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: pvpSurface,
+            border: Border.all(color: pvpMuted),
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const PvpGlyph('screen-share', size: 18),
+                const SizedBox(width: 8),
+                const Flexible(child: Text('Sharing screen')),
+                TextButton(
+                  onPressed: onStop,
+                  child: const Text('Stop sharing'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 /// A stable video child whose size changes without replacing the renderer.
 class ExpandableSelfPreview extends StatefulWidget {
   final Widget child;
@@ -88,11 +244,12 @@ class _ExpandableSelfPreviewState extends State<ExpandableSelfPreview> {
             label: expanded ? 'Shrink your preview' : 'Expand your preview',
             child: Tooltip(
               message: expanded ? 'Shrink your preview' : 'Expand your preview',
-              child: InkWell(
-                onTap: () => setState(() => expanded = !expanded),
-                child: FocusableActionDetector(
+              child: PvpTouch(
+                child: InkWell(
                   mouseCursor: SystemMouseCursors.click,
+                  onTap: () => setState(() => expanded = !expanded),
                   child: AnimatedContainer(
+                    curve: PvpMotion.curve,
                     duration: PvpMotion.duration(context, PvpMotion.travel),
                     width: width,
                     height: (width * .65).clamp(
@@ -327,19 +484,21 @@ class CallDock extends StatelessWidget {
   final List<Widget> children;
   const CallDock({super.key, required this.children});
   @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(12),
-    decoration: BoxDecoration(
-      color: pvpSurface,
-      border: Border.all(color: const Color(0x20ffffff)),
-      borderRadius: BorderRadius.circular(25),
-    ),
-    child: Wrap(
-      alignment: WrapAlignment.center,
-      crossAxisAlignment: WrapCrossAlignment.start,
-      spacing: 12,
-      runSpacing: 12,
-      children: children,
+  Widget build(BuildContext context) => CallChrome(
+    child: Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: pvpSurface,
+        border: Border.all(color: const Color(0x20ffffff)),
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.start,
+        spacing: 12,
+        runSpacing: 12,
+        children: children,
+      ),
     ),
   );
 }

@@ -3,9 +3,9 @@ import { captureList, moveNavigation, reveal } from '/motion.js';
 import { BandwidthMeter, bandwidthLabel, bandwidthControls, validCaps, videoCap, saverCaps, connectionIsMetered, saverLimit } from './bandwidth.js';
 import { MeetingLinks, meetingId } from '/meetings.js';
 import { GroupCalls } from '/group-calls.js';
-import { inspectReport, endpointLabel, mediaCaptureCommand } from '/inspector.js';
+import { inspectReport, publicObservation } from '/inspector.js';
 import { isRelay, requireCandidate, requireEncryptedSdp, safetyCode, inspectEncryptionReport } from '/security.js';
-import { bindSelfPreview, resetStage, bindViewport } from './call-stage.js';
+import { bindSelfPreview, resetStage, bindViewport, bindCallControls } from './call-stage.js';
 import { mountTrustPanel } from './trust.js';
 import { RemotePlayback } from './playback.js';
 import { monitorLocalMicrophone, replaceMicrophone, OutboundVideoStats, selectedQuality, sentVideoLabel } from './media-health.js';
@@ -189,9 +189,9 @@ function networkEvent(detail, source = 'Application event') {
 }
 function connectionReport() {
   return { schemaVersion: 1, exportedAt: new Date().toISOString(), client: 'PVP browser',
-    notice: 'App-reported observations, not an independent packet capture. Contains network addresses. No credentials or media.',
-    signaling: { source: 'Browser WebSocket URL and state', service: state.ws?.url || null, connected: state.ws?.readyState === WebSocket.OPEN, socket: null },
-    media: state.call?.evidence || null, events: state.call?.networkEvents || [] };
+    notice: 'App-reported connection statistics with network addresses omitted.',
+    signaling: { source: 'Browser WebSocket state', connected: state.ws?.readyState === WebSocket.OPEN },
+    media: publicObservation(state.call?.evidence), events: state.call?.networkEvents || [] };
 }
 function inspectorTable(id, headers, rows) {
   const table = element('table'), head = element('tr');
@@ -210,19 +210,14 @@ function renderInspector() {
   $('inspector-sampled').textContent = d ? `${d.source} · sampled ${d.sampledAt} · ${age.toFixed(1)}s ago${fresh ? '' : ' · STALE'}` : 'No WebRTC statistics available yet. No packet capture is running.';
   $('inspector-route').textContent = fresh && d?.direct ? 'Direct media path · WebRTC reported' : 'Media path not yet verified';
   document.querySelector('.connection-arrow').textContent = fresh && d?.selectedPairId ? '↔' : '…';
-  $('inspector-local').textContent = endpointLabel(d?.local); $('inspector-remote').textContent = endpointLabel(d?.remote);
   $('inspector-local-type').textContent = d?.local?.candidateType || 'Type unavailable'; $('inspector-remote-type').textContent = d?.remote?.candidateType || 'Type unavailable';
-  $('inspector-transport').textContent = `${d?.connectionState || 'unavailable'} · ${d?.local?.protocol || 'protocol unavailable'} · selected pair ${d?.selectedPairId || 'unavailable'} · ${d?.selectionSource || 'selection unavailable'}`;
+  $('inspector-transport').textContent = `${d?.connectionState || 'unavailable'} · ${d?.local?.protocol || 'protocol unavailable'} · ${d?.selectionSource || 'selection unavailable'}`;
   $('inspector-counters').textContent = `Sent ${d?.bytesSent ?? 'unavailable'} bytes · received ${d?.bytesReceived ?? 'unavailable'} bytes · RTT ${d?.rttSeconds == null ? 'unavailable' : Math.round(d.rttSeconds * 1000) + ' ms'}`;
   $('inspector-encryption').textContent = `DTLS ${d?.dtlsState || 'unavailable'} · ${d?.dtlsCipher || 'cipher unavailable'} · SRTP ${d?.srtpCipher || 'cipher unavailable'}. Relay policy: disabled. Observed relay: ${fresh && d?.direct ? 'none in selected pair' : 'path not verified'}.`;
-  $('inspector-signaling').textContent = `${state.ws?.url || 'URL unavailable'} · ${state.ws?.readyState === WebSocket.OPEN ? 'connected' : 'disconnected'}`;
-  $('inspector-servers').textContent = `Configured STUN URLs (configuration): ${d?.configuredServers?.join(', ') || 'unavailable'}`;
-  inspectorTable('inspector-candidates', ['Side', 'Type', 'Reported endpoint', 'Protocol', 'Reported STUN URL'], (d?.candidates || []).map(c => [c.side, c.candidateType, endpointLabel(c), c.protocol, c.url]));
-  inspectorTable('inspector-pairs', ['Path', 'State', 'Local ↔ remote', 'STUN requests sent / received', 'Responses sent / received'], (d?.pairs || []).map(p => [p.selected ? 'SELECTED' : 'TESTED', p.state, `${endpointLabel(p.local)} ↔ ${endpointLabel(p.remote)}`, `${p.requestsSent ?? 'unavailable'} / ${p.requestsReceived ?? 'unavailable'}`, `${p.responsesSent ?? 'unavailable'} / ${p.responsesReceived ?? 'unavailable'}`]));
+  $('inspector-signaling').textContent = `${state.ws?.readyState === WebSocket.OPEN ? 'connected' : 'disconnected'}`;
+  inspectorTable('inspector-candidates', ['Side', 'Type', 'Protocol'], (d?.candidates || []).map(c => [c.side, c.candidateType, c.protocol]));
+  inspectorTable('inspector-pairs', ['Path', 'State', 'Local ↔ remote', 'STUN requests sent / received', 'Responses sent / received'], (d?.pairs || []).map(p => [p.selected ? 'SELECTED' : 'TESTED', p.state, `${p.local?.candidateType ?? 'unavailable'} ↔ ${p.remote?.candidateType ?? 'unavailable'}`, `${p.requestsSent ?? 'unavailable'} / ${p.requestsReceived ?? 'unavailable'}`, `${p.responsesSent ?? 'unavailable'} / ${p.responsesReceived ?? 'unavailable'}`]));
   inspectorTable('inspector-media', ['Direction', 'Kind', 'RTP packets', 'Bytes', 'Packets lost'], (d?.media || []).map(r => [r.direction, r.kind, r.packets, r.bytes, r.packetsLost]));
-  const command = fresh ? mediaCaptureCommand(d, $('inspector-platform').value) : null;
-  $('inspector-command').textContent = command || 'Filter unavailable: waiting for a current literal peer IP, port and protocol.';
-  $('copy-inspector-command').disabled = !command;
   $('inspector-events').replaceChildren(...(state.call?.networkEvents || []).slice().reverse().map(e => element('p', '', `${e.at} · ${e.source} · ${e.detail}`)));
 }
 
@@ -744,7 +739,7 @@ async function createPeer(call) {
   // Intentionally STUN only. There is no TURN fallback and no media server.
   const pc = createPeerConnection(); state.pc = pc; state.candidates = [];
   networkEvent('Peer connection created; STUN configured, no TURN');
-  clearInterval(state.stats); state.stats = setInterval(() => updateStats().catch(() => { if (state.pc === pc && state.call === call) { call.evidence = null;call.proof=null;$('call-trust').textContent='Connection evidence'; $('call-network').textContent = 'Route unavailable'; renderInspector(); } }), 1000);
+  clearInterval(state.stats); state.stats = setInterval(() => updateStats().catch(() => { if (state.pc === pc && state.call === call) { call.evidence = null;call.proof=null;labeledAction($('call-trust'),'shield-check','Connection evidence'); $('call-network').textContent = 'Route unavailable'; renderInspector(); } }), 1000);
   pc.oniceconnectionstatechange = () => { if (state.pc === pc && state.call === call) networkEvent(`ICE: ${pc.iceConnectionState}`, 'WebRTC event'); };
   pc.onicegatheringstatechange = () => { if (state.pc === pc && state.call === call) networkEvent(`ICE gathering: ${pc.iceGatheringState}`, 'WebRTC event'); };
   state.stream.getAudioTracks().forEach((track) => pc.addTrack(track, state.stream));
@@ -811,9 +806,9 @@ async function updateStats() {
   const proof = await inspectEncryptionReport(report, {localSdp:pc.localDescription?.sdp,remoteSdp:pc.remoteDescription?.sdp,connectionState:pc.connectionState});
   if(state.pc!==pc||state.call!==call)return;call.proof=proof;
   if(proof.failure){toast('Connection security check failed. The call has been stopped.',true);hangup();return;}
-  $('call-trust').textContent=proof.encryptionState==='confirmed'?'Encryption observed':'Connection evidence';
+  labeledAction($('call-trust'),'shield-check',proof.encryptionState==='confirmed'?'Encryption observed':'Connection evidence');
   const evidence = inspectReport(report, { connectionState: pc.connectionState, iceState: pc.iceConnectionState, configuredServers: pc.getConfiguration().iceServers.flatMap(s => Array.isArray(s.urls) ? s.urls : [s.urls]) });
-  if (evidence.selectedPairId !== call.evidence?.selectedPairId) networkEvent(`Selected path: ${endpointLabel(evidence.local)} ↔ ${endpointLabel(evidence.remote)}`, 'WebRTC statistics');
+  if (evidence.selectedPairId !== call.evidence?.selectedPairId) networkEvent('Selected media path changed', 'WebRTC statistics');
   call.meter.sample(report);$('call-bandwidth').textContent=bandwidthLabel([call.meter.rate]);
   call.videoStats ||= new OutboundVideoStats(); call.videoStats.sample(report); refreshMediaHealth();
   call.evidence = evidence; renderInspector();
@@ -827,7 +822,7 @@ function cleanupCall(message) {
   resetStage($('call-view'));
   if(trustScope==='direct'&&$('trust-dialog').open)$('trust-dialog').close();
   $('inspector-dialog').close();
-  for (const id of ['inspector-local', 'inspector-remote', 'inspector-command', 'inspector-events', 'inspector-candidates', 'inspector-pairs', 'inspector-media', 'inspector-signaling', 'inspector-transport', 'inspector-counters', 'inspector-encryption', 'inspector-servers', 'inspector-sampled']) $(id).replaceChildren();
+  for (const id of ['inspector-local-type', 'inspector-remote-type', 'inspector-events', 'inspector-candidates', 'inspector-pairs', 'inspector-media', 'inspector-signaling', 'inspector-transport', 'inspector-counters', 'inspector-encryption', 'inspector-sampled']) $(id).replaceChildren();
   stopRinging(); messageChain = Promise.resolve(); state.signalCount = 0;
   clearTimeout(state.callTimeout); clearInterval(state.stats); state.stats = null; state.lastStats = null; state.candidates = [];
   releaseDisplay(state.call); state.call?.notification?.close(); state.call?.playback?.dispose(); state.call = null; state.pc?.close(); state.pc = null;
@@ -968,12 +963,6 @@ $('end-call').onclick = hangup; $('toggle-mic').onclick = () => toggleTrack('aud
 $('call-quality').onclick = () => {closeSheet($('call-more-dialog'));$('call-settings').hidden=false;openSheet($('call-audio-dialog'),$('call-more'));}; $('close-call-settings').onclick = () => closeSheet($('call-audio-dialog'));
 $('connection-inspector').onclick = () => {closeSheet($('call-more-dialog')); if(state.call?.caps)bandwidthControls($('connection-bandwidth-controls'),state.call.caps,(direction,source,value)=>{state.call.caps[direction][source]=value;sendBandwidth(state.call);applyQuality().catch(e=>toast(e.message,true));});$('inspector-dialog').showModal(); renderInspector(); };
 $('close-inspector').onclick = () => $('inspector-dialog').close();
-$('inspector-platform').onchange = renderInspector;
-$('copy-inspector-command').onclick = async () => {
-  renderInspector(); if ($('copy-inspector-command').disabled) return;
-  try { await navigator.clipboard.writeText($('inspector-command').textContent); toast('tcpdump command copied.'); }
-  catch { toast('Select and copy the command above.'); }
-};
 $('export-inspector').onclick = () => {
   renderInspector();
   const url = URL.createObjectURL(new Blob([JSON.stringify(connectionReport(), null, 2)], { type: 'application/json' }));
@@ -1267,7 +1256,7 @@ async function setGroupDevice(kind,id){
 }
 function syncDirectControls(){
   const call=state.call;if(!call)return;
-  const proofAge=Date.now()-Date.parse(call.proof?.sampledAt||'');$('call-trust').textContent=state.pc?.connectionState==='connected'&&proofAge>=0&&proofAge<4000&&call.proof.encryptionState==='confirmed'?'Encryption observed':'Connection evidence';
+  const proofAge=Date.now()-Date.parse(call.proof?.sampledAt||'');labeledAction($('call-trust'),'shield-check',state.pc?.connectionState==='connected'&&proofAge>=0&&proofAge<4000&&call.proof.encryptionState==='confirmed'?'Encryption observed':'Connection evidence');
   const mic=state.stream?.getAudioTracks().some(t=>t.enabled&&t.readyState==='live'),camera=state.stream?.getVideoTracks().some(t=>t.enabled&&t.readyState==='live');
   callAction($('toggle-mic'),{glyph:mic?'mic':'mic-off',label:'Microphone',action:mic?'Mute':'Unmute',active:mic,pressed:mic});
   callAction($('toggle-camera'),{glyph:camera?'video':'video-off',label:'Camera',action:camera?'Turn camera off':'Turn camera on',active:camera,pressed:camera,busy:!!state.cameraPromise});
@@ -1282,8 +1271,14 @@ function syncDirectControls(){
   $('direct-self-preview').hidden=!camera&&!call.displayStream;
   syncCallShell();
 }
+const syncIdleControls = bindCallControls();
 function syncCallShell(){
   const ongoing=!$('call-view').hidden||!$('group-view').hidden,browsing=workspace.classList.contains('browsing');document.body.classList.toggle('call-stage',ongoing&&!browsing);document.body.classList.toggle('ongoing-call',ongoing);
+  const activeStage = !browsing && (state.pc?.connectionState === 'connected' && !$('call-view').hidden
+    ? $('call-view')
+    : !$('group-view').hidden && groups.members.length > 1 && [...groups.links.values()].some(link => link.pc.connectionState === 'connected')
+      ? $('group-view') : null);
+  syncIdleControls(activeStage || null);
   $('call-return-strip').hidden=!ongoing||!browsing;
   if(!ongoing&&$('trust-dialog').open)$('trust-dialog').close();
   const sharing=ongoing&&(!$('call-view').hidden&&$('call-view').dataset.sharing==='true'||!$('group-view').hidden&&$('group-view').dataset.sharing==='true');labeledAction($('call-return-strip'),sharing?'screen-share':'phone-off',sharing?'Sharing screen · Return to call':'Return to call');
@@ -1345,8 +1340,8 @@ for(const [scope,parent] of [['direct',$('call-settings')],['group',$('group-adv
   const detail=document.createElement('p');detail.className='quality-details';detail.id=scope==='direct'?'call-quality-detail':'group-quality-detail';
   parent.prepend(detail);qualityDetails[scope]=detail;
 }
-$('call-quality-summary').onclick=()=>$('call-quality').click();
-$('group-quality-summary').onclick=()=>$('group-audio-open').click();
+$('call-settings').prepend($('call-quality-summary'));
+$('group-advanced').prepend($('group-quality-summary'));
 let nudgeDismissedUntil=0,microphoneStatusTimer;
 document.addEventListener('pvp-media-health',event=>{
   const health=event.detail;

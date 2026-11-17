@@ -22,6 +22,7 @@ PrivateTmp=true
 PrivateDevices=true
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 UMask=0077
+LimitCORE=0
 MemoryMax=150M
 
 [Install]

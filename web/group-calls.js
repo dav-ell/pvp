@@ -1,10 +1,10 @@
-import { syncPairStage, resetStage } from './call-stage.js';
+import { syncPairStage, resetStage, fitGroupGrid } from './call-stage.js';
 import { createPeerConnection } from '../packages/pvp-call/src/mesh.js';
 import { BandwidthMeter, bandwidthLabel, bandwidthControls, validCaps, videoCap, saverCaps } from './bandwidth.js';
 import { MeetingChat } from '/meeting-chat.js';
 import { cameraQuality, groupVideoKbps, screenVideoKbps } from './group-quality.js';
 import { requireEncryptedSdp, requireCandidate, isRelay, safetyCode, inspectEncryptionReport } from '/security.js';
-import { inspectReport, endpointLabel, mediaCaptureCommand } from '/inspector.js';
+import { inspectReport, publicObservation } from '/inspector.js';
 import { VideoOverlay } from '/group-video.js';
 import { RemotePlayback } from './playback.js';
 import { icon, callAction, rowAction, labeledAction, openSheet, closeSheet, bindSheet, copied, participantAvatar, stateBadge, videoState } from './ui.js';
@@ -19,6 +19,7 @@ export class GroupCalls {
     this.connectionCaps = new Map(); this.messageChain = Promise.resolve(); this.earlyCandidates = new Map(); this.maximized = null;
     this.display = null; this.shareBusy = false; this.shareToken = 0; this.inspectId = null; this.muted = !this.o.stream()?.getAudioTracks().some(t=>t.enabled&&t.readyState==='live'); this.paused = false;
     this.timer = setInterval(() => this.sample().catch(e => this.o.toast(e.message, true)), 1000);
+    new ResizeObserver(() => fitGroupGrid($('group-view'), this.members.length)).observe($('group-media'));
     this.mobile=matchMedia('(max-width:700px)');this.seenChat=new Set();
     const extra=$('group-desktop-actions'),footer=$('group-more').parentElement;
     const layout=()=>{if(this.mobile.matches)$('group-more-content').prepend(extra);else footer.insertBefore(extra,$('group-more'));this.render();};this.mobile.addEventListener('change',layout);layout();document.addEventListener('visibilitychange',()=>{if($('meeting-chat-dialog').open&&!document.hidden)this.renderChat();if(document.hidden)document.querySelectorAll('.group-tile.speaking').forEach(n=>n.classList.remove('speaking'));});
@@ -31,7 +32,12 @@ export class GroupCalls {
     $('group-connection-open').onclick=()=>{closeSheet($('group-more-dialog'));this.showPeople($('group-more'));};
     $('group-chat-open').onclick=()=>{closeSheet($('group-more-dialog'));openSheet($('meeting-chat-dialog'),this.mobile.matches?$('group-more'):$('group-chat-open'));this.renderChat();};
     $('meeting-chat-dialog').addEventListener('close',()=>this.render());
-    $('group-back').onclick=()=>this.o.browse();
+    $('group-back').onclick=()=>this.maximized?this.maximize(this.maximized):this.o.browse();
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && this.maximized && !document.querySelector('dialog[open]')) {
+        event.preventDefault(); this.maximize(this.maximized);
+      }
+    });
     $('group-solo-invite').onclick=()=>$('group-copy-link').hidden?this.chooseFriends(true):$('group-copy-link').click();
     $('group-people-invite').onclick=()=>$('group-copy-link').hidden?this.chooseFriends(true):$('group-copy-link').click();
     $('group-stop-sharing').onclick=()=>this.stopSharing();
@@ -162,7 +168,7 @@ export class GroupCalls {
       if (!link || link.generation !== msg.generation) return;
       for(const candidate of this.earlyCandidates.get(key)||[])link.chain=link.chain.then(()=>this.receive(link,candidate));
       this.earlyCandidates.delete(key);
-      link.chain = link.chain.then(() => this.receive(link, msg.payload)).catch(e => this.linkFailure(link, e));
+      link.chain = link.chain.then(() => this.receive(link, msg.payload)).catch(() => this.linkFailure(link));
     }
   }
   async reconcile() {
@@ -195,7 +201,7 @@ export class GroupCalls {
     pc.ontrack = e => { if (!valid()) return; if (!link.remote.getTracks().some(t => t.id === e.track.id)) link.remote.addTrack(e.track); this.applyModeration(); this.render(); this.play(link); };
     pc.onconnectionstatechange = () => { if (!valid()) return; this.event(`Peer ${id}: ${pc.connectionState}`); this.render(); if(pc.connectionState==='connected'){link.error=null;clearTimeout(link.retry);link.retry=null;link.disconnectedAt=null;}
       if(pc.connectionState==='disconnected')link.disconnectedAt ||= performance.now();
-      if (pc.connectionState === 'failed') this.linkFailure(link, new Error('Direct peer connection failed')); };
+      if (pc.connectionState === 'failed') this.linkFailure(link); };
     pc.ondatachannel = e => this.channel(link, e.channel);
     if (initiator) {
       this.channel(link, pc.createDataChannel('pvp-group-chat'));
@@ -297,8 +303,8 @@ export class GroupCalls {
         if(this.links.get(link.id)!==link)return;
         if(link.proof.failure){this.leave('security');this.o.toast('Connection security check failed. The room connection has been stopped.',true);return;}
         link.evidence = inspectReport(stats, {connectionState: link.pc.connectionState, iceState: link.pc.iceConnectionState, configuredServers: STUN});
-        if(link.pc.connectionState==='disconnected'&&performance.now()-link.disconnectedAt>8000)this.linkFailure(link,new Error('Peer disconnected'));
-        if(link.pc.connectionState==='connecting'&&performance.now()-link.openedAt>15000)this.linkFailure(link,new Error('Peer connection timed out'));
+        if(link.pc.connectionState==='disconnected'&&performance.now()-link.disconnectedAt>8000)this.linkFailure(link);
+        if(link.pc.connectionState==='connecting'&&performance.now()-link.openedAt>15000)this.linkFailure(link);
         const audio = [...stats.values()].find(s => s.type === 'inbound-rtp' && s.kind === 'audio');
         const delta = audio && link.energy ? (audio.totalAudioEnergy - link.energy.value) / Math.max(.001, audio.totalSamplesDuration - link.energy.duration) : 0;
         link.energy = audio ? {value: audio.totalAudioEnergy || 0, duration: audio.totalSamplesDuration || 0} : null;
@@ -307,9 +313,9 @@ export class GroupCalls {
     }));
     await this.limits(); this.render(); this.renderInspector();
   }
-  linkFailure(link, error) {
+  linkFailure(link) {
     if (this.links.get(link.id) !== link) return;
-    this.event(`Peer ${link.id}: ${error.message}`); link.error = 'Direct connection unavailable'; link.overlayReady = false;
+    this.event(`Peer ${link.id}: direct connection unavailable`); link.error = 'Direct connection unavailable'; link.overlayReady = false;
     this.overlay?.refresh(); this.render();
     if (this.o.user().id < link.id && link.generation < 8 && !link.retry) link.retry = setTimeout(async () => {
       if (!this.joined || this.links.get(link.id) !== link) return;
@@ -401,9 +407,11 @@ export class GroupCalls {
     $('group-roster').textContent = names; $('group-invite-roster').textContent = names;
     $('group-join').disabled = this.pending; $('group-invite-detail').textContent = 'Joining authorizes encrypted connections to these participants, including people outside your friends list. Peers can see your network address.';
     if (!this.joined) return;
+    $('group-view').classList.toggle('participant-focused', !!this.maximized);
     $('group-grid').classList.toggle('maximized',!!this.maximized);
     $('group-grid').querySelector('.self').classList.toggle('maximized',this.maximized==='self');
-    let selfMax=$('group-self-maximize');if(!selfMax){selfMax=make('button','Maximize','group-small-button');selfMax.id='group-self-maximize';selfMax.onclick=()=>this.maximize('self');$('group-self-label').parentElement.append(selfMax);}labeledAction(selfMax,this.maximized==='self'?'minimize':'maximize',this.maximized==='self'?'Restore':'Maximize');selfMax.setAttribute('aria-label',this.maximized==='self'?'Restore self view':'Expand self view');
+    let selfMax=$('group-self-maximize');if(!selfMax){selfMax=make('button','Maximize','participant-expand');selfMax.type='button';selfMax.id='group-self-maximize';selfMax.onclick=()=>this.maximize('self');$('group-self-label').closest('.group-tile').append(selfMax);}labeledAction(selfMax,this.maximized==='self'?'minimize':'maximize',this.maximized==='self'?'Restore':'Maximize');selfMax.setAttribute('aria-label',this.maximized==='self'?'Back to grid':'Expand your video');
+    selfMax.setAttribute('aria-expanded', String(this.maximized === 'self'));
     $('group-quality').value=this.o.preferences().preset;
     for(const preset of ['saver','balanced','studio']){const defaults={saver:{preset,resolution:360,video:400},balanced:{preset,resolution:720,video:1800},studio:{preset,resolution:1080,video:4000}};const p=defaults[preset],kbps=groupVideoKbps(p,this.members.length);$('group-quality').querySelector(`[value=${preset}]`).textContent=`${preset==='saver'?'Data saver':preset==='studio'?'High quality':'Balanced'} · ${preset==='balanced'&&this.members.length<=8?'480p target · ':''}${(kbps/1000).toFixed(1)} Mbps cap`; }
     $('group-bandwidth').textContent=bandwidthLabel([...this.links.values()].map(l=>l.meter.rate));
@@ -412,7 +420,11 @@ export class GroupCalls {
     $('group-add').hidden=false;
     $('group-quality').closest('label').hidden=this.paused&&!this.display;
     $('group-view').classList.toggle('voice-only',this.paused&&!this.display&&![...this.links.values()].some(l=>l.state.paused===false));
-    $('group-heading').textContent=this.personalRoom?'Your drop-in room':this.room.name||(this.room.voice?'Drop-in room':'Conversation');$('group-view').dataset.count=String(this.members.length);$('group-solo-invite').hidden=this.members.length!==1;$('group-grid').classList.toggle('solo',this.members.length===1);$('group-grid').classList.toggle('duo',this.members.length===2);
+    $('group-heading').textContent=this.maximized
+      ? this.maximized === 'self' ? 'You' : this.members.find(member => member.id === this.maximized)?.display_name || 'Participant'
+      : this.personalRoom ? 'Your drop-in room' : this.room.name || (this.room.voice ? 'Drop-in room' : 'Conversation');
+    labeledAction($('group-back'), 'chevron-left', this.maximized ? 'Back to grid' : 'Back to rooms');
+    $('group-back').setAttribute('aria-label', this.maximized ? 'Back to grid' : 'Back to rooms');$('group-view').dataset.count=String(this.members.length);$('group-solo-invite').hidden=this.members.length!==1;$('group-grid').classList.toggle('solo',this.members.length===1);$('group-grid').classList.toggle('duo',this.members.length===2);
     $('group-mic').disabled=this.moderatorMuted;this.renderControls();
     const local = $('group-self-video'), outgoing=this.outgoing(), videoTrack=outgoing?.getVideoTracks()[0]?.id||'';
     // An initially empty listen-only stream can gain its first camera track.
@@ -420,8 +432,10 @@ export class GroupCalls {
     if (local.srcObject !== outgoing || local._sourceVideoTrack !== videoTrack) { local._sourceVideoTrack=videoTrack;local.srcObject = outgoing; local.play().catch(() => {}); } local.classList.toggle('screen-sharing', !!this.display);
     $('group-self-video').closest('.group-tile').dataset.initials=(this.o.user()?.display_name||'You').trim().split(/\s+/).slice(0,2).map(n=>n[0]).join('').toUpperCase();
     const selfTile=$('group-self-video').closest('.group-tile');selfTile.dataset.localCapture=String(!this.paused);participantAvatar(selfTile,this.o.user()?.display_name||'You');stateBadge(selfTile,{muted:this.muted,listening:!this.o.stream()?.getAudioTracks().length,adminMuted:this.moderatorMuted,sharing:!!this.display});videoState(selfTile,local,!this.paused);selfTile.classList.toggle('speaking',!this.muted&&this.o.level()>.025&&!document.hidden);
-    syncPairStage($('group-view'),this.members.length);
-    const proofs=[...this.links.values()].map(l=>l.proof);$('group-trust').textContent=proofs.length&&proofs.every(p=>p?.encryptionState==='confirmed'&&Date.now()-Date.parse(p.sampledAt)>=0&&Date.now()-Date.parse(p.sampledAt)<4000)&&[...this.links.values()].every(l=>l.pc.connectionState==='connected')?'Encryption observed':'Connection evidence';
+    syncPairStage($('group-view'), this.maximized ? 0 : this.members.length);
+    fitGroupGrid($('group-view'), this.members.length);
+    selfTile.inert = !!this.maximized && this.maximized !== 'self';
+    const proofs=[...this.links.values()].map(l=>l.proof);labeledAction($('group-trust'),'shield-check',proofs.length&&proofs.every(p=>p?.encryptionState==='confirmed'&&Date.now()-Date.parse(p.sampledAt)>=0&&Date.now()-Date.parse(p.sampledAt)<4000)&&[...this.links.values()].every(l=>l.pc.connectionState==='connected')?'Encryption observed':'Connection evidence');
     $('group-self-label').textContent = `${this.o.user()?.display_name||'You'}${this.members.length===1?'':' · You'}${this.self?.hand_raised?' · Hand raised':''}`;
     for (const member of this.members) {
       if (member.id === this.o.user().id) continue;
@@ -432,15 +446,20 @@ export class GroupCalls {
         const canvas = make('canvas'); canvas.id = `group-canvas-${member.id}`; canvas.hidden = true;
         const caption = make('div', undefined, 'group-tile-caption'), label = make('span'), inspect = make('button', 'Connection', 'group-small-button'); inspect.onclick = async () => { this.inspectId = member.id; bandwidthControls($('group-bandwidth-controls'),this.caps(member.id),(direction,source,value)=>{this.caps(member.id)[direction][source]=value;this.broadcastState();this.overlay?.refresh().then(()=>this.limits()).catch(e=>this.o.toast(e.message,true));}); $('group-inspector').showModal(); await this.sample(); this.renderInspector(); };
         const pin = make('button', 'Pin', 'group-small-button'); pin.onclick = () => { this.pinned = this.pinned === member.id ? null : member.id; this.render(); };
-        const maximize=make('button','Maximize','group-small-button');maximize.dataset.maximize='';maximize.onclick=()=>this.maximize(member.id);
-        for(const [button,glyph,text]of [[pin,'pin','Pin'],[maximize,'maximize','Maximize'],[inspect,'wifi','Connection']]){labeledAction(button,glyph,text);button.setAttribute('aria-label',text+' '+member.display_name);button.title=text;}caption.append(label,pin,maximize,inspect); tile.append(video, canvas, caption); $('group-grid').append(tile);
+        const maximize=make('button','Maximize','participant-expand');maximize.type='button';maximize.dataset.maximize='';maximize.onclick=()=>this.maximize(member.id);
+        for(const [button,glyph,text]of [[pin,'pin','Pin'],[maximize,'maximize','Maximize'],[inspect,'wifi','Connection']]){labeledAction(button,glyph,text);button.setAttribute('aria-label',text+' '+member.display_name);button.title=text;}caption.append(label,pin,inspect); tile.append(video, canvas, caption,maximize); $('group-grid').append(tile);
       }
       const link = this.links.get(member.id); const video = $(`group-video-${member.id}`);
       if (link && video.srcObject !== link.remote && link.remote.getTracks().length) { video.srcObject = link.remote; this.play(link); }
       if(link?.state.paused){const canvas=tile.querySelector('canvas');if(!canvas.hidden){const ctx=canvas.getContext('2d');ctx.fillStyle='#122a21';ctx.fillRect(0,0,canvas.width,canvas.height);}}
-      tile.classList.toggle('maximized',this.maximized===member.id);labeledAction(tile.querySelector('[data-maximize]'),this.maximized===member.id?'minimize':'maximize',this.maximized===member.id?'Restore':'Maximize');
+      tile.classList.toggle('maximized',this.maximized===member.id);
+      tile.inert = !!this.maximized && this.maximized !== member.id;
+      const expand = tile.querySelector('[data-maximize]');
+      expand.setAttribute('aria-label', this.maximized === member.id ? 'Back to grid' : 'Expand ' + member.display_name);
+      expand.setAttribute('aria-expanded', String(this.maximized === member.id));
+      labeledAction(tile.querySelector('[data-maximize]'),this.maximized===member.id?'minimize':'maximize',this.maximized===member.id?'Restore':'Maximize');
       tile.classList.toggle('speaking', !!link?.speaking&&link?.pc.connectionState==='connected'&&!document.hidden); tile.classList.toggle('pinned', this.pinned === member.id);
-      tile.querySelector('span').textContent=member.display_name+(member.hand_raised?' · Hand raised':'');participantAvatar(tile,member.display_name);stateBadge(tile,{muted:link?.state.muted,listening:link?.state.listening,adminMuted:member.moderator_muted,sharing:link?.state.sharing});videoState(tile,video,link?.state.paused===false);
+      tile.querySelector('.group-tile-caption>span').textContent=member.display_name+(member.hand_raised?' · Hand raised':'');participantAvatar(tile,member.display_name);stateBadge(tile,{muted:link?.state.muted,listening:link?.state.listening,adminMuted:member.moderator_muted,sharing:link?.state.sharing});videoState(tile,video,link?.state.paused===false);
 
     }
   }
@@ -456,12 +475,12 @@ export class GroupCalls {
     $('group-connection-bandwidth').textContent=bandwidthLabel(link?[link.meter.rate]:[]);
     $('group-bandwidth-status').textContent=link?.bandwidthSupported?'Receive limits supported by this participant.':'Waiting for receive-limit support from this participant. Older clients may not honor receive limits.';
     $('group-inspector-title').textContent = `Connection to ${member?.display_name || 'participant'}`;
-    $('group-inspector-detail').textContent = `WebRTC observations, not packet capture. ${d?.direct && link.pc.connectionState==='connected' && Date.now()-Date.parse(d.sampledAt)<4000 ? 'Selected direct peer route' : 'Route unverified'}\nObserved: ${d?.sampledAt || 'unavailable'}\nLocal: ${endpointLabel(d?.local)}\nRemote: ${endpointLabel(d?.remote)}\nDTLS: ${d?.dtlsState || 'unavailable'} · ${d?.dtlsCipher || 'unavailable'} · ${d?.srtpCipher || 'unavailable'}\nSent ${d?.bytesSent ?? 'unavailable'} bytes · received ${d?.bytesReceived ?? 'unavailable'} bytes\nPair certificate code: ${link?.code || 'unavailable'}\n${link?.receivingOverlay ? (this.videoForwarder(link)?`Video source ${link.id}; immediate forwarder ${this.videoForwarder(link)}. Forwarded encrypted content is authenticated separately from hop transport.`:`Video received directly from source ${link.id} as encrypted frames. Audio uses this direct link.`) : 'Video and audio use this direct link.'}\n${mediaCaptureCommand(d, 'macos') || 'Capture filter unavailable.'}`;
+    $('group-inspector-detail').textContent = `WebRTC observations, not packet capture. ${d?.direct && link.pc.connectionState==='connected' && Date.now()-Date.parse(d.sampledAt)<4000 ? 'Selected direct peer route' : 'Route unverified'}\nObserved: ${d?.sampledAt || 'unavailable'}\nPath types: ${d?.local?.candidateType ?? 'unavailable'} ↔ ${d?.remote?.candidateType ?? 'unavailable'}\nDTLS: ${d?.dtlsState || 'unavailable'} · ${d?.dtlsCipher || 'unavailable'} · ${d?.srtpCipher || 'unavailable'}\nSent ${d?.bytesSent ?? 'unavailable'} bytes · received ${d?.bytesReceived ?? 'unavailable'} bytes\nPair certificate code: ${link?.code || 'unavailable'}\n${link?.receivingOverlay ? (this.videoForwarder(link)?`Video source ${link.id}; immediate forwarder ${this.videoForwarder(link)}. Forwarded encrypted content is authenticated separately from hop transport.`:`Video received directly from source ${link.id} as encrypted frames. Audio uses this direct link.`) : 'Video and audio use this direct link.'}`;
   }
   async exportReport() {
     await this.sample();
-    const report = {schemaVersion: 2, client: 'PVP browser group call', exportedAt: new Date().toISOString(), notice: 'Observed application/engine data; not an independent packet capture. Includes peer network addresses.', roomId: this.room?.room_id, revision: this.room?.revision,
-      peers: [...this.links.values()].map(l => ({peerId: l.id, media: l.evidence, certificateCode: l.code, receivingEncodedVideo: !!l.receivingOverlay, receivingForwardedVideo: !!this.videoForwarder(l), forwarder: this.videoForwarder(l), overlay: {forwardedBytes: l.forwardedBytes, sentBytes: l.sentBytes, receivedBytes: l.receivedBytes, decodedFrames: l.frames}})), events: this.events};
+    const report = {schemaVersion: 2, client: 'PVP browser group call', exportedAt: new Date().toISOString(), notice: 'App-reported connection statistics with network addresses omitted.', roomId: this.room?.room_id, revision: this.room?.revision,
+      peers: [...this.links.values()].map(l => ({peerId: l.id, media: publicObservation(l.evidence), certificateCode: l.code, receivingEncodedVideo: !!l.receivingOverlay, receivingForwardedVideo: !!this.videoForwarder(l), forwarder: this.videoForwarder(l), overlay: {forwardedBytes: l.forwardedBytes, sentBytes: l.sentBytes, receivedBytes: l.receivedBytes, decodedFrames: l.frames}})), events: this.events};
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], {type:'application/json'})), a = make('a'); a.href = url; a.download = `pvp-group-${Date.now()}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   async share() {

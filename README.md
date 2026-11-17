@@ -34,7 +34,7 @@ The browser and Flutter clients open on **Rooms** for both guests and accounts. 
 - Data saver, Balanced, Studio, and custom presets: 360p–1080p, 15–60 fps, outgoing video limits of 128 Kbps–8 Mbps, and audio limits of 24–96 Kbps. Settings apply during calls and persist per account on the device.
 - Camera preview and device selection, microphone activity and selection during calls, microphone mute, camera toggle, live outbound statistics, latency, and call duration.
 - Echo cancellation enabled by default, with a saved toggle in Settings and call controls on Mac and web, including group calls.
-- A live [Connection inspector](docs/CONNECTION-INSPECTOR.md) with reported IPs/ports, selected and tested ICE paths, incoming/outgoing counters, native signaling socket endpoints, local JSON export and endpoint-specific tcpdump commands. Missing addresses are marked unavailable; packet rows are never manufactured.
+- A live [Connection inspector](docs/CONNECTION-INSPECTOR.md) with ICE path types, bandwidth controls, media counters, and local JSON exports that omit network addresses.
 - A professional Mac interface, native menu-bar quick calling, answer/decline notifications, gentle ringing, optional launch at login, window hiding, and automatic network/wake reconnection. The optional web client also supports mobile layouts.
 
 ![Native Mac Rooms — local test accounts](docs/screenshots/native-rooms.png)
@@ -165,3 +165,12 @@ PVP 1.0.6 keeps users signed in across browser visits and Mac restarts, with sec
 In a group call or recurring meeting, use **Chat** for live text, images and arbitrary file attachments. Recipients accept files before encrypted peer transfer; attachments are limited to 100 MiB. Chat is cleared when leaving the call. See [meeting chat](docs/MEETING-CHAT.md).
 
 PVP 1.0.19 introduces the shared Lucide controls, compact call docks, contextual sheets, quieter copy and informative motion across web and Mac. See [implementation and validation](docs/ICON-MOTION-UX.md).
+
+
+### Quiet test runs on macOS
+
+`npm test` uses muted headless Chromium on macOS. WebKit can send synthetic
+call tones to physical speakers, so it is excluded there unless you explicitly
+set `PVP_TEST_WEBKIT=1`. That opt-in may be audible. Linux CI can still run both
+engines. Real native call/capture tests remain separate opt-in commands; do not
+run them on a shared workstation without preparing silent audio output.

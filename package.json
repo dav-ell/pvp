@@ -5,9 +5,10 @@
   "scripts": {
     "dev:recovery": "PVP_RECOVERY=1 PVP_DATABASE=\"${PVP_DATABASE:-fellowship.sqlite}\" cargo run --manifest-path signaling/Cargo.toml",
     "test:recovery": "node --test tests/recovery.mjs",
-    "test": "node --test --test-concurrency=1 tests/network.mjs tests/bandwidth.mjs tests/group-quality.mjs tests/meeting-chat.mjs tests/inspector.mjs tests/media-health.mjs tests/security-proof.mjs tests/rooms-experience.mjs tests/e2e.mjs tests/security.mjs tests/sessions.mjs tests/meetings.mjs tests/raise-hand.mjs tests/guests.mjs tests/guest-links-zoom.mjs tests/mobile-meetings.mjs tests/motion.mjs tests/polish.mjs tests/recovery.mjs",
+    "test": "node --test --test-concurrency=1 tests/network-physics.mjs tests/network.mjs tests/bandwidth.mjs tests/group-quality.mjs tests/meeting-chat.mjs tests/inspector.mjs tests/media-health.mjs tests/security-proof.mjs tests/rooms-experience.mjs tests/e2e.mjs tests/security.mjs tests/sessions.mjs tests/meetings.mjs tests/raise-hand.mjs tests/guests.mjs tests/guest-links-zoom.mjs tests/mobile-meetings.mjs tests/motion.mjs tests/call-layout.mjs tests/polish.mjs tests/recovery.mjs",
     "test:security-proof": "node --test tests/security-proof.mjs",
     "test:browser": "node --test --test-concurrency=1 tests/e2e.mjs",
+    "test:call-layout": "node --test tests/call-layout.mjs",
     "test:motion": "node --test tests/motion.mjs",
     "test:native": "node scripts/test-native.mjs",
     "test:voice:native": "PVP_TEST_VOICE=1 node scripts/test-native-groups.mjs",
@@ -25,7 +26,8 @@
     "sync:brand": "node scripts/sync-brand-tokens.mjs",
     "test:rooms": "node --test tests/rooms-experience.mjs",
     "test:media-health": "node --test tests/media-health.mjs",
-    "test:network": "node --test tests/network.mjs"
+    "test:network": "node --test tests/network-physics.mjs tests/network.mjs",
+    "review:network": "node scripts/network-harness.mjs"
   },
   "devDependencies": {
     "playwright": "^1.56.0"

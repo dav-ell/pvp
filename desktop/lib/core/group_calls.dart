@@ -1315,14 +1315,14 @@ class GroupCalls extends ChangeNotifier {
     'client': 'PVP macOS group call',
     'exportedAt': DateTime.now().toUtc().toIso8601String(),
     'notice':
-        'WebRTC/application observations, not independent packet capture; includes peer network addresses.',
+        'App-reported connection statistics with network addresses omitted.',
     'roomId': id,
     'revision': room?['revision'],
     'peers': links.values
         .map(
           (l) => {
             'peerId': l.id,
-            'media': l.evidence?.data,
+            'media': l.evidence?.publicObservation(),
             'certificateCode': l.code,
             'forwardedBytes': l.forwardedBytes,
             'receivedBytes': l.receivedBytes,

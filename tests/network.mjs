@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {chromium,webkit} from 'playwright';
+import { testBrowsers } from './browser-engines.mjs';
 import {spawn,execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {mkdtemp,rm,mkdir} from 'node:fs/promises';
@@ -36,7 +36,7 @@ async function assertClear(page,label){
   const hits=[];for(const root of document.querySelectorAll('.room-cluster')){const b=root.getBoundingClientRect();for(const r of rects)if(b.left<r.right+2&&b.right>r.left-2&&b.top<r.bottom+2&&b.bottom>r.top-2)hits.push({slot:root.dataset.slot,graph:{x:b.x,y:b.y,w:b.width,h:b.height},copy:{x:r.x,y:r.y,w:r.width,h:r.height}});}return hits;
  });assert.deepEqual(collisions,[],label);
 }
-for(const [engineName,engine]of Object.entries({chromium,webkit}))test(`homepage room network: honest empty state, opt-in live peers, privacy and mobile entry (${engineName})`,{timeout:120000},async()=>{
+for(const [engineName,engine]of Object.entries(testBrowsers))test(`homepage room network: honest empty state, opt-in live peers, privacy and mobile entry (${engineName})`,{timeout:120000},async()=>{
  const temp=await mkdtemp(join(tmpdir(),'pvp-network-'));let service,browser;
  try{
   await promisify(execFile)('cargo',['build','--quiet','--manifest-path','signaling/Cargo.toml']);
@@ -47,19 +47,37 @@ for(const [engineName,engine]of Object.entries({chromium,webkit}))test(`homepage
   home.on('pageerror',e=>errors.push(e.message));await home.goto(base);await home.locator('#network-count').filter({hasText:'No rooms sharing activity'}).waitFor();assert.equal(await home.locator('#room-network').getAttribute('data-source'),'example');assert.equal(await home.locator('#network-motion').isDisabled(),true);
   await home.locator('.room-cluster').first().focus();await home.keyboard.press('Enter');assert.match(await home.locator('.network-focus-text').textContent(),/An example, not a live room/);
   const large=home.locator('[data-topology=forwarding]').first();assert.equal(await large.locator('.video-source').count(),1);assert.ok(await large.locator('.forwarding-peer').count()>0);assert.equal(await large.locator('.room-shape').last().locator('.video-route').count(),Number(await large.getAttribute('data-peers'))-1);await large.focus();await home.keyboard.press('Enter');assert.match(await home.locator('.network-focus-text').textContent(),/Audio stays direct/);
-  assert.equal(await home.locator('.node-halo').first().evaluate(n=>getComputedStyle(n).animationName),'none');
-  await home.emulateMedia({reducedMotion:'no-preference'});await home.waitForFunction(()=>!document.getElementById('network-motion').disabled&&document.getElementById('room-network').getAnimations({subtree:true}).some(a=>a.playState==='running'));
-  const pulse=await home.locator('.node-halo').first().evaluate(n=>getComputedStyle(n).transform);await home.waitForTimeout(220);assert.notEqual(await home.locator('.node-halo').first().evaluate(n=>getComputedStyle(n).transform),pulse,'peer halos breathe, not only the whole graph');
-  assert.ok(await home.evaluate(()=>document.getElementById('room-network').getAnimations({subtree:true}).some(a=>a.effect.target.classList.contains('room-signal')&&a.playState==='running')),'illustrated video signals animate');
-  const signalPosition=await home.evaluate(()=>{const a=document.getElementById('room-network').getAnimations({subtree:true}).find(a=>a.effect.target.classList.contains('room-signal'));a.currentTime=a.effect.getTiming().duration*.2;window.__testedSignal=a.effect.target;return getComputedStyle(window.__testedSignal).transform;});await home.waitForTimeout(160);assert.notEqual(await home.evaluate(()=>getComputedStyle(window.__testedSignal).transform),signalPosition,'signals travel along the peer links');
-  await home.locator('#network-motion').click();await home.evaluate(()=>Promise.all(document.getElementById('room-network').getAnimations({subtree:true}).map(a=>a.ready)));const frozen=await home.evaluate(()=>document.getElementById('room-network').getAnimations({subtree:true}).map(a=>({time:a.currentTime,state:a.playState})));assert.ok(frozen.every(a=>a.state==='paused'));await home.waitForTimeout(180);assert.deepEqual(await home.evaluate(()=>document.getElementById('room-network').getAnimations({subtree:true}).map(a=>({time:a.currentTime,state:a.playState}))),frozen,'pause stops CSS and path animations');
+  const positions = () => home.locator('.room-cluster').evaluateAll(rooms => rooms.map(room => room.getAttribute('transform')));
+  assert.ok(await large.locator('.note-route-active').count(), 'reduced motion highlights the path');
+  assert.equal(await large.locator('.room-note:not([hidden])').count(), 0);
+  const still = await positions();
+  await home.waitForTimeout(160);
+  assert.deepEqual(await positions(), still, 'reduced motion keeps room geometry still');
+
+  await home.emulateMedia({reducedMotion:'no-preference'});
+  await home.waitForFunction(() => !document.getElementById('network-motion').disabled);
+  await home.waitForFunction(initial => Array.from(document.querySelectorAll('.room-cluster'), room => room.getAttribute('transform')).some((p, i) => p !== initial[i]), still);
+  await large.focus();
+  await home.keyboard.press('Space');
+  const note = large.locator('.room-note:not([hidden])').first();
+  await note.waitFor({state:'visible'});
+  const signalPosition = await note.getAttribute('cx');
+  await home.waitForFunction(initial => Array.from(document.querySelectorAll('.room-note:not([hidden])')).some(dot => dot.getAttribute('cx') !== initial), signalPosition);
+  await large.locator('[data-note-hop="1"].note-route-active').first().waitFor({state:'attached'});
+  await home.locator('#network-motion').click();
+  const frozen = await positions();
+  await home.waitForTimeout(180);
+  assert.deepEqual(await positions(), frozen, 'pause stops the force model');
   await home.locator('#network-motion').click();await home.emulateMedia({reducedMotion:'reduce'});
 
   for(const width of [320,390,700,701,768,1440]){await home.setViewportSize({width,height:900});await home.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));await assertClear(home,`copy stays clear at ${width}px`);assert.equal(await home.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`no horizontal overflow at ${width}`);for(const id of ['network-create','network-join']){const r=await home.locator('#'+id).boundingBox();assert.ok(r.width>=44&&r.height>=44&&r.x>=0&&r.x+r.width<=width+1);}}
   await home.setViewportSize({width:700,height:784});await home.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));await assertClear(home,'reported 700px layout');
   await home.locator('#network-heading').evaluate(n=>n.style.fontSize='82px');await home.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));await assertClear(home,'larger text reflows safely');assert.equal(await home.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await home.locator('#network-heading').evaluate(n=>n.style.fontSize='');
   await home.setViewportSize({width:1440,height:1000});await home.evaluate(()=>document.documentElement.style.zoom='1.4');await home.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));await assertClear(home,'zoomed document stays clear');await home.evaluate(()=>document.documentElement.style.zoom='');await home.emulateMedia({reducedMotion:'no-preference'});await home.waitForFunction(()=>!document.getElementById('network-motion').disabled);
-  for(const fraction of [0,.25,.5,.75]){await home.evaluate(f=>{for(const a of document.getElementById('room-network').getAnimations({subtree:true}))if(a.effect.target.classList.contains('room-float')){a.pause();a.currentTime=a.effect.getTiming().duration*f;}},fraction);await assertClear(home,`moving graphs clear at phase ${fraction}`);}
+  for (let sample = 0; sample < 4; sample++) {
+    await home.waitForTimeout(100);
+    await assertClear(home, `moving graphs clear at sample ${sample}`);
+  }
   for(const width of [700,390,701,1440]){await home.setViewportSize({width,height:900});await home.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));await assertClear(home,`animated resize keeps copy clear at ${width}`);await home.waitForTimeout(120);await assertClear(home,`no large fading shapes after resize at ${width}`);}
   const beforeExample=await home.getAttribute('#room-network','data-example-step');await home.waitForFunction(before=>document.getElementById('room-network').dataset.exampleStep!==before,beforeExample||undefined,{timeout:12000});
   await home.locator('#network-motion').click();const stoppedStep=await home.getAttribute('#room-network','data-example-step');await home.waitForTimeout(200);assert.equal(await home.getAttribute('#room-network','data-example-step'),stoppedStep);await home.locator('#network-motion').click();await home.emulateMedia({reducedMotion:'reduce'});

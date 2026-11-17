@@ -75,10 +75,11 @@ test(`${count}-participant browser room: explicit admission, encrypted mesh audi
   assert.match(await page.evaluate(()=>window.__quality.sent.label),/Encoded forwarding .* encoder payload · delivery unverified/,'forwarded camera quality uses actual encoded output, not disabled RTP or preview dimensions');
  }
  console.log('Source pixels verified');
+ await receiver.keyboard.press('Shift');
  await receiver.locator(`#group-tile-${sourceId} .group-small-button`).last().click();
  const downloadEvent=receiver.waitForEvent('download',{timeout:10000});await receiver.locator('#group-export').click();let download;try{download=await downloadEvent;}catch(e){console.log('Export diagnostics',await receiver.evaluate(()=>({toast:document.getElementById('toast').textContent,detail:document.getElementById('group-inspector-detail').textContent,errors:window.__errors})));throw e;}
  const {readFile}=await import('node:fs/promises');const report=JSON.parse(await readFile(await download.path(),'utf8'));
- assert.equal(report.peers.length,count-1);assert.ok(report.peers.every(p=>p.media?.selectedPairId&&p.media.dtlsState==='connected'&&['host','srflx','prflx'].includes(p.media.local?.candidateType)&&['host','srflx','prflx'].includes(p.media.remote?.candidateType)),'observed selected paths use peer candidates and encrypted transports');for(const p of report.peers){const pair=p.media.pairs.find(q=>q.selected);assert.equal(p.media.direct,pair?.state==='succeeded','UI does not call an in-progress ICE observation verified');}if(overlay)assert.ok(report.peers.some(p=>p.overlay.receivedBytes>0));assert.ok(!JSON.stringify(report).includes('overlay-key'),'export excludes media keys');
+ assert.equal(report.peers.length,count-1);assert.ok(report.peers.every(p=>p.media?.pairs.some(pair=>pair.selected)&&p.media.dtlsState==='connected'&&['host','srflx','prflx'].includes(p.media.local?.candidateType)&&['host','srflx','prflx'].includes(p.media.remote?.candidateType)),'observed selected paths use peer candidates and encrypted transports');for(const p of report.peers){const pair=p.media.pairs.find(q=>q.selected);assert.equal(p.media.direct,pair?.state==='succeeded','UI does not call an in-progress ICE observation verified');assert.ok(p.media.candidates.every(c=>Object.keys(c).every(key=>['side','candidateType','protocol'].includes(key))),'export omits candidate identifiers and endpoints');}if(overlay)assert.ok(report.peers.some(p=>p.overlay.receivedBytes>0));assert.ok(!JSON.stringify(report).includes('overlay-key'),'export excludes media keys');
  for(const p of report.peers){
   assert.equal(p.receivingForwardedVideo,!!p.receivingEncodedVideo&&treeParent(users.map(u=>u.id),p.peerId,users[receiverIndex].id)!==p.peerId,'forwarding means an intermediate hop');
   assert.equal(p.forwarder,p.receivingForwardedVideo?treeParent(users.map(u=>u.id),p.peerId,users[receiverIndex].id):null);
@@ -103,14 +104,17 @@ test(`${count}-participant browser room: explicit admission, encrypted mesh audi
   await wait(receiver,id=>document.getElementById(`group-canvas-${id}`)?.hidden===false,sourceId,30000);
  }
  if(overlay)console.log('Tamper rejection and recovery verified');
+ await host.keyboard.press('Shift');
  await host.locator('#group-mic').click();assert.equal(await host.evaluate(()=>window.__capture.getAudioTracks()[0].enabled),false);
  if(count<=8)await wait(receiver,({id,fallback})=>fallback?document.getElementById(`group-video-${id}`)?.videoHeight>=480:document.getElementById(`group-canvas-${id}`)?.height>=480,{id:sourceId,fallback:!overlay},30000);
 
  await host.locator('#group-share').click();await wait(receiver,id=>document.getElementById(`group-video-${id}`)?.videoWidth===1920,sourceId,90000);assert.equal(await host.evaluate(()=>window.__capture.getAudioTracks()[0].enabled),false,'screen share preserves microphone mute');
+ await receiver.keyboard.press('Shift');
  await receiver.locator(`#group-tile-${sourceId} [data-maximize]`).click();
  await wait(receiver,id=>document.getElementById(`group-tile-${id}`).classList.contains('maximized'),sourceId);
  const bounds=await receiver.locator(`#group-tile-${sourceId}`).boundingBox();assert.ok(bounds.width>1100&&bounds.height>500,'maximized share fills the call area');
  await wait(host,async()=>{const senders=window.__peers.filter(p=>p.connectionState==='connected').flatMap(p=>p.getSenders()).filter(s=>s.track?.kind==='video');return senders.some(s=>s.getParameters().encodings?.some(e=>e.maxBitrate===6000000));},null,15000);
+ await receiver.keyboard.press('Shift');
  await receiver.locator(`#group-tile-${sourceId} [data-maximize]`).click();
  await host.locator('#group-share').click();await wait(host,()=>window.__display.readyState==='ended');
  await host.locator('#group-mic').click();
@@ -122,11 +126,11 @@ test(`${count}-participant browser room: explicit admission, encrypted mesh audi
  await wait(initiator,n=>window.__peers.length>n,oldCount,20000);
  for(const page of pages)await wait(page,async n=>{const peers=window.__peers.filter(p=>p.connectionState==='connected');return peers.length===n&&(await Promise.all(peers.map(async p=>[...(await p.getStats()).values()].some(s=>s.type==='inbound-rtp'&&s.kind==='audio'&&s.totalAudioEnergy>0)))).every(Boolean);},count-1,30000);
  // Removing a forwarder changes the tree, rotates keys, and keeps the call alive.
- const victim=pages[victimIndex];await victim.locator('#group-leave').click();await victim.locator('#group-view').waitFor({state:'hidden'});assert.equal(await victim.evaluate(()=>window.__capture.getTracks().every(t=>t.readyState==='ended')),true);
+ const victim=pages[victimIndex];await victim.keyboard.press('Shift');await victim.locator('#group-leave').click();await victim.locator('#group-view').waitFor({state:'hidden'});assert.equal(await victim.evaluate(()=>window.__capture.getTracks().every(t=>t.readyState==='ended')),true);
  if(!overlay||count===6)await wait(receiver,id=>document.getElementById(`group-video-${id}`)?.videoWidth>0&&document.getElementById(`group-canvas-${id}`)?.hidden,sourceId);else await wait(receiver,id=>{const c=document.getElementById(`group-canvas-${id}`);return c&&!c.hidden&&c.width>0;},sourceId,60000);
  if(count===9&&overlay)await wait(receiver,id=>document.getElementById(`group-canvas-${id}`)?.height>=480,sourceId,30000);
  if(count===6&&overlay){await receiver.waitForTimeout(2500);const packets=await receiver.evaluate(()=>window.__packetCount);await receiver.waitForTimeout(1500);assert.equal(await receiver.evaluate(()=>window.__packetCount),packets,'forwarding stops when the sixth participant leaves');}
  assert.equal(await host.locator('#group-view').isVisible(),true);
- for(const page of pages.filter((_,i)=>i!==victimIndex))await page.locator('#group-leave').click();
+ for(const page of pages.filter((_,i)=>i!==victimIndex)){await page.keyboard.press('Shift');await page.locator('#group-leave').click();}
  for(const page of pages){await page.locator('#group-view').waitFor({state:'hidden'});assert.equal(await page.evaluate(()=>window.__peers.every(p=>p.connectionState==='closed')),true);assert.deepEqual(await page.evaluate(()=>window.__errors),[]);}
 });

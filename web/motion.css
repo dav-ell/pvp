@@ -120,6 +120,20 @@ dialog[open]::backdrop { animation: pvp-fade var(--motion-travel) ease backwards
   }
 }
 
+/* Native select popups need a stationary anchor, including when opening
+   Connection details directly from another dialog. */
+:is(#inspector-dialog, #group-inspector) {
+  transform: none;
+  animation: none;
+  transition-property: opacity, overlay, display;
+  transition-duration: var(--motion-response);
+}
+:is(#inspector-dialog, #group-inspector)[open] {
+  transform: none;
+  animation: pvp-fade var(--motion-response) ease backwards;
+}
+dialog:not([open]), dialog:not([open])::backdrop { pointer-events: none; }
+
 /* The paired wave is PVP's signature: two people, one direct connection.
    It is reserved for ringing/connecting and settles after three waves. */
 #incoming-avatar::before, #incoming-avatar::after,

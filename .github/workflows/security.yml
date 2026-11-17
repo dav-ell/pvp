@@ -1,0 +1,18 @@
+name: Service security
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '23 11 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - run: rustup toolchain install 1.98.1 --profile minimal && rustup default 1.98.1
+      - run: cargo test --locked --manifest-path signaling/Cargo.toml
+      - run: cargo test --locked --manifest-path relay/Cargo.toml
+      - run: python3 scripts/audit-lockfiles.py

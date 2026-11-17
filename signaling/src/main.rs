@@ -154,6 +154,8 @@ impl App {
             CREATE INDEX IF NOT EXISTS history_caller ON history(caller,started);
             CREATE INDEX IF NOT EXISTS history_callee ON history(callee,started);
             CREATE INDEX IF NOT EXISTS friends_recipient ON friends(recipient);")?;
+        db.execute_batch("CREATE TABLE IF NOT EXISTS session_lifetimes(token TEXT PRIMARY KEY REFERENCES sessions(token) ON DELETE CASCADE, created_at INTEGER NOT NULL);")?;
+        db.execute("INSERT OR IGNORE INTO session_lifetimes SELECT token,MIN(expires-2592000,?1) FROM sessions", [now()])?;
         // Keep the two-column roster compatible with earlier server binaries.
         // Import roles if opening a development database with the interim columns.
         let columns = {
@@ -210,7 +212,7 @@ impl App {
             .ok_or(ApiError(StatusCode::UNAUTHORIZED, "Please sign in"))?;
         let hash = token_hash(token);
         let db = self.db.lock().unwrap();
-        let user = db.query_row("SELECT u.id,u.username,u.display_name FROM users u JOIN sessions s ON s.user_id=u.id WHERE s.token=?1 AND s.expires>?2", params![hash,now()], |r| Ok(User {id:r.get(0)?,username:r.get(1)?,display_name:r.get(2)?})).optional()?.ok_or(ApiError(StatusCode::UNAUTHORIZED, "Please sign in"))?;
+        let user = db.query_row("SELECT u.id,u.username,u.display_name FROM users u JOIN sessions s ON s.user_id=u.id WHERE s.token=?1 AND s.expires>?2 AND COALESCE((SELECT created_at FROM session_lifetimes l WHERE l.token=s.token),s.expires-2592000)+7776000>?2", params![hash,now()], |r| Ok(User {id:r.get(0)?,username:r.get(1)?,display_name:r.get(2)?})).optional()?.ok_or(ApiError(StatusCode::UNAUTHORIZED, "Please sign in"))?;
         // Slide a valid session after an hour of activity; never revive expired
         // or revoked sessions. WebSocket heartbeats also authenticate here.
         db.execute(
@@ -238,10 +240,13 @@ impl App {
 
     fn session(&self, user: &User) -> ApiResult<Response> {
         let token = format!("{}{}", Uuid::new_v4().simple(), Uuid::new_v4().simple());
-        self.db.lock().unwrap().execute(
-            "INSERT INTO sessions VALUES(?1,?2,?3)",
-            params![token_hash(&token), user.id, now() + 30 * 86400],
-        )?;
+        {
+            let mut db = self.db.lock().unwrap();
+            let transaction = db.transaction()?;
+            transaction.execute("INSERT INTO sessions VALUES(?1,?2,?3)", params![token_hash(&token), user.id, now() + 30 * 86400])?;
+            transaction.execute("INSERT INTO session_lifetimes VALUES(?1,?2)", params![token_hash(&token), now()])?;
+            transaction.commit()?;
+        }
         Ok((
             [("set-cookie", self.session_cookie(&token))],
             Json(identity(user)),
@@ -1561,6 +1566,15 @@ fn router(app: App) -> Router {
             }),
         )
         .route(
+            "/network-physics.js",
+            get(|| async {
+                (
+                    [("content-type", "text/javascript; charset=utf-8")],
+                    include_str!("../../web/network-physics.js"),
+                )
+            }),
+        )
+        .route(
             "/network.css",
             get(|| async {
                 (
@@ -1844,6 +1858,22 @@ mod tests {
             .unwrap();
         assert!(cookie.contains("HttpOnly; SameSite=Strict; Max-Age=2592000; Secure"));
         assert_eq!(renewed.headers().get("cache-control").unwrap(), "no-store");
+    }
+    #[test]
+    fn renewed_sessions_still_expire_at_the_absolute_lifetime() {
+        let (app, user, _) = fixture();
+        let token = "c".repeat(64);
+        let hash = token_hash(&token);
+        let mut headers = HeaderMap::new();
+        headers.insert("cookie", format!("pvp_session={token}").parse().unwrap());
+        {
+            let db = app.db.lock().unwrap();
+            db.execute("INSERT INTO sessions VALUES(?1,?2,?3)", params![hash, user.id, now()+2592000]).unwrap();
+            db.execute("INSERT INTO session_lifetimes VALUES(?1,?2)", params![hash, now()-7776000+60]).unwrap();
+        }
+        assert_eq!(app.user(&headers).unwrap().id, user.id);
+        app.db.lock().unwrap().execute("UPDATE session_lifetimes SET created_at=?1", [now()-7776000]).unwrap();
+        assert!(app.user(&headers).is_err());
     }
     #[test]
     fn sessions_slide_with_activity_but_never_revive_expired_or_revoked_tokens() {

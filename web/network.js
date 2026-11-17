@@ -1,9 +1,13 @@
 import { forwardingEnabled } from './group-quality.js';
 import { treeParent } from './group-video.js';
+import { createField, STEP_SECONDS } from './network-physics.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const example = [2, 6, 3, 8, 4, 5, 6, 3];
-const colors = ['#557f6d', '#a47664', '#6d86a2', '#92865c', '#76896b', '#8b7a95'];
+const colors = ['#367d68', '#b26655', '#5b79a7', '#947636', '#528664', '#8067a6'];
+const noteTravelSeconds = .34;
+const noteHandoffSeconds = .09;
+const noteHopSeconds = noteTravelSeconds + noteHandoffSeconds;
 const make = (tag, attributes = {}) => {
   const node = document.createElementNS(NS, tag);
   for (const [name, value] of Object.entries(attributes)) node.setAttribute(name, String(value));
@@ -43,11 +47,10 @@ export function graphTopology(peers) {
 
 export const intersects = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 const expand = (rect, padding) => ({ left: rect.left - padding, top: rect.top - padding, right: rect.right + padding, bottom: rect.bottom + padding });
-// These bounds include the orbit, two caption lines, halo, rotation and the full
-// drift envelope. They are CSS pixels, just like the measured copy rectangles.
+// The same envelope covers paint and hit targets, including a stretched shell.
 export function roomBounds(x, y, radius) {
-  const half = Math.max(radius + 15, 51) + 18;
-  return { left: x - half, right: x + half, top: y - radius - 33, bottom: y + radius + 61 };
+  const half = Math.max(radius + 17, 49);
+  return { left: x - half, right: x + half, top: y - radius - 17, bottom: y + radius + 45 };
 }
 export function layoutRooms(width, height, exclusions, rooms) {
   if (!(width > 0 && height > 0)) return [];
@@ -58,7 +61,8 @@ export function layoutRooms(width, height, exclusions, rooms) {
   for (let slot = 0; slot < rooms.length; slot++) {
     const [ax, ay] = anchors[slot % anchors.length];
     const minimum = rooms[slot] > 10 ? 48 : 28;
-    const radii = [...new Set([nominal, Math.round(nominal * .82), Math.round(nominal * .66), minimum].filter(r => r >= minimum))];
+    const size = Math.round(nominal * (.75 + Math.min(rooms[slot], 10) * .028));
+    const radii = [...new Set([size, Math.round(size * .82), Math.round(size * .66), minimum].filter(r => r >= minimum))];
     let best;
     for (const radius of radii) {
       const origin = roomBounds(0, 0, radius), left = 8 - origin.left, right = width - 8 - origin.right, top = 8 - origin.top, bottom = height - 8 - origin.bottom;
@@ -79,171 +83,419 @@ export function layoutRooms(width, height, exclusions, rooms) {
   return placed;
 }
 
-function animateSignal(dot, from, to, depth, index) {
-  const start = .09 + (depth - 1) * .33, end = start + .29, at = p => `translate(${p.x}px, ${p.y}px)`;
-  dot.animate([{ transform: at(from), opacity: 0, offset: 0 }, { transform: at(from), opacity: 0, offset: start }, { transform: at(from), opacity: .65, offset: start + .025 }, { transform: at(to), opacity: .65, offset: end - .025 }, { transform: at(to), opacity: 0, offset: end }, { transform: at(to), opacity: 0, offset: 1 }], { duration: 6500 + index * 310, delay: -index * 710, iterations: Infinity, easing: 'linear' });
+const outlineDirections = Array.from({ length: 16 }, (_, index) => {
+  const angle = index * 2 * Math.PI / 16;
+  return { x: Math.cos(angle), y: Math.sin(angle), wave: Math.cos(angle * 3 + .4) * .045 };
+});
+const midpoint = (a, b) => `${(a.x + b.x) / 2} ${(a.y + b.y) / 2}`;
+function bubblePath(room) {
+  const { points, radius } = room;
+  const outline = outlineDirections.map(({ x, y, wave }) => {
+    const extent = Math.max(...points.map(point => point.x * x + point.y * y));
+    const reach = Math.max(radius * (.66 + wave), extent + 13);
+    return { x: x * reach, y: y * reach };
+  });
+  return `M ${midpoint(outline.at(-1), outline[0])} ${outline.map((point, i) =>
+    `Q ${point.x} ${point.y} ${midpoint(point, outline[(i + 1) % outline.length])}`).join(' ')} Z`;
 }
-const cancelTree = node => { for (const animation of node.getAnimations({ subtree: true })) animation.cancel(); };
-function shapeFor(peers, radius, index) {
-  const topology = graphTopology(peers), color = colors[index % colors.length], shape = make('g', { class: 'room-shape' });
-  const nodeRadius = Math.max(3.4, Math.min(8, radius * .077)), rotation = index * .77 + .4;
-  const points = Array.from({ length: peers }, (_, n) => {
-    if (topology.forwarding) {
-      if (n === 0) return { x: -radius * .83, y: 0 };
-      if (n <= 4) return { x: -radius * .04, y: ((n - 1) / 3 * 1.55 - .775) * radius };
-      const leaves = peers - 5;
-      return { x: radius * .83, y: leaves === 1 ? 0 : ((n - 5) / (leaves - 1) * 1.7 - .85) * radius };
-    }
-    const angle = rotation + n * 2 * Math.PI / peers, r = peers === 1 ? 0 : radius * (.68 + ((n * 7 + index) % 4) * .085);
-    return { x: Math.cos(angle) * r, y: Math.sin(angle) * r };
-  });
-  shape.append(make('circle', { class: 'room-orbit', r: radius + 12, stroke: color }));
-  const links = make('g', { class: 'room-links' }); links.style.setProperty('--breath-delay', `${-index * .8}s`);
-  for (const [a, b] of topology.mesh) links.append(make('line', { class: `room-edge${topology.forwarding ? ' audio-edge' : ''}`, x1: points[a].x, y1: points[a].y, x2: points[b].x, y2: points[b].y, stroke: color }));
+
+function positionEdge(line, a, b) {
+  line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+  line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+}
+
+function shapeFor(peers, radius, slot) {
+  const topology = graphTopology(peers);
+  const color = colors[slot % colors.length];
+  const shape = make('g', { class: 'room-shape', color, 'aria-hidden': 'true' });
+  const light = { x1: '12%', y1: '0%', x2: '85%', y2: '100%' };
+  const gradient = make('linearGradient', { id: `bubble-${slot}`, ...light });
+  gradient.append(make('stop', { offset: 0, 'stop-color': color, 'stop-opacity': .08 }),
+    make('stop', { offset: .48, 'stop-color': color, 'stop-opacity': .17 }),
+    make('stop', { offset: 1, 'stop-color': color, 'stop-opacity': .29 }));
+  const rim = make('linearGradient', { id: `bubble-rim-${slot}`, ...light });
+  rim.append(make('stop', { offset: 0, 'stop-color': color, 'stop-opacity': .4 }),
+    make('stop', { offset: 1, 'stop-color': color }));
+  const defs = make('defs'); defs.append(gradient, rim); shape.append(defs);
+  const hull = make('path', { class: 'room-hull', fill: `url(#bubble-${slot})` });
+  hull.style.setProperty('--bubble-rim', `url(#bubble-rim-${slot})`);
+  shape.append(hull);
+  const links = make('g', { class: 'room-links' });
+  const edges = [];
+  const edge = ([a, b], name) => {
+    const line = make('line', { class: name });
+    edges.push({ a, b, line }); links.append(line);
+  };
+  // Batch the quiet audio mesh so a dense room updates one SVG path per frame.
+  const mesh = topology.forwarding ? make('path', { class: 'room-edge audio-edge' }) : null;
+  if (mesh) links.append(mesh);
+  else for (const pair of topology.mesh) edge(pair, 'room-edge');
+  if (topology.forwarding) for (const pair of topology.routes) edge(pair, 'video-route');
   shape.append(links);
-  if (topology.forwarding) for (const [a, b] of topology.routes) shape.append(make('line', { class: 'video-route', x1: points[a].x, y1: points[a].y, x2: points[b].x, y2: points[b].y, stroke: color }));
-  for (const [a, b] of topology.routes) {
-    const dot = make('circle', { class: 'room-signal', r: Math.max(1.4, radius * .026), fill: color, 'aria-hidden': 'true' });
-    shape.append(dot); animateSignal(dot, points[a], points[b], topology.depth[b], index);
-  }
-  points.forEach((point, n) => {
-    const node = make('g', { class: `peer-point${n === 0 ? ' video-source' : ''}${topology.forwarders.has(n) ? ' forwarding-peer' : ''}`, transform: `translate(${point.x} ${point.y})` });
-    const halo = make('circle', { class: 'node-halo', r: nodeRadius + 3, stroke: color });
-    halo.style.setProperty('--pulse-delay', `${-index * .7 - n * .43}s`); halo.style.setProperty('--pulse-period', `${4.6 + n % 4 * .6}s`);
-    node.append(halo, make('circle', { class: 'room-node', r: nodeRadius, stroke: color }));
-    if (topology.forwarders.has(n)) node.append(make('circle', { class: 'forwarder-ring', r: nodeRadius + 3, stroke: color }));
-    if (n === 0) node.append(make('circle', { class: 'node-core', r: nodeRadius * .48, fill: color }));
+  const noteLayer = make('g', { class: 'room-notes' }); shape.append(noteLayer);
+  const nodeRadius = Math.max(4.5, Math.min(8, radius * (peers > 10 ? .085 : .115)));
+  const nodes = Array.from({ length: peers }, (_, index) => {
+    const node = make('g', {
+      class: `peer-point${index === 0 ? ' video-source' : ''}${topology.forwarders.has(index) ? ' forwarding-peer' : ''}`,
+      'data-peer-index': index,
+    });
+    node.append(make('circle', { class: 'peer-hit', r: Math.max(13, nodeRadius + 4) }),
+      make('circle', { class: 'room-node', r: nodeRadius }));
+    if (topology.forwarders.has(index)) node.append(make('circle', { class: 'forwarder-ring', r: nodeRadius + 3 }));
+    if (index === 0) node.append(make('circle', { class: 'node-core', r: nodeRadius * .39 }));
     shape.append(node);
+    return node;
   });
-  const text = make('text', { class: 'room-caption', x: 0, y: radius + 30, 'text-anchor': 'middle' });
-  const caption = make('tspan', { x: 0 }); caption.textContent = `${String(peers).padStart(2, '0')} ${peers === 1 ? 'PEER' : 'PEERS'}`; text.append(caption);
-  if (topology.forwarding) { const detail = make('tspan', { class: 'room-route-caption', x: 0, dy: 12 }); detail.textContent = 'VIDEO VIA PEERS'; text.append(detail); }
+  const text = make('text', { class: 'room-caption', x: 0, y: radius + 26, 'text-anchor': 'middle' });
+  const caption = make('tspan', { x: 0 }); caption.textContent = `${peers} ${peers === 1 ? 'peer' : 'peers'}`; text.append(caption);
+  if (topology.forwarding) {
+    const detail = make('tspan', { class: 'room-route-caption', x: 0, dy: 12 });
+    detail.textContent = 'Video via peers'; text.append(detail);
+  }
   shape.append(text);
-  return { shape, topology };
+  return { shape, hull, edges, mesh, nodes, noteLayer, topology };
+}
+
+function noteRoutes(topology, peers, peer) {
+  if (!topology.forwarding) {
+    return Array.from({ length: peers }, (_, index) => index)
+      .filter(index => index !== peer).map(index => [peer, index, 0]);
+  }
+  if (peer === 0) return topology.routes.map(([a, b]) => [a, b, topology.depth[b] - 1]);
+  // The marked source owns the video tree. Trace its route to a selected peer.
+  const path = [];
+  while (peer !== 0) {
+    const [parent] = topology.routes.find(([, child]) => child === peer);
+    path.push([parent, peer, topology.depth[peer] - 1]);
+    peer = parent;
+  }
+  return path.reverse();
 }
 
 function mount() {
-  const host = document.getElementById('room-network'), home = document.getElementById('auth-view'); if (!host || !home) return;
+  const host = document.getElementById('room-network'), home = document.getElementById('auth-view');
+  if (!host || !home) return;
   const hero = host.parentElement, copy = hero.querySelector('.network-copy'), footer = hero.querySelector('.network-footer');
-  const state = document.getElementById('network-state'), count = document.getElementById('network-count'), mode = document.getElementById('network-mode'), motion = document.getElementById('network-motion');
-  const focus = document.createElement('p'); focus.className = 'network-focus-text'; focus.setAttribute('aria-live', 'polite'); copy.append(focus);
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)'), scenes = new Map(), exampleCounts = [...example], trends = example.map((n, i) => i % 2 ? -1 : 1);
-  let paused = false, distribution = null, unavailable = false, exampleMode = false, timer, request, generation = 0, active = false, onscreen = true, exampleTimer, exampleTick = 0, frame, geometrySignature = '';
-  const svg = make('svg', { role: 'group', preserveAspectRatio: 'none' }), defs = make('defs'), mask = make('mask', { id: 'network-copy-mask', maskUnits: 'userSpaceOnUse' });
-  const background = make('rect', { fill: 'white' }), safeArea = make('g', { mask: 'url(#network-copy-mask)' }); mask.append(background); defs.append(mask); svg.append(defs, safeArea); host.replaceChildren(svg);
+  const state = document.getElementById('network-state'), count = document.getElementById('network-count');
+  const mode = document.getElementById('network-mode'), motion = document.getElementById('network-motion');
+  const focus = document.createElement('p');
+  focus.className = 'network-focus-text'; focus.setAttribute('aria-live', 'polite'); copy.append(focus);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)'), scenes = new Map();
+  const exampleCounts = [...example], trends = example.map((_, i) => i % 2 ? -1 : 1);
+  const preset = new URLSearchParams(location.search).get('network-preset') === 'buoyant' ? 'buoyant' : 'elastic';
+  host.dataset.preset = preset;
+  let paused = false, distribution = null, unavailable = false, exampleMode = false;
+  let timer, request, generation = 0, active = false, onscreen = true, exampleTimer, exampleTick = 0;
+  let layoutFrame, motionFrame, previousTime, remainder = 0, layoutSignature = '';
+  let field, gesture, selected, protectedAreas = [];
+  const svg = make('svg', { role: 'group', preserveAspectRatio: 'none' });
+  const mask = make('mask', { id: 'network-copy-mask', maskUnits: 'userSpaceOnUse' });
+  const background = make('rect', { fill: 'white' });
+  const safeArea = make('g', { mask: 'url(#network-copy-mask)' });
+  const defs = make('defs'); mask.append(background); defs.append(mask); svg.append(defs, safeArea);
+  host.replaceChildren(svg);
+
   const isLive = () => !!distribution?.total && !exampleMode;
-  const isStill = () => paused || reduce.matches || document.hidden || !onscreen || home.hidden;
+  const isStill = () => paused || reduce.matches || !active;
+
   function scheduleExample() {
-    if (isStill() || !active || isLive()) { clearTimeout(exampleTimer); exampleTimer = undefined; return; }
-    if (exampleTimer || !scenes.size) return;
+    if (isStill() || isLive()) { clearTimeout(exampleTimer); exampleTimer = undefined; return; }
+    if (exampleTimer || !scenes.size || gesture) return;
     exampleTimer = setTimeout(() => {
       exampleTimer = undefined;
       const visible = [...scenes.keys()], slot = visible[exampleTick % visible.length];
-      if (isStill() || !active || isLive() || slot == null) return;
+      if (isStill() || isLive() || slot == null || gesture) return;
       if (exampleCounts[slot] <= 2) trends[slot] = 1;
       if (exampleCounts[slot] >= 8) trends[slot] = -1;
-      exampleCounts[slot] += trends[slot]; host.dataset.exampleStep = String(++exampleTick); render(); scheduleExample();
+      exampleCounts[slot] += trends[slot]; host.dataset.exampleStep = String(++exampleTick);
+      render(); scheduleExample();
     }, 6800);
   }
-  function updateMotion() {
-    const still = isStill(); host.classList.toggle('network-still', still);
-    for (const animation of host.getAnimations({ subtree: true })) {
-      if (reduce.matches && animation.effect.getTiming().iterations !== Infinity) { try { animation.finish(); } catch {} }
-      else if (still) animation.pause(); else if (animation.playState === 'paused') animation.play();
+
+  function drawNote(scene, points) {
+    if (!scene.note) return;
+    const note = scene.note;
+    for (const { a, b, hop, forwards, line, dot } of note.routes) {
+      const time = note.elapsed - hop * noteHopSeconds;
+      const from = points[a], to = points[b];
+      const traveling = !note.static && time >= 0 && time < (forwards ? noteHopSeconds : noteTravelSeconds);
+      line.classList.toggle('note-route-active', note.static || time >= 0);
+      positionEdge(line, from, to);
+      dot.toggleAttribute('hidden', !traveling);
+      if (traveling) {
+        const progress = Math.min(1, time / noteTravelSeconds);
+        dot.setAttribute('cx', from.x + (to.x - from.x) * progress);
+        dot.setAttribute('cy', from.y + (to.y - from.y) * progress);
+      }
     }
-    motion.disabled = reduce.matches; motion.setAttribute('aria-pressed', String(still));
-    motion.setAttribute('aria-label', reduce.matches ? 'Network motion disabled by your reduced-motion preference' : paused ? 'Resume network motion' : 'Pause network motion'); motion.textContent = still ? '▷' : 'Ⅱ'; scheduleExample();
   }
+
+  function paint() {
+    for (const [slot, room] of field?.rooms ?? []) {
+      const scene = scenes.get(slot);
+      scene.root.setAttribute('transform', `translate(${room.x} ${room.y})`);
+      scene.hull.setAttribute('d', bubblePath(room));
+      if (scene.mesh) scene.mesh.setAttribute('d', scene.topology.mesh.map(([a, b]) => {
+        const from = room.points[a], to = room.points[b];
+        return `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
+      }).join(' '));
+      for (const { a, b, line } of scene.edges) positionEdge(line, room.points[a], room.points[b]);
+      scene.nodes.forEach((node, index) => {
+        const point = room.points[index];
+        node.setAttribute('transform', `translate(${point.x} ${point.y})`);
+      });
+      drawNote(scene, room.points);
+    }
+  }
+
+  function tick(now) {
+    motionFrame = undefined;
+    if (isStill() || !field?.rooms.size) return;
+    remainder += previousTime == null ? STEP_SECONDS : Math.min(.05, (now - previousTime) / 1000);
+    previousTime = now;
+    while (remainder >= STEP_SECONDS) {
+      field.step(); remainder -= STEP_SECONDS;
+      const note = selected?.note;
+      if (note && !note.static) {
+        note.elapsed += STEP_SECONDS;
+        if (note.elapsed > note.duration) {
+          selected.noteLayer.replaceChildren(); selected.note = null;
+        }
+      }
+    }
+    paint();
+    motionFrame = requestAnimationFrame(tick);
+  }
+
+  function updateMotion() {
+    if (isStill()) {
+      cancelAnimationFrame(motionFrame); motionFrame = undefined;
+      previousTime = undefined; remainder = 0;
+      endGesture(true);
+      if (reduce.matches && selected?.note) {
+        selected.note.static = true; paint();
+      }
+    } else if (motionFrame == null && field?.rooms.size) {
+      motionFrame = requestAnimationFrame(tick);
+    }
+    motion.disabled = reduce.matches;
+    motion.setAttribute('aria-pressed', String(paused || reduce.matches));
+    motion.setAttribute('aria-label', reduce.matches ? 'Network motion disabled by your reduced-motion preference' : paused ? 'Resume network motion' : 'Pause network motion');
+    motion.textContent = paused || reduce.matches ? '▷' : 'Ⅱ';
+    scheduleExample();
+  }
+
   function exclusions() {
-    const origin = host.getBoundingClientRect(), rects = [], sx = host.clientWidth / origin.width, sy = host.clientHeight / origin.height;
-    const add = rect => { if (rect.width && rect.height) rects.push({ left: (rect.left - origin.left) * sx, right: (rect.right - origin.left) * sx, top: (rect.top - origin.top) * sy, bottom: (rect.bottom - origin.top) * sy }); };
-    // Measure line boxes, not a breakpoint or a guessed headline width.
+    const origin = host.getBoundingClientRect(), rects = [];
+    const sx = host.clientWidth / origin.width, sy = host.clientHeight / origin.height;
+    const add = rect => {
+      if (rect.width && rect.height) rects.push({
+        left: (rect.left - origin.left) * sx, right: (rect.right - origin.left) * sx,
+        top: (rect.top - origin.top) * sy, bottom: (rect.bottom - origin.top) * sy,
+      });
+    };
     for (const element of copy.querySelectorAll('.network-eyebrow,h1,.network-description,.network-fine')) {
       const range = document.createRange(); range.selectNodeContents(element);
       for (const rect of range.getClientRects()) add(rect);
     }
     for (const button of copy.querySelectorAll('.network-actions button')) add(button.getBoundingClientRect());
-    add(footer.getBoundingClientRect());
-    // Reserve the short explanation even when it is empty, so keyboard or hover
-    // never moves a graph into the copy while the text is being read.
-    add(focus.getBoundingClientRect());
+    add(footer.getBoundingClientRect()); add(focus.getBoundingClientRect());
     return rects;
   }
+
   function describe(scene) {
     const { peers, topology } = scene;
-    focus.textContent = `${peers} ${peers === 1 ? 'peer' : 'peers'}. ${peers === 1 ? 'A place for someone else to join.' : topology.forwarding ? 'Video can pass through another peer. Audio stays direct.' : `${topology.mesh.length} illustrated peer connections.`} ${isLive() ? 'Anonymous room size.' : 'An example, not a live room.'}`;
+    const description = `${peers} ${peers === 1 ? 'peer' : 'peers'}. ${peers === 1 ? 'A place for someone else to join.' : topology.forwarding ? 'Video can pass through another peer. Audio stays direct.' : `${topology.mesh.length} illustrated peer connections.`} ${isLive() ? 'Anonymous room size.' : 'An example, not a live room.'}`;
+    if (focus.textContent !== description) focus.textContent = description;
   }
+
+  function activate(scene, peer = 0) {
+    if (selected) {
+      selected.root.classList.remove('room-selected');
+      selected.noteLayer.replaceChildren(); selected.note = null;
+    }
+    selected = scene; scene.root.classList.add('room-selected');
+    describe(scene);
+    const path = noteRoutes(scene.topology, scene.peers, peer);
+    const routes = path.map(([a, b, hop]) => {
+      const line = make('line', { class: 'room-note-route', 'data-note-hop': hop });
+      const dot = make('circle', { class: 'room-note', r: 3.6, hidden: '' });
+      scene.noteLayer.append(line, dot);
+      return { a, b, hop, forwards: path.some(([source]) => source === b), line, dot };
+    });
+    if (routes.length) {
+      scene.note = { routes, elapsed: 0, static: isStill(), duration: noteHopSeconds * (1 + Math.max(...path.map(([, , hop]) => hop))) + .32 };
+    }
+    paint();
+  }
+
+  function pointerPoint(event) {
+    const bounds = svg.getBoundingClientRect();
+    return {
+      x: (event.clientX - bounds.left) * host.clientWidth / bounds.width,
+      y: (event.clientY - bounds.top) * host.clientHeight / bounds.height,
+    };
+  }
+
+  function endGesture(cancel = false) {
+    if (!gesture) return;
+    const current = gesture;
+    gesture = null;
+    if (current.dragging) field.release({ cancel });
+    current.scene.root.classList.remove('room-grabbed');
+    if (current.scene.root.hasPointerCapture(current.id)) current.scene.root.releasePointerCapture(current.id);
+    if (!cancel && !current.dragging) activate(current.scene, current.peer ?? 0);
+    scheduleExample();
+  }
+
   function newScene(slot) {
-    const root = make('g', { class: 'room-cluster', tabindex: 0, role: 'button', 'data-slot': slot }), drift = make('g', { class: 'room-float' });
-    drift.style.setProperty('--room-period', `${13 + slot * 1.2}s`); drift.style.setProperty('--room-delay', `${-slot * 1.7}s`); root.append(drift);
-    const scene = { root, drift, peers: 0, radius: 0, topology: null, layers: new Set() };
-    root.addEventListener('pointerenter', () => describe(scene)); root.addEventListener('focus', () => describe(scene)); root.addEventListener('click', () => describe(scene));
-    root.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); describe(scene); } });
-    root.addEventListener('blur', () => { focus.textContent = ''; }); root.addEventListener('pointerleave', () => { if (document.activeElement !== root) focus.textContent = ''; });
-    safeArea.append(root); scenes.set(slot, scene); return scene;
-  }
-  function replaceShape(scene, peers, radius, slot, immediate = false) {
-    const previous = [...scene.layers], next = shapeFor(peers, radius, slot);
-    scene.peers = peers; scene.radius = radius; scene.topology = next.topology;
-    scene.root.dataset.peers = String(peers); scene.root.dataset.topology = next.topology.forwarding ? 'forwarding' : 'direct';
-    scene.root.setAttribute('aria-label', `${isLive() ? 'Shared room size' : 'Example room'}: ${peers} ${peers === 1 ? 'peer' : 'peers'}. ${next.topology.forwarding ? 'Video forwarding illustrated; audio stays direct.' : `${next.topology.mesh.length} illustrated direct connections.`}`);
-    scene.currentShape = next.shape; scene.layers.add(next.shape); scene.drift.append(next.shape);
-    if (!immediate && !isStill()) next.shape.animate([{ opacity: 0, transform: 'scale(.94)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 650, easing: 'cubic-bezier(.2,.7,.2,1)' });
-    for (const old of previous) {
-      const retire = () => { cancelTree(old); old.remove(); scene.layers.delete(old); };
-      if (immediate || isStill() || scene.layers.size > 3) retire();
-      else old.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320 }).finished.catch(() => {}).then(retire);
+    const root = make('g', { class: 'room-cluster', tabindex: 0, role: 'button', 'data-slot': slot });
+    const scene = { root };
+    root.addEventListener('pointerenter', () => { if (!gesture) describe(scene); });
+    root.addEventListener('pointerleave', () => {
+      if (gesture || document.activeElement === root) return;
+      if (selected) describe(selected); else focus.textContent = '';
+    });
+    root.addEventListener('focus', () => describe(scene));
+    root.addEventListener('blur', () => { if (selected !== scene) focus.textContent = ''; });
+    root.addEventListener('click', event => { if (event.detail === 0) activate(scene); });
+    root.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault(); if (!event.repeat) activate(scene);
+      }
+    });
+    root.addEventListener('pointerdown', event => {
+      if (gesture || event.button !== 0 || !event.isPrimary) return;
+      const start = pointerPoint(event);
+      if (protectedAreas.some(rect => start.x >= rect.left && start.x <= rect.right && start.y >= rect.top && start.y <= rect.bottom)) return;
+      const peer = event.target.closest('.peer-point')?.dataset.peerIndex;
+      gesture = { id: event.pointerId, scene, peer: peer == null ? null : Number(peer), start, dragging: false, touch: event.pointerType === 'touch' };
+      root.setPointerCapture(event.pointerId);
+    });
+    root.addEventListener('pointermove', event => {
+      if (gesture?.id !== event.pointerId) return;
+      const point = pointerPoint(event);
+      if (!gesture.dragging) {
+        const dx = point.x - gesture.start.x, dy = point.y - gesture.start.y;
+        if (Math.hypot(dx, dy) < (gesture.touch ? 8 : 5)) return;
+        if (isStill() || (gesture.touch && Math.abs(dy) > Math.abs(dx))) { endGesture(true); return; }
+        gesture.dragging = field.grab(slot, gesture.peer, gesture.start.x, gesture.start.y) !== false;
+        if (!gesture.dragging) { endGesture(true); return; }
+        root.classList.add('room-grabbed');
+      }
+      field.move(point.x, point.y);
+    });
+    root.addEventListener('pointerup', event => { if (gesture?.id === event.pointerId) endGesture(); });
+    for (const type of ['pointercancel', 'lostpointercapture']) {
+      root.addEventListener(type, event => { if (gesture?.id === event.pointerId) endGesture(true); });
     }
+    safeArea.append(root); scenes.set(slot, scene);
+    return scene;
   }
+
   function render() {
-    const width = host.clientWidth, height = host.clientHeight; if (!width || !height) { updateMotion(); return; }
-    const live = isLive(), limit = width <= 700 ? 6 : 8, rooms = live ? sampledRooms(distribution, limit) : exampleCounts.slice(0, limit), blocked = exclusions();
-    const geometry = JSON.stringify([width, height, blocked]), moved = geometry !== geometrySignature; geometrySignature = geometry;
-    const layout = layoutRooms(width, height, blocked, rooms);
-    svg.setAttribute('viewBox', `0 0 ${width} ${height}`); svg.setAttribute('aria-label', live ? 'Shared room patterns' : 'Example room patterns');
-    for (const [name, value] of Object.entries({ x: 0, y: 0, width, height })) { mask.setAttribute(name, value); background.setAttribute(name, value); }
-    for (const old of [...mask.children].slice(1)) old.remove();
-    for (const rect of blocked) { const b = expand(rect, 8); mask.append(make('rect', { x: b.left, y: b.top, width: b.right - b.left, height: b.bottom - b.top, rx: 8, fill: 'black' })); }
-    const visible = new Set(layout.map(room => room.slot));
-    for (const [slot, scene] of scenes) if (!visible.has(slot)) { if (document.activeElement === scene.root) { (motion.disabled ? document.getElementById('network-create') : motion).focus({ preventScroll: true }); focus.textContent = ''; } cancelTree(scene.root); scene.root.remove(); scenes.delete(slot); }
-    for (const room of layout) {
-      const scene = scenes.get(room.slot) || newScene(room.slot), peers = rooms[room.slot];
-      // Responsive moves are immediate: never animate a graph across the text.
-      if (moved) for (const layer of [...scene.layers]) if (layer !== scene.currentShape) { cancelTree(layer); layer.remove(); scene.layers.delete(layer); }
-      scene.root.setAttribute('transform', `translate(${room.x} ${room.y})`);
-      if (scene.peers !== peers || scene.radius !== room.radius) replaceShape(scene, peers, room.radius, room.slot, moved || scene.radius !== room.radius);
-      scene.root.setAttribute('aria-label', `${live ? 'Shared room size' : 'Example room'}: ${peers} ${peers === 1 ? 'peer' : 'peers'}. ${scene.topology.forwarding ? 'Video forwarding illustrated; audio stays direct.' : `${scene.topology.mesh.length} illustrated direct connections.`}`);
+    const width = host.clientWidth, height = host.clientHeight;
+    if (!width || !height) { updateMotion(); return; }
+    const live = isLive(), limit = width <= 700 ? 6 : 8;
+    const rooms = live ? sampledRooms(distribution, limit) : exampleCounts.slice(0, limit);
+    const blocked = exclusions();
+    const signature = JSON.stringify([width, height, blocked, rooms]);
+    if (signature !== layoutSignature) {
+      layoutSignature = signature; endGesture(true);
+      const layout = layoutRooms(width, height, blocked, rooms);
+      protectedAreas = blocked.map(rect => expand(rect, 8));
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      for (const [name, value] of Object.entries({ x: 0, y: 0, width, height })) {
+        mask.setAttribute(name, value); background.setAttribute(name, value);
+      }
+      mask.replaceChildren(background, ...protectedAreas.map(b => make('rect', {
+        x: b.left, y: b.top, width: b.right - b.left, height: b.bottom - b.top, rx: 8, fill: 'black',
+      })));
+      const visible = new Set(layout.map(room => room.slot));
+      for (const [slot, scene] of scenes) {
+        if (visible.has(slot)) continue;
+        if (selected === scene) { selected = null; focus.textContent = ''; }
+        if (document.activeElement === scene.root) {
+          (reduce.matches ? document.getElementById('network-create') : motion).focus({ preventScroll: true });
+          focus.textContent = '';
+        }
+        scene.root.remove(); scenes.delete(slot);
+      }
+      for (const { slot, radius } of layout) {
+        const scene = scenes.get(slot) || newScene(slot), peers = rooms[slot];
+        if (scene.peers !== peers || scene.radius !== radius) {
+          Object.assign(scene, shapeFor(peers, radius, slot), { peers, radius, note: null });
+          scene.root.replaceChildren(scene.shape);
+          scene.root.dataset.peers = String(peers);
+          scene.root.dataset.topology = scene.topology.forwarding ? 'forwarding' : 'direct';
+        }
+      }
+      field = createField(width, height, blocked, layout.map(room => ({ ...room, peers: rooms[room.slot] })), { preset, previous: field });
+      paint();
     }
-    host.dataset.source = live ? 'live' : 'example'; host.dataset.visibleRooms = String(layout.length);
+    for (const scene of scenes.values()) {
+      scene.root.setAttribute('aria-label', `${live ? 'Shared room size' : 'Example room'}: ${scene.peers} ${scene.peers === 1 ? 'peer' : 'peers'}. ${scene.peers > 1 ? 'Activate to send an illustrated note.' : ''}`.trim());
+    }
+    const described = [...scenes.values()].find(scene => scene.root === document.activeElement) ?? selected;
+    if (described) describe(described);
+    host.dataset.source = live ? 'live' : 'example';
+    host.dataset.visibleRooms = String(scenes.size);
+    svg.setAttribute('aria-label', live ? 'Shared room patterns' : 'Example room patterns');
     host.setAttribute('aria-label', live ? 'Anonymous live room sizes, with illustrated peer connections' : 'Illustration of peer-to-peer rooms; not live activity');
     state.textContent = live ? 'Live room shapes' : 'P2P, illustrated'; state.dataset.live = String(live);
-    count.textContent = unavailable ? 'Live activity unavailable · showing an example' : distribution?.total ? `${distribution.total} opt-in ${distribution.total === 1 ? 'room' : 'rooms'} · ${distribution.peers} ${distribution.peers === 1 ? 'peer' : 'peers'}${distribution.total > layout.length ? ' · a selection shown' : ''}` : 'No rooms sharing activity right now';
-    mode.hidden = !distribution?.total; mode.textContent = exampleMode ? 'See live rooms' : 'See an example'; mode.setAttribute('aria-pressed', String(exampleMode)); updateMotion();
+    count.textContent = unavailable ? 'Live activity unavailable · showing an example' : distribution?.total ? `${distribution.total} opt-in ${distribution.total === 1 ? 'room' : 'rooms'} · ${distribution.peers} ${distribution.peers === 1 ? 'peer' : 'peers'}${distribution.total > scenes.size ? ' · a selection shown' : ''}` : 'No rooms sharing activity right now';
+    mode.hidden = !distribution?.total; mode.textContent = exampleMode ? 'See live rooms' : 'See an example';
+    mode.setAttribute('aria-pressed', String(exampleMode)); updateMotion();
   }
-  function scheduleLayout() { if (!frame) frame = requestAnimationFrame(() => { frame = undefined; render(); }); }
+
+  function scheduleLayout() {
+    if (!layoutFrame) layoutFrame = requestAnimationFrame(() => { layoutFrame = undefined; render(); });
+  }
+
   async function refresh() {
     if (!active) return;
     const mine = ++generation, controller = new AbortController(); request = controller;
     const timeout = setTimeout(() => controller.abort(), 6000);
     try {
-      const response = await fetch('/api/network', { credentials: 'omit', cache: 'no-store', signal: controller.signal }); if (!response.ok) throw Error('Unavailable');
+      const response = await fetch('/api/network', { credentials: 'omit', cache: 'no-store', signal: controller.signal });
+      if (!response.ok) throw Error('Unavailable');
       const value = roomDistribution(await response.json()); if (mine !== generation || !active) return;
       distribution = value; unavailable = false; render();
-    } catch { if (mine !== generation || !active) return; distribution = null; unavailable = true; render(); }
-    finally { clearTimeout(timeout); if (mine === generation) { request = null; if (active) timer = setTimeout(refresh, 15000); } }
+    } catch {
+      if (mine !== generation || !active) return;
+      distribution = null; unavailable = true; render();
+    } finally {
+      clearTimeout(timeout);
+      if (mine === generation) { request = null; if (active) timer = setTimeout(refresh, 15000); }
+    }
   }
+
   function visibility() {
     const next = !home.hidden && !document.hidden && onscreen;
-    if (next !== active) { active = next; if (active) refresh(); else { ++generation; clearTimeout(timer); request?.abort(); request = null; } }
+    if (next !== active) {
+      active = next;
+      if (active) refresh();
+      else { ++generation; clearTimeout(timer); request?.abort(); request = null; }
+    }
     updateMotion();
   }
+
   motion.onclick = () => { paused = !paused; updateMotion(); };
-  mode.onclick = () => { exampleMode = !exampleMode; focus.textContent = ''; render(); };
+  mode.onclick = () => {
+    exampleMode = !exampleMode; focus.textContent = '';
+    if (selected) {
+      selected.root.classList.remove('room-selected');
+      selected.noteLayer.replaceChildren(); selected.note = null; selected = null;
+    }
+    render();
+  };
   reduce.addEventListener('change', updateMotion);
-  new IntersectionObserver(([entry]) => { onscreen = entry.isIntersecting; visibility(); }, { threshold: 0 }).observe(hero);
-  const resize = new ResizeObserver(scheduleLayout); resize.observe(host); resize.observe(copy); resize.observe(footer);
+  new IntersectionObserver(([entry]) => { onscreen = entry.isIntersecting; visibility(); }).observe(hero);
+  const resize = new ResizeObserver(scheduleLayout);
+  resize.observe(host); resize.observe(copy); resize.observe(footer);
   new MutationObserver(() => { visibility(); scheduleLayout(); }).observe(home, { attributes: true, attributeFilter: ['hidden'] });
-  document.addEventListener('visibilitychange', visibility); document.fonts?.ready.then(scheduleLayout); document.fonts?.addEventListener('loadingdone', scheduleLayout);
+  document.addEventListener('visibilitychange', visibility);
+  document.fonts?.ready.then(scheduleLayout); document.fonts?.addEventListener('loadingdone', scheduleLayout);
   render(); visibility();
 }
 if (typeof document !== 'undefined') mount();

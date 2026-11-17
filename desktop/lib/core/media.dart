@@ -1081,7 +1081,7 @@ class CallMedia extends ChangeNotifier {
       );
       if (observed.data['selectedPairId'] != evidence?.data['selectedPairId']) {
         recordNetworkEvent(
-          'Selected path: ${endpointLabel(observed.local)} ↔ ${endpointLabel(observed.remote)}',
+          'Selected media path changed',
           source: 'WebRTC statistics',
         );
       }

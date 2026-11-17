@@ -40,9 +40,7 @@ Both clients serialize room negotiation and retain early ICE candidates until th
 
 ## Connection evidence
 
-Each tile's **Connection** control displays actual selected ICE candidates, addresses/ports where the engine exposes them, DTLS/SRTP ciphers, byte counters, and the pair certificate code. The Direct label includes encoded frames delivered by their original source; Peer-forwarded video requires an intermediate participant. Browser reports identify a video's source and immediate forwarding participant separately from its direct audio link. Native reports include opaque forwarding counters. Group exports contain all peer observations with sample times. Missing or stale observations remain unverified. Browsers may hide addresses; PVP does not invent them.
-
-These are engine/application observations, not independent packet captures or tamper-proof attestation. The generated tcpdump filter is based only on valid observed IPs/ports. External tcpdump/Wireshark can corroborate transport endpoints, while encrypted captures cannot independently identify a particular video source without application context.
+A participant's connection details show selected ICE path types, DTLS/SRTP ciphers, byte counters, and the pair certificate code. Browser reports identify a video's source and immediate forwarding participant separately from its direct audio link. Native reports include forwarding counters. Group exports contain peer observations and sample times with network addresses and ports omitted.
 
 ## Validation and release
 

@@ -1893,75 +1893,78 @@ class CallView extends StatelessWidget {
     final elapsed = c.media.connectedAt == null
         ? Duration.zero
         : DateTime.now().difference(c.media.connectedAt!);
-    return Container(
+    final stage = Container(
       color: pvpCanvas,
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
       child: Column(
         children: [
-          Row(
-            children: [
-              if (onBack != null)
-                IconButton(
-                  tooltip: 'Back to app',
-                  onPressed: onBack,
-                  icon: const PvpGlyph('chevron-left'),
-                ),
-              Expanded(
-                child: Text(
-                  person?.name ?? 'Call',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+          CallChrome(
+            top: true,
+            child: Row(
+              children: [
+                if (onBack != null)
+                  IconButton(
+                    tooltip: 'Back to app',
+                    onPressed: onBack,
+                    icon: const PvpGlyph('chevron-left'),
                   ),
-                ),
-              ),
-              if (connected)
-                Text(
-                  '${elapsed.inMinutes}:${(elapsed.inSeconds % 60).toString().padLeft(2, '0')}',
-                  style: const TextStyle(color: pvpMuted, fontSize: 13),
-                ),
-              IconButton(
-                tooltip: 'More',
-                icon: const PvpGlyph('ellipsis'),
-                onPressed: () => showPvpDialog(
-                  context: context,
-                  builder: (ctx) => ListenableBuilder(
-                    listenable: c,
-                    builder: (ctx, _) => ContextSheet(
-                      title: 'More',
-                      active: c.busy,
-                      children: [
-                        SheetAction(
-                          glyph: 'settings-2',
-                          label: 'Audio & video',
-                          onTap: () {
-                            Navigator.pop(ctx);
-                            audioVideoDialog(context, c);
-                          },
-                        ),
-                        SheetAction(
-                          glyph: 'wifi',
-                          label: 'Connection',
-                          onTap: () {
-                            Navigator.pop(ctx);
-                            showPvpDialog(
-                              context: context,
-                              builder: (_) => ConnectionInspector(c: c),
-                            );
-                          },
-                        ),
-                        SwitchListTile(
-                          title: const Text('Show control labels'),
-                          contentPadding: EdgeInsets.zero,
-                          value: c.preferences.showControlLabels,
-                          onChanged: c.setControlLabels,
-                        ),
-                      ],
+                Expanded(
+                  child: Text(
+                    person?.name ?? 'Call',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-              ),
-            ],
+                if (connected)
+                  Text(
+                    '${elapsed.inMinutes}:${(elapsed.inSeconds % 60).toString().padLeft(2, '0')}',
+                    style: const TextStyle(color: pvpMuted, fontSize: 13),
+                  ),
+                IconButton(
+                  tooltip: 'More',
+                  icon: const PvpGlyph('ellipsis'),
+                  onPressed: () => showPvpDialog(
+                    context: context,
+                    builder: (ctx) => ListenableBuilder(
+                      listenable: c,
+                      builder: (ctx, _) => ContextSheet(
+                        title: 'More',
+                        active: c.busy,
+                        children: [
+                          SheetAction(
+                            glyph: 'settings-2',
+                            label: 'Audio & video',
+                            onTap: () {
+                              Navigator.pop(ctx);
+                              audioVideoDialog(context, c);
+                            },
+                          ),
+                          SheetAction(
+                            glyph: 'wifi',
+                            label: 'Connection',
+                            onTap: () {
+                              Navigator.pop(ctx);
+                              showPvpDialog(
+                                context: context,
+                                builder: (_) => ConnectionInspector(c: c),
+                              );
+                            },
+                          ),
+                          SwitchListTile(
+                            title: const Text('Show control labels'),
+                            contentPadding: EdgeInsets.zero,
+                            value: c.preferences.showControlLabels,
+                            onChanged: c.setControlLabels,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 20),
           Expanded(
@@ -2052,6 +2055,12 @@ class CallView extends StatelessWidget {
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
                           ),
+                        ),
+                      ),
+                    if (connected && c.media.screenSharing)
+                      Positioned.fill(
+                        child: SharingIndicator(
+                          onStop: () => c.perform(c.media.stopScreenShare),
                         ),
                       ),
                   ],
@@ -2188,25 +2197,10 @@ class CallView extends StatelessWidget {
                 control(Icons.call_end, 'End call', c.endCall, danger: true),
               ],
             ),
-          if (connected && c.media.screenSharing)
-            Padding(
-              padding: const EdgeInsets.only(top: 14),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const PvpGlyph('screen-share', size: 18),
-                  const SizedBox(width: 8),
-                  const Text('Sharing screen'),
-                  TextButton(
-                    onPressed: () => c.perform(c.media.stopScreenShare),
-                    child: const Text('Stop sharing'),
-                  ),
-                ],
-              ),
-            ),
         ],
       ),
     );
+    return CallControlActivity(active: connected, child: stage);
   }
 
   Widget control(

@@ -1,6 +1,6 @@
 [package]
 name = "pvp-signaling"
-version = "0.3.25"
+version = "0.3.29"
 edition = "2021"
 
 [dependencies]
@@ -8,7 +8,7 @@ axum = { version = "0.8", features = ["ws"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-rusqlite = { version = "0.37", features = ["bundled"] }
+rusqlite = { version = "0.41", features = ["bundled"] }
 argon2 = "0.5"
 rand_core = { version = "0.6", features = ["getrandom"] }
 uuid = { version = "1", features = ["v4"] }

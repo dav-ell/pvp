@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { chromium, webkit } from 'playwright';
+import { testBrowsers } from './browser-engines.mjs';
 import { spawn, execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { mkdtemp, rm, mkdir, writeFile } from 'node:fs/promises';
@@ -35,7 +35,7 @@ function generatedMedia() {
   Object.defineProperty(navigator, 'mediaDevices', {value:new Proxy(native,{get(target,key){if(key==='getUserMedia')return capture;const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;}})});
 }
 
-for (const [name, engine] of Object.entries({ chromium, webkit })) test(`room-first entry, pair stage, evidence and leave/rejoin (${name})`, {timeout:120000}, async () => {
+for (const [name, engine] of Object.entries(testBrowsers)) test(`room-first entry, pair stage, evidence and leave/rejoin (${name})`, {timeout:120000}, async () => {
   const temporary = await mkdtemp(join(tmpdir(), 'pvp-rooms-')); let service, browser;
   try {
     await promisify(execFile)('cargo', ['build', '--quiet', '--manifest-path', 'signaling/Cargo.toml']);
@@ -83,8 +83,11 @@ for (const [name, engine] of Object.entries({ chromium, webkit })) test(`room-fi
     const expanded = await guest.locator('#group-grid .self').boundingBox();assert.ok(expanded.width>thumbnail.width*2&&expanded.height>thumbnail.height*2,'tap expands self feed');
     await guest.locator('#group-grid .self .self-preview-toggle').click();
     assert.equal(await guest.evaluate(()=>window.__firstRemote===document.querySelector('#group-grid .group-tile:not(.self)')&&window.__firstVideo===window.__firstRemote.querySelector('video')&&window.__firstPeer===window.__peers.find(pc=>pc.connectionState==='connected')),true,'layout changes preserve media nodes and peer');
+    await guest.locator('#group-more').click();
+    await guest.locator('#group-audio-open').click();
     await guest.locator('#group-quality-summary').filter({hasText:/Balanced/}).waitFor();
     await guest.waitForFunction(()=>document.getElementById('group-quality-summary').textContent.includes('Sending'));
+    await guest.locator('#group-audio-close').click();
     await guest.locator('#group-trust').click();
     await guest.locator('.trust-state').filter({hasText:'Encryption observed'}).waitFor();
     await guest.locator('.trust-route').filter({hasText:'Direct connection observed'}).waitFor();

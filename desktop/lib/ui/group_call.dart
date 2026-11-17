@@ -13,7 +13,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import '../core/controller.dart';
-import '../core/connection_evidence.dart';
 
 Future<void> groupPicker(
   BuildContext context,
@@ -192,8 +191,6 @@ class GroupCallView extends StatelessWidget {
         builder: (context, _) {
           final link = g.links[id], e = link?.evidence?.data;
           final local = e?['local'] as Map?, remote = e?['remote'] as Map?;
-          String endpoint(Map? m) =>
-              '${m?['address'] ?? 'Address unavailable'}:${m?['port'] ?? 'port unavailable'}';
           return AlertDialog(
             title: const Text('Connection info & bandwidth'),
             content: SizedBox(
@@ -233,8 +230,10 @@ class GroupCallView extends StatelessWidget {
                     const SizedBox(height: 20),
                     for (final row in <String, String>{
                       'Observed': '${e?['sampledAt'] ?? 'Unavailable'}',
-                      'Local endpoint': endpoint(local),
-                      'Remote endpoint': endpoint(remote),
+                      'Your media path':
+                          '${local?['candidateType'] ?? 'Unavailable'}',
+                      'Peer media path':
+                          '${remote?['candidateType'] ?? 'Unavailable'}',
                       'Encryption': '${e?['dtlsState'] ?? 'Unavailable'}',
                       'DTLS cipher': '${e?['dtlsCipher'] ?? 'Unavailable'}',
                       'SRTP cipher': '${e?['srtpCipher'] ?? 'Unavailable'}',
@@ -257,22 +256,6 @@ class GroupCallView extends StatelessWidget {
                           ],
                         ),
                       ),
-                    const Divider(height: 24),
-                    ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      title: const Text('Packet capture command'),
-                      subtitle: const Text('For advanced troubleshooting'),
-                      children: [
-                        SelectableText(
-                          mediaCaptureCommand(link?.evidence) ??
-                              'Capture filter unavailable.',
-                          style: const TextStyle(
-                            fontFamily: 'monospace',
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -392,46 +375,49 @@ class GroupCallView extends StatelessWidget {
         : g.listening
         ? 'Listening'
         : '';
-    return Container(
+    final stage = Container(
       color: pvpCanvas,
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
       child: Column(
         children: [
-          Row(
-            children: [
-              if (onBack != null)
-                IconButton(
-                  tooltip: 'Back to app',
-                  onPressed: onBack,
-                  icon: const PvpGlyph('chevron-left'),
-                ),
-              Expanded(
-                child: Text(
-                  g.personalRoom
-                      ? 'Your drop-in call'
-                      : g.room?['name'] ??
-                            (g.room?['voice'] == true
-                                ? 'Drop-in call'
-                                : 'Group call'),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+          CallChrome(
+            top: true,
+            child: Row(
+              children: [
+                if (onBack != null)
+                  IconButton(
+                    tooltip: 'Back to app',
+                    onPressed: onBack,
+                    icon: const PvpGlyph('chevron-left'),
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Text(
+                    g.personalRoom
+                        ? 'Your drop-in call'
+                        : g.room?['name'] ??
+                              (g.room?['voice'] == true
+                                  ? 'Drop-in call'
+                                  : 'Group call'),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-              TextButton.icon(
-                onPressed: () => people(context),
-                icon: const PvpGlyph('users-round', size: 19),
-                label: Text('${g.participants.length}'),
-              ),
-              IconButton(
-                tooltip: 'Invite',
-                onPressed: () => invite(context),
-                icon: const PvpGlyph('link'),
-              ),
-            ],
+                TextButton.icon(
+                  onPressed: () => people(context),
+                  icon: const PvpGlyph('users-round', size: 19),
+                  label: Text('${g.participants.length}'),
+                ),
+                IconButton(
+                  tooltip: 'Invite',
+                  onPressed: () => invite(context),
+                  icon: const PvpGlyph('link'),
+                ),
+              ],
+            ),
           ),
           if (status.isNotEmpty)
             Padding(
@@ -444,163 +430,157 @@ class GroupCallView extends StatelessWidget {
                 ),
               ),
             ),
-          if (g.media.screenSharing)
-            Container(
-              margin: const EdgeInsets.only(top: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-              decoration: BoxDecoration(
-                color: PvpBrandColors.stageSurface,
-                border: Border.all(color: PvpBrandColors.stageMuted),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  const PvpGlyph('screen-share', size: 20),
-                  const SizedBox(width: 10),
-                  const Expanded(child: Text('Sharing screen')),
-                  TextButton(
-                    onPressed: () => c.perform(g.media.stopScreenShare),
-                    child: const Text('Stop sharing'),
-                  ),
-                ],
-              ),
-            ),
           Expanded(
-            child: LayoutBuilder(
-              builder: (context, size) {
-                final others = g.participants
-                    .where((m) => m['id'] != c.user?.id)
-                    .toList();
-                Widget self() => tile(
-                  context,
-                  '${c.user?.name ?? 'You'}${solo ? '' : ' · You'}',
-                  g.media.local,
-                  mirror: !g.media.screenSharing,
-                  paused: g.media.cameraOff && !g.media.screenSharing,
-                  speaking: !g.media.muted && g.media.microphoneLevel > .025,
-                  muted: g.media.muted,
-                  maximize: () => maximize(context, c.user!.id, 'Your screen'),
-                );
-                Widget remote(Map<String, dynamic> m) => KeyedSubtree(
-                  key: ValueKey(m['id']),
-                  child: PvpArrival(
-                    identity: m['id'],
-                    child: tile(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                LayoutBuilder(
+                  builder: (context, size) {
+                    final others = g.participants
+                        .where((m) => m['id'] != c.user?.id)
+                        .toList();
+                    Widget self() => tile(
                       context,
-                      m['display_name'],
-                      g.links[m['id']]?.renderer,
-                      speaking: g.links[m['id']]?.speaking ?? false,
-                      paused: g.links[m['id']]?.state['paused'] != false,
-                      muted:
-                          m['moderator_muted'] == true ||
-                          g.links[m['id']]?.state['muted'] == true,
-                      listening: g.links[m['id']]?.state['listening'] == true,
+                      '${c.user?.name ?? 'You'}${solo ? '' : ' · You'}',
+                      g.media.local,
+                      mirror: !g.media.screenSharing,
+                      paused: g.media.cameraOff && !g.media.screenSharing,
+                      speaking:
+                          !g.media.muted && g.media.microphoneLevel > .025,
+                      muted: g.media.muted,
                       maximize: () =>
-                          maximize(context, m['id'], m['display_name']),
-                    ),
-                  ),
-                );
-                if (solo) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: SingleChildScrollView(
-                      child: SizedBox(
-                        height: math.max(
-                          size.maxHeight - 40,
-                          MediaQuery.textScalerOf(context).scale(30) + 100,
+                          maximize(context, c.user!.id, 'Your screen'),
+                    );
+                    Widget remote(Map<String, dynamic> m) => KeyedSubtree(
+                      key: ValueKey(m['id']),
+                      child: PvpArrival(
+                        identity: m['id'],
+                        child: tile(
+                          context,
+                          m['display_name'],
+                          g.links[m['id']]?.renderer,
+                          speaking: g.links[m['id']]?.speaking ?? false,
+                          paused: g.links[m['id']]?.state['paused'] != false,
+                          muted:
+                              m['moderator_muted'] == true ||
+                              g.links[m['id']]?.state['muted'] == true,
+                          listening:
+                              g.links[m['id']]?.state['listening'] == true,
+                          maximize: () =>
+                              maximize(context, m['id'], m['display_name']),
                         ),
-                        child: self(),
                       ),
-                    ),
-                  );
-                }
-                if (others.length == 1 &&
-                    (!g.media.cameraOff ||
-                        g.media.screenSharing ||
-                        g.links[others.first['id']]?.state['paused'] ==
-                            false)) {
-                  return Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      remote(others.first),
-                      ExpandableSelfPreview(
-                        key: const ValueKey('room-self-preview'),
-                        child: self(),
-                      ),
-                    ],
-                  );
-                }
-                if (others.length == 1 &&
-                    g.media.cameraOff &&
-                    g.links[others.first['id']]?.state['paused'] != false) {
-                  return SingleChildScrollView(
-                    child: SizedBox(
-                      height: math.max(
-                        size.maxHeight,
-                        MediaQuery.textScalerOf(context).scale(30) + 156,
-                      ),
-                      child: Column(
-                        children: [
-                          Expanded(child: remote(others.first)),
-                          SizedBox(
-                            height: 56,
-                            child: Row(
-                              children: [
-                                Text(
-                                  '${c.user?.name ?? 'You'} · You',
-                                  style: const TextStyle(
-                                    color: pvpMuted,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                const Spacer(),
-                                PvpGlyph(
-                                  g.listening
-                                      ? 'headphones'
-                                      : g.media.muted
-                                      ? 'mic-off'
-                                      : 'mic',
-                                  size: 17,
-                                  color: pvpMuted,
-                                ),
-                              ],
+                    );
+                    if (solo) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: SingleChildScrollView(
+                          child: SizedBox(
+                            height: math.max(
+                              size.maxHeight - 40,
+                              MediaQuery.textScalerOf(context).scale(30) + 100,
                             ),
+                            child: self(),
+                          ),
+                        ),
+                      );
+                    }
+                    if (others.length == 1 &&
+                        (!g.media.cameraOff ||
+                            g.media.screenSharing ||
+                            g.links[others.first['id']]?.state['paused'] ==
+                                false)) {
+                      return Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          remote(others.first),
+                          ExpandableSelfPreview(
+                            key: const ValueKey('room-self-preview'),
+                            child: self(),
                           ),
                         ],
+                      );
+                    }
+                    if (others.length == 1 &&
+                        g.media.cameraOff &&
+                        g.links[others.first['id']]?.state['paused'] != false) {
+                      return SingleChildScrollView(
+                        child: SizedBox(
+                          height: math.max(
+                            size.maxHeight,
+                            MediaQuery.textScalerOf(context).scale(30) + 156,
+                          ),
+                          child: Column(
+                            children: [
+                              Expanded(child: remote(others.first)),
+                              SizedBox(
+                                height: 56,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '${c.user?.name ?? 'You'} · You',
+                                      style: const TextStyle(
+                                        color: pvpMuted,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    PvpGlyph(
+                                      g.listening
+                                          ? 'headphones'
+                                          : g.media.muted
+                                          ? 'mic-off'
+                                          : 'mic',
+                                      size: 17,
+                                      color: pvpMuted,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                    final count = others.length + 1;
+                    var columns = size.maxWidth < 600
+                        ? 1
+                        : count <= 4
+                        ? 2
+                        : count <= 9
+                        ? 3
+                        : 4;
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1440),
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          crossAxisCount: columns,
+                          childAspectRatio:
+                              16 /
+                              (10 *
+                                  MediaQuery.textScalerOf(
+                                    context,
+                                  ).scale(1).clamp(1, 1.6)),
+                          crossAxisSpacing: 14,
+                          mainAxisSpacing: 14,
+                          children: [
+                            for (final m in others) remote(m),
+                            KeyedSubtree(
+                              key: ValueKey(c.user?.id),
+                              child: self(),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }
-                final count = others.length + 1;
-                var columns = size.maxWidth < 600
-                    ? 1
-                    : count <= 4
-                    ? 2
-                    : count <= 9
-                    ? 3
-                    : 4;
-                return Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 1440),
-                    child: GridView.count(
-                      shrinkWrap: true,
-                      crossAxisCount: columns,
-                      childAspectRatio:
-                          16 /
-                          (10 *
-                              MediaQuery.textScalerOf(
-                                context,
-                              ).scale(1).clamp(1, 1.6)),
-                      crossAxisSpacing: 14,
-                      mainAxisSpacing: 14,
-                      children: [
-                        for (final m in others) remote(m),
-                        KeyedSubtree(key: ValueKey(c.user?.id), child: self()),
-                      ],
-                    ),
+                    );
+                  },
+                ),
+                if (g.media.screenSharing)
+                  SharingIndicator(
+                    onStop: () => c.perform(g.media.stopScreenShare),
                   ),
-                );
-              },
+              ],
             ),
           ),
           if (solo)
@@ -762,6 +742,7 @@ class GroupCallView extends StatelessWidget {
         ],
       ),
     );
+    return CallControlActivity(active: connected > 0, child: stage);
   }
 
   Future<void> invite(BuildContext context) async {

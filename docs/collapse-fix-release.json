@@ -1,0 +1,118 @@
+{
+  "version": "0.3.28",
+  "status": "deployed and verified over public HTTPS",
+  "fix": "Remove the maximized group grid width cap so the collapse control remains outside the call heading on wide displays.",
+  "sourceBaseline": ".build/call-layout-deploy.81cSoN/source (0.3.27); verified against all 39 live asset hashes before building",
+  "releaseSource": "/Users/davell/Documents/github/pvp/.build/collapse-release/source",
+  "changes": [
+    "web/polish.css: max-width: none for #group-grid.maximized",
+    "release-only signaling version bump to 0.3.28"
+  ],
+  "validation": [
+    "Before fix: Chromium and WebKit clicks failed because the call heading intercepted Collapse.",
+    "After fix: Chromium and WebKit passed self and remote expand/collapse at 1920 and 2560 pixels, mobile layout, idle wake, and media preservation.",
+    "Candidate passed isolated service-user preflight and all embedded assets.",
+    "Public HTTPS: Chromium and WebKit passed the full call layout suite, including self/remote collapse at 1920 and 2560 pixels. All 39 asset hashes match."
+  ],
+  "deployment": {
+    "health": {
+      "media": "direct-p2p",
+      "status": "ok",
+      "version": "0.3.28"
+    },
+    "rollback": "/var/backups/pvp/collapse-fix-2026-11-16-1794855216",
+    "binarySha256": "35677ea90681fa980816a0075f3d2da51cb5897ac9865293914c688004fe99f1",
+    "verifiedAssets": 39,
+    "databaseIntegrity": "ok",
+    "durableRecordsMatchBackup": {
+      "users": true,
+      "friends": true,
+      "history": true,
+      "meetings": true,
+      "meeting_members": true,
+      "meeting_controls": true,
+      "meeting_access": true,
+      "meeting_blocks": true,
+      "discovery_preferences": true,
+      "meeting_visits": true,
+      "meeting_network": true,
+      "meeting_speaking": true
+    },
+    "signalingConnectionsAtRestart": 5,
+    "caddyUnchanged": true,
+    "services": [
+      "active",
+      "active",
+      "active",
+      "active"
+    ]
+  },
+  "candidateSha256": "35677ea90681fa980816a0075f3d2da51cb5897ac9865293914c688004fe99f1",
+  "assets": {
+    "/packages/pvp-call/src/index.js": "d55489881812d6443188b96ddd71cd9efe1a82ecfe79c5e87ae0cbab36cb6cd5",
+    "/packages/pvp-call/src/mesh.js": "30330384c736c00dc7cf283c417a559e6dc3867dcf5e51059c679315ccd09b5e",
+    "/packages/pvp-call/src/media.js": "a64ba3f1ffbf364f07d7a251a5b330799559d73b6e075a807d5a4f26a5ec40aa",
+    "/packages/pvp-call/src/room.js": "b58f9f62275cca892f87d329b095fcba9923537b7013f627a96bcfb10d8c9efe",
+    "/packages/pvp-call/src/security.js": "2b04eec4fb5bc45f370a90b7648fe14d8d1c29bea2171a88d4466d157690fd95",
+    "/packages/pvp-call/src/quality.js": "7a689d823924d93d6b60d7e98b240a1dde4af953abb2edc1b422e319a8c3110c",
+    "/packages/pvp-call/src/inspector.js": "d8d5426e5fe7d675dcd81147840e24146c70241c4a86ab8be59e282c8befb6ee",
+    "/": "2aa6f8330a8667a8f39f097fa281bf849cadcfea96104a4ff4c71d732cf74e4e",
+    "/meetings.js": "0285c81d079d3845d4e0dd91ee5b7978dd461b2ee98d7ad592a3be5cd49ffd48",
+    "/ui.js": "f74aa27cb52d9ebe2cb0e1549acf636d29a0b6f3232b91e7230e7646fc92b0f2",
+    "/polish.css": "9c94bc7e5541828e8ac1a394f5959cd74b314a20b2392af132f6e8d63878fb40",
+    "/icons.svg": "d26d68ec601947231522482960b240929128f304c4058f71ecb0620369a715bd",
+    "/meeting-join.js": "29e0185d392ea60898ee1de8cccad8b60a7a29191823d5fcdb0f2fdafd908a5f",
+    "/meeting-route.js": "5ed7b68b25437796c279442ceae4816fa146a5ab11b8d7be414267b2dc427538",
+    "/meeting-mobile.css": "41dd182a4b50c212b1be3583ad35d0d475264ec4426da3ebb155008d7a49a6fd",
+    "/playback.js": "d0c5a6e2e57977a1c2dfa06c3f5aeed569fc393ea50700b57c22c66a792211ea",
+    "/motion.js": "da28aa78acf006d543afd965d158a528f45c84a295d9f48e598af48ea8485fa6",
+    "/motion.css": "65f4ba7c364023c234dc8c81f7d5cd3cf7c3e5cd44681819a4ba1f41f01e6b3f",
+    "/app.js": "74304ccba498ffd511e545aab7e482c25cb1af9c4855f35148ee8102f6111c76",
+    "/group-calls.js": "3308550428ad8decf19c456a7a3a6b48faa04fd9d844eae326f1d2193a8d3988",
+    "/meeting-chat.js": "ff15414f04b30bb7467e479f71951e7feff158ead581625ace1157745b231abe",
+    "/bandwidth.js": "19a1ddc6c86fbed0333fe6fc399e6a2033066648069e3112234a38c2cdbc1dff",
+    "/group-quality.js": "d777f1abc238bb59e03cd26b6369cabcd3518539b142c5cb9978276d3d1c7b8c",
+    "/group-video.js": "bae8daeef7a46ad626478361994ee526b3f16519d1803810f9f02295c85f8804",
+    "/security.js": "a0e04cd9aab538c1585148be17e49e9f07d2a9db13bfe19593a59e4ba85ab6b6",
+    "/trust.js": "8f1dabb214fd9b7c13a1248173989d056b19022601c42e00851a29ddb271518f",
+    "/media-health.js": "445e4a982f81fad53e56dd9f4a2d8da712bdf74480818a5ca82da08e879c3745",
+    "/call-stage.js": "7ad4eb3ceb262ae4af2ce50f2a5bc8ee72530b1aa14757287dba6c1f42a41a05",
+    "/inspector.js": "5a802f2876e40d720808ca65b1d340c9b27150a082866de137c670711ce4f594",
+    "/styles.css": "b4d86f49e76b5366e15baf201feb5fc809825ff92b314343ea7b06d1920c1c5a",
+    "/room-scene.svg": "e76f6af1801d6b62b59a9fffcd6fcae71a0880cd47284396a53ff5b8ae539681",
+    "/fonts/Manrope.ttf": "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6",
+    "/fonts/InstrumentSerif-Regular.ttf": "498efd461f6ddfcb7a111bf9a565709d2085d48201d501ead960d93e84ffbb88",
+    "/brand-tokens.css": "fc56f18dd9d7740c19333f733c2fcaaf98dedda197cdeb2b870ffcc8b1fb32cd",
+    "/icon.svg": "c602496087ebf16f96ef8e3e91965b141d349b6ada335a4609248b3f881a3470",
+    "/manifest.webmanifest": "898f376c2e6b2e5f2f3064750f8af987a54a1c78103351f77ec8ae38ca8f16b9",
+    "/network.js": "911e3d226cb028ead32ed6fd9bda873023156c159c82f65536a4a9cb267dc362",
+    "/network.css": "4a892175f584c12dfd0031d592d065e0cf26f146691c2441248f9bda1ec71fd0",
+    "/network-physics.js": "11ee887d2705029875e022a89c7676d2ede0c091242c88d93859e0ce5f22acac"
+  },
+  "cleanup": {
+    "removedExactVerificationUsers": 2,
+    "removedExactVerificationMeetings": 2,
+    "databaseIntegrity": "ok",
+    "foreignKeys": "ok",
+    "existingDurableRecordsMatchBackup": {
+      "users": true,
+      "friends": true,
+      "history": true,
+      "meetings": true,
+      "meeting_members": true,
+      "meeting_controls": true,
+      "meeting_access": true,
+      "meeting_blocks": true,
+      "discovery_preferences": true,
+      "meeting_visits": true,
+      "meeting_network": true,
+      "meeting_speaking": true
+    },
+    "services": [
+      "active",
+      "active",
+      "active",
+      "active"
+    ]
+  }
+}

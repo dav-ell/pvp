@@ -1,34 +1,10 @@
 # Connection inspector
 
-During a call, click **Connection inspector** in the Mac app's top bar or the browser's call controls. The inspector uses observations from that call; it contains no illustrative IPs or generated packet rows.
+During a direct call, open **More → Connection**. In a group call, use a participant's connection details. The inspector reports ICE candidate types, tested-pair states, media counters, and DTLS/SRTP details from the active call. It also shows bandwidth use and lets you set separate limits for sending and receiving camera and screen video.
 
-## What the display establishes
+The selected ICE pair describes the active media path. The browser marks old samples as stale. Compare the certificate verification code with your peer over a separate trusted channel to check the current connection's certificates.
 
-The diagram displays the selected ICE candidate pair's reported local and remote addresses, ports and protocol. The inspector follows `transport.selectedCandidatePairId`; when that field is unavailable it accepts only one succeeded nominated/selected pair. Multiple possible paths, missing candidates or unavailable statistics do not produce a direct-path claim. State changes and failed samples clear that claim, and the browser explicitly marks old samples as stale.
-
-The detailed view includes actual candidate endpoints, tested-pair states and STUN request/response counters where exposed, incoming/outgoing RTP counters, selected-pair byte counters, DTLS state/ciphers and SRTP cipher. Every observation has its source and sample time. The event timeline contains application signaling events and WebRTC state changes, not individual packets.
-
-The Mac client obtains signaling IPs and ports from the live `dart:io` socket after the authenticated, non-redirecting WebSocket handshake. It does not resolve a hostname and pretend the result is the active socket. The browser shows its actual WebSocket URL and state and explicitly marks its socket tuple as unavailable. Its API does not expose that tuple.
-
-Configured STUN URLs are labeled as configuration. A STUN URL reported with a discovered candidate is labeled as a reported server. Neither is represented as an observed packet destination IP. TURN remains disabled and relayed candidates remain rejected. The display does not silently introduce a relay fallback.
-
-## Independent verification
-
-The inspector builds copyable `tcpdump` commands from validated literal IPs, numeric ports and the reported protocol. Run them in Terminal during the call. Mac commands use `pktap,all`, which includes loopback and tunnel interfaces; browser users can choose Linux's `any` interface. PVP does not execute a privileged capture command, ask for an administrator password, or capture unrelated machine traffic.
-
-The media filter matches both directions at the reported peer endpoint. If its address is hidden, a literal local **host** candidate can supply a local-socket filter. A public STUN/NAT mapping is never substituted as a local binding. If neither tuple is usable, the filter is unavailable. Native signaling has a separate filter for its actual service socket. Stop capture with Control-C. For a capture to inspect in Wireshark, append `-w PVP-call.pcap` to the command before the quoted filter; the capture file contains the matching encrypted network traffic.
-
-The selected candidates describe ICE endpoints. A public NAT-mapped local endpoint can differ from the IP/port captured on the Mac before router translation. Browser privacy can hide addresses, including peer-reflexive candidates; these remain unavailable rather than being guessed from another candidate or from DNS. VPN encapsulation changes what is visible on physical interfaces. RTP/WebRTC counters and packet captures count different layers, so totals need not be equal.
-
-The app's display and JSON export are app-reported evidence. An altered app could fabricate them. Users checking with their own `tcpdump` or Wireshark obtain independent observations of the traffic. Endpoint observations establish the network path; peer identity still depends on authenticated signaling and independent comparison of the existing certificate verification code.
-
-References: [WebRTC statistics](https://www.w3.org/TR/webrtc-stats/), [ICE connectivity checks](https://www.rfc-editor.org/rfc/rfc8445.html), and [`dart:io` socket endpoints](https://api.dart.dev/dart-io/Socket/remotePort.html). On this Mac, `man tcpdump` documents `pktap,all` including loopback and tunnels.
-
-## Data handling
-
-Observations and a bounded 120-event timeline stay in memory. Call teardown clears media endpoints and events. **Save report** creates an allowlisted JSON snapshot locally, only when requested. Native export uses a user-selected file with a save panel; the browser downloads a JSON file. Reports include IP addresses and timestamps but exclude credentials, cookies, SDP and media payloads. Export is diagnostic evidence, not cryptographically signed proof.
-
-Inspector screenshots made during integration tests contain real observed endpoints and are kept under ignored `.build/inspector/screenshots/`, outside the documentation screenshots intended for publication.
+**Save report** creates a local JSON snapshot. Connection details and reports omit network addresses, ports, and packet-capture commands. The timeline includes application and WebRTC state changes. Call teardown clears media observations. Direct WebRTC peers exchange network addresses to establish the connection.
 
 ## Release and validation — October 4, 2026
 

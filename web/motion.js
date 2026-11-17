@@ -6,7 +6,7 @@ const active = new WeakMap();
 const scopes = new WeakMap();
 const settle = 'cubic-bezier(.16, 1, .3, 1)';
 
-function animate(node, frames, options = {}) {
+export function animate(node, frames, options = {}) {
   active.get(node)?.cancel();
   if (preference.matches || !node?.isConnected || !node.getClientRects().length) return;
   const animation = node.animate(frames, { duration: 240, easing: settle, ...options });
@@ -17,6 +17,7 @@ function animate(node, frames, options = {}) {
     if (active.get(node) === animation) active.delete(node);
   };
   animation.finished.then(release, release);
+  return animation;
 }
 
 preference.addEventListener('change', () => {

@@ -52,28 +52,56 @@ class BandwidthControls extends StatelessWidget {
     if (value != null && !choices.containsKey(value)) {
       choices[value] = '$value Kbps';
     }
+    Future<void> select(int? next) async {
+      if (source == 'camera') {
+        values.camera = next;
+      } else {
+        values.screen = next;
+      }
+      await change();
+    }
+
     return Row(
       children: [
         Expanded(
-          child: DropdownButtonFormField<int>(
-            initialValue: value,
-            hint: const Text('Automatic'),
-            key: ValueKey('$direction/$source/$value'),
-            decoration: InputDecoration(labelText: label),
-            items: choices.entries
-                .map(
-                  (e) =>
-                      DropdownMenuItem<int>(value: e.key, child: Text(e.value)),
-                )
-                .toList(),
-            onChanged: (n) async {
-              if (source == 'camera') {
-                values.camera = n;
-              } else {
-                values.screen = n;
-              }
-              await change();
-            },
+          child: MenuAnchor(
+            menuChildren: [
+              for (final choice in choices.entries)
+                MenuItemButton(
+                  onPressed: () => select(choice.key),
+                  child: Text(choice.value),
+                ),
+            ],
+            builder: (context, controller, _) => OutlinedButton(
+              onPressed: () =>
+                  controller.isOpen ? controller.close() : controller.open(),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          label,
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
+                        Text(choices[value]!),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.arrow_drop_down),
+                ],
+              ),
+            ),
           ),
         ),
         TextButton(
@@ -107,13 +135,7 @@ class BandwidthControls extends StatelessWidget {
                 ],
               ),
             );
-            if (n == null) return;
-            if (source == 'camera') {
-              values.camera = n;
-            } else {
-              values.screen = n;
-            }
-            await change();
+            if (n != null) await select(n);
           },
           child: const Text('Custom'),
         ),

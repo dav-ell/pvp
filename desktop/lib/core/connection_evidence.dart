@@ -1,42 +1,6 @@
-import 'dart:io';
 import 'security.dart';
 
 // The model retains allowlisted observations, never SDP, credentials or media.
-String? literalIp(Object? value) {
-  if (value is! String ||
-      value.length > 64 ||
-      !RegExp(r'^[0-9a-fA-F:.]+$').hasMatch(value)) {
-    return null;
-  }
-  return InternetAddress.tryParse(value)?.address;
-}
-
-String endpointLabel(Map<String, dynamic>? value) {
-  if (value == null) return 'Address unavailable';
-  final address = value['address'] as String? ?? 'Address unavailable';
-  return '${address.contains(':') ? '[$address]' : address}:${value['port'] ?? 'port unavailable'}';
-}
-
-String? captureCommand(Map<String, dynamic>? value) {
-  final ip = literalIp(value?['address']);
-  final port = value?['port'];
-  final protocol = value?['protocol'];
-  if (ip == null ||
-      port is! int ||
-      port < 1 ||
-      port > 65535 ||
-      !['udp', 'tcp'].contains(protocol)) {
-    return null;
-  }
-  return "sudo tcpdump -i pktap,all -nn -tttt '$protocol and host $ip and port $port'";
-}
-
-String? mediaCaptureCommand(ConnectionEvidence? evidence) =>
-    captureCommand(evidence?.remote) ??
-    (evidence?.local?['candidateType'] == 'host'
-        ? captureCommand(evidence?.local)
-        : null);
-
 class ConnectionEvidence {
   final Map<String, dynamic> data;
   const ConnectionEvidence(this.data);
@@ -78,6 +42,35 @@ class ConnectionEvidence {
 
   Map<String, dynamic>? get local => data['local'] as Map<String, dynamic>?;
   Map<String, dynamic>? get remote => data['remote'] as Map<String, dynamic>?;
+
+  Map<String, dynamic> publicObservation() {
+    Map<String, dynamic>? path(Map? candidate) => candidate == null
+        ? null
+        : {
+            'candidateType': candidate['candidateType'],
+            'protocol': candidate['protocol'],
+          };
+    return {...data}
+      ..remove('configuredServers')
+      ..remove('selectedPairId')
+      ..['local'] = path(local)
+      ..['remote'] = path(remote)
+      ..['candidates'] = [
+        for (final candidate in data['candidates'] as List? ?? [])
+          {...?path(candidate), 'side': candidate['side']},
+      ]
+      ..['pairs'] = [
+        for (final pair in data['pairs'] as List? ?? [])
+          (Map<String, dynamic>.from(pair)
+            ..remove('id')
+            ..['local'] = path(pair['local'])
+            ..['remote'] = path(pair['remote'])),
+      ]
+      ..['media'] = [
+        for (final row in data['media'] as List? ?? [])
+          (Map<String, dynamic>.from(row)..remove('id')),
+      ];
+  }
 
   static String? _text(Object? value) => value is String && value.isNotEmpty
       ? value.substring(0, value.length.clamp(0, 256))

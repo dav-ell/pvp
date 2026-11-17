@@ -7,7 +7,6 @@ import { join } from 'node:path';
 import { spawn, execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { createServer } from 'node:net';
-import { endpointLabel } from '../web/inspector.js';
 
 let base = process.env.PVP_TEST_URL;
 const suffix = process.env.PVP_TEST_SUFFIX || `${Date.now()}`.slice(-9);
@@ -197,14 +196,15 @@ test('real WebRTC call, direct candidate pair, live bitrate controls, mute, and 
     await waitFor(other, () => window.__peer.getSenders().find(s=>s.track?.kind==='video').getParameters().encodings[0].maxBitrate === 64000);
     await page.locator('#connection-bandwidth-controls select[data-direction="receive"][data-source="screen"]').selectOption('8000');
     assert.equal(await other.evaluate(()=>window.__peer.getSenders().find(s=>s.track?.kind==='video').getParameters().encodings[0].maxBitrate),64000,'screen limit does not change camera');
+    await receiveCamera.press('h');
+    assert.equal(await receiveCamera.inputValue(), '4000');
+    await waitFor(other, () => window.__peer.getSenders().find(s=>s.track?.kind==='video').getParameters().encodings[0].maxBitrate === 4000000);
     await receiveCamera.selectOption('');
     await page.locator('#connection-bandwidth-controls select[data-direction="receive"][data-source="screen"]').selectOption('');
     await waitFor(other, () => window.__peer.getSenders().find(s=>s.track?.kind==='video').getParameters().encodings[0].maxBitrate === 1800000);
     const downloading = page.waitForEvent('download');
-    const diagram = await page.evaluate(() => {
-      document.getElementById('export-inspector').click();
-      return { local: document.getElementById('inspector-local').textContent, remote: document.getElementById('inspector-remote').textContent, command: document.getElementById('inspector-command').textContent };
-    });
+    await page.locator('#export-inspector').click();
+    const details = await page.locator('#inspector-dialog').innerText();
     const download = await downloading;
     const evidence = JSON.parse(await readFile(await download.path(), 'utf8'));
     const live = await page.evaluate(evidence => {
@@ -212,26 +212,30 @@ test('real WebRTC call, direct candidate pair, live bitrate controls, mute, and 
       // Match the export to the real engine report from that observation.
       for (const values of window.__observedReports.slice().reverse()) {
         const stats = new Map(values.map(s => [s.id, s]));
-        const transport = values.find(s => s.type === 'transport' && s.selectedCandidatePairId === evidence.selectedPairId);
+        const transport = values.find(s => s.type === 'transport' && s.selectedCandidatePairId);
         const pair = stats.get(transport?.selectedCandidatePairId);
         if (pair?.bytesSent === evidence.bytesSent && pair?.bytesReceived === evidence.bytesReceived) return { pair, local: stats.get(pair.localCandidateId), remote: stats.get(pair.remoteCandidateId) };
       }
       return null;
     }, evidence.media);
     assert.ok(live, 'export matches a real engine report, including selected path and byte counters');
-    assert.equal(evidence.media.selectedPairId, live.pair.id);
     for (const side of ['local', 'remote']) {
-      assert.equal(evidence.media[side].address, live[side].address ?? live[side].ip ?? null);
-      assert.equal(evidence.media[side].port, live[side].port);
-      assert.equal(diagram[side], endpointLabel(evidence.media[side]), 'diagram renders observed endpoint, not an example');
+      assert.deepEqual(evidence.media[side], {
+        candidateType: live[side].candidateType, protocol: live[side].protocol,
+      });
+      const address = live[side].address ?? live[side].ip;
+      if (address) {
+        assert.ok(!JSON.stringify(evidence).includes(address));
+        assert.ok(!details.includes(address));
+      }
     }
     assert.ok(evidence.media.bytesSent > 0 && evidence.media.bytesSent === live.pair.bytesSent);
     assert.ok(evidence.media.bytesReceived > 0 && evidence.media.bytesReceived === live.pair.bytesReceived);
     assert.ok(evidence.media.media.some(r => r.direction === 'incoming' && r.packets > 0));
     assert.ok(evidence.media.media.some(r => r.direction === 'outgoing' && r.packets > 0));
-    assert.equal(evidence.signaling.socket, null, 'browser never guesses signaling IPs');
+    assert.deepEqual(evidence.signaling, {source: 'Browser WebSocket state', connected: true});
     assert.ok(!JSON.stringify(evidence).includes('pvp_session'));
-    if (evidence.media.remote.ip) assert.ok(diagram.command.includes(`host ${evidence.media.remote.ip} and port ${evidence.media.remote.port}`));
+    assert.ok(!details.includes('tcpdump'));
     if (process.env.PVP_TEST_SCREENSHOTS !== '0' && page === a) {
       await mkdir('.build/inspector/screenshots', { recursive: true });
       await page.screenshot({ path: '.build/inspector/screenshots/browser-inspector.png' });
@@ -348,7 +352,7 @@ test('real WebRTC call, direct candidate pair, live bitrate controls, mute, and 
 
   for (const page of pages) {
     assert.equal(await page.locator('#inspector-dialog').evaluate(d => d.open), false);
-    assert.equal(await page.locator('#inspector-local').textContent(), '', 'call teardown clears endpoint observations');
+    assert.equal(await page.locator('#inspector-local-type').textContent(), '', 'call teardown clears path observations');
   }
   assert.equal(await a.evaluate(() => window.__peer.connectionState), 'closed');
   const history = (await request(contexts[0], '/history', undefined, 'GET')).body; assert.equal(history[0].outcome, 'ended'); assert.equal(history[0].peer_id, users[1].id);

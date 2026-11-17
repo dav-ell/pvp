@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {chromium,webkit} from 'playwright';
+import { testBrowsers } from './browser-engines.mjs';
 import {spawn,execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {mkdtemp,rm,mkdir,writeFile} from 'node:fs/promises';
@@ -34,10 +34,10 @@ function mediaFixture(){
     }
     return stream;
   };
-  Object.defineProperty(navigator,'mediaDevices',{value:new Proxy(native,{get(t,k){if(k==='getUserMedia')return capture;const v=Reflect.get(t,k,t);return typeof v==='function'?v.bind(t):v;}})});
+  Object.defineProperty(navigator,'mediaDevices',{value:new Proxy(native,{get(t,k){if(k==='getUserMedia')return capture;if(k==='getDisplayMedia')return ()=>capture({audio:false,video:true});const v=Reflect.get(t,k,t);return typeof v==='function'?v.bind(t):v;}})});
 }
 
-for(const [engine,type] of Object.entries({chromium,webkit}))test(`polished real call, accessible controls and stable media (${engine})`,{timeout:90000},async()=>{
+for(const [engine,type] of Object.entries(testBrowsers))test(`polished real call, accessible controls and stable media (${engine})`,{timeout:90000},async()=>{
   const directory=await mkdtemp(join(tmpdir(),'pvp-polish-'));let server,browser;
   try{
     await promisify(execFile)('cargo',['build','--quiet','--manifest-path','signaling/Cargo.toml']);
@@ -79,7 +79,35 @@ for(const [engine,type] of Object.entries({chromium,webkit}))test(`polished real
     assert.equal(await guest.evaluate(()=>window.__originalPeer===window.__peers.find(p=>p.connectionState==='connected')&&window.__originalTile===document.querySelector('#group-grid .group-tile:not(.self)')&&window.__originalVideo===window.__originalTile.querySelector('video')&&window.__originalAudio===window.__originalTile.querySelector('audio')),true,'navigation and resize preserve actual media nodes and peers');
     await guest.locator('#group-mic').click();await guest.locator('#group-mic').filter({hasText:/^Mute$/}).waitFor();assert.equal(await guest.locator('#group-mic').getAttribute('aria-pressed'),'true');await guest.locator('#group-mic').click();assert.equal(await guest.locator('#group-mic').getAttribute('aria-pressed'),'false');
     await host.locator('#group-camera').click();await guest.waitForFunction(id=>document.getElementById(`group-tile-${id}`)?.dataset.video==='on',self.id);
+    const preview = host.locator('#group-grid .self-preview-toggle');
+    const animated = await preview.evaluate(button => {
+      const video = button.parentElement.querySelector('video');
+      window.__previewVideo = video;
+      button.click();
+      return button.parentElement.getAnimations().some(animation => animation.effect.getKeyframes().some(frame => frame.transform?.includes('scale(')));
+    });
+    assert.equal(animated, true, 'self preview animates on expansion');
+    assert.equal(await preview.getAttribute('aria-expanded'), 'true');
+    await preview.click();
+    assert.equal(await preview.getAttribute('aria-expanded'), 'false');
+    assert.equal(await preview.evaluate(button => button.parentElement.querySelector('video') === window.__previewVideo), true);
+
+    const dock = host.locator('.call-dock');
+    const dockPosition = await dock.boundingBox();
+    await host.locator('#group-share').click();
+    await host.locator('#group-sharing').waitFor({state:'visible'});
+    assert.deepEqual(await dock.boundingBox(), dockPosition, 'sharing leaves the dock in place');
+    assert.ok(await host.locator('#group-sharing').evaluate(banner => banner.getBoundingClientRect().bottom < innerHeight / 2));
+
+    await host.mouse.move(-1,-1);
+    await host.waitForFunction(() => getComputedStyle(document.querySelector('.call-dock')).opacity === '0');
+    assert.ok(await host.locator('#group-stop-sharing').isVisible(), 'the stop action stays available while idle');
+    await host.mouse.move(280,200);
+    await host.waitForFunction(() => getComputedStyle(document.querySelector('.call-dock')).opacity === '1',null,{timeout:600});
+    await host.locator('#group-stop-sharing').click();
+    await host.locator('#group-sharing').waitFor({state:'hidden'});
     await host.locator('#group-camera').click();await guest.waitForFunction(id=>document.getElementById(`group-tile-${id}`)?.dataset.video==='off',self.id);
+    await guest.keyboard.press('Shift');
     await guest.emulateMedia({reducedMotion:'reduce'});await guest.locator('#group-more').click();await guest.locator('#group-audio-open').click();await guest.locator('#group-audio-dialog').waitFor({state:'visible'});await screenshot(guest,join(output,'audio-mobile.png'));await guest.keyboard.press('Escape');
     assert.equal(await guest.evaluate(()=>document.activeElement.id),'group-more');
     await screenshot(host,join(output,'duo-desktop.png'));
